@@ -20,7 +20,7 @@ The extension method called “Run” is used to execute a terminating / short-circu
 
 
 ## Middleware Chain
-![application_pipeline!](assets/application_pipeline!.png)
+![application_pipeline_1](assets/application_pipeline_1.png)
 
 ### app.Use( )
 ```c#
@@ -158,4 +158,15 @@ By using a CustomMiddleware class which can be accomplished by:
 - What is the right order of middleware used in production-level applications?
 ```c#
 app.UseExceptionHandler();
+app.UseHsts();
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseSession();
+app.MapControllers();
+// Custom middlewares
+app.Run();
 ```
