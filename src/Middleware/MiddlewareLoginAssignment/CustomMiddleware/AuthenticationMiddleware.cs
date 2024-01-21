@@ -60,7 +60,7 @@ namespace MiddlewareLoginAssignment.CustomMiddleware
                 await httpContext.Response.WriteAsync("Unsuccessful login");
             }
             catch (IncorrectPasswordException)
-            {
+            { 
                 httpContext.Response.StatusCode = 400;
                 await httpContext.Response.WriteAsync("Unsuccessful login");
             }
