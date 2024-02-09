@@ -8,7 +8,7 @@ namespace ModelValidationsExample.Controllers
     {
         [Route("register")]
         // [Bind(nameof(Person.PersonName), nameof(Person.Email), nameof(Person.Password), nameof(Person.ConfirmPassword))] 
-        public IActionResult Index(Person person)
+        public IActionResult Index(Person person, [FromHeader(Name = "User-Agent")] string UserAgent)
         {
             if (!ModelState.IsValid)
             {
@@ -16,7 +16,7 @@ namespace ModelValidationsExample.Controllers
                 ModelState.Values.SelectMany(value => value.Errors).Select(err => err.ErrorMessage).ToList());
                 return BadRequest(errors);
             }
-            return Content($"{person}");
+            return Content($"{person}, {UserAgent}");
         }
     }
 }
