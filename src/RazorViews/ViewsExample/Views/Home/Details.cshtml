@@ -6,22 +6,29 @@
 <head>
     <title>Person Details</title>
     <meta charset="UTF-8"/>
-    <link href="StyleSheet.css" rel="stylesheet"/>
+    <link href="/StyleSheet.css" rel="stylesheet"/>
 </head>
 <body>
-<h1>Person Details</h1>
-<h3>@Model.Name</h3>
-<table>
-    <tbody>
-    <tr>
-        <td>Gender</td>
-        <td>@Model.PersonGender</td>
-    </tr>    
-    <tr>
-        <td>Date of Birth</td>
-        <td>@Model.DateOfBirth?.ToString("MM/dd/yyyy")</td>
-    </tr>
-    </tbody>
-</table>
+<div class="page-content">
+
+    <h1>Person Details</h1>
+    <div class="box w-50">
+        <h3>@Model.Name</h3>
+        <table class="table">
+            <tbody>
+            <tr>
+                <td>Gender</td>
+                <td>@Model.PersonGender</td>
+            </tr>
+            <tr>
+                <td>Date of Birth</td>
+                <td>@Model.DateOfBirth?.ToString("MM/dd/yyyy")</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <a href="/home">Back to people</a>
+</div>
+
 </body>
 </html>

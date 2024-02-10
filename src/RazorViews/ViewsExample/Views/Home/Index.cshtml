@@ -6,16 +6,16 @@
     <head>
         <title>@ViewBag.x</title>
         <meta charset="utf-8"/>
-        <link href="StyleSheet.css" rel="stylesheet"/>
+        <link href="/StyleSheet.css" rel="stylesheet"/>
     </head>
 <body>
 <div class="page-content">
-    <h1>Welcome</h1>
+    <h1>People</h1>
 
     @foreach (Person person in Model)
     {
         <div class="box float-left w-50">
-                <h3>@person.Name</h3>
+            <h3>@person.Name</h3>
             <table class="table w-100">
                 <tbody>
                 <tr>
@@ -29,8 +29,12 @@
 
                 </tbody>
             </table>
+            <a href="/person-details/@person.Name">Details</a>
         </div>
     }
+</div>
+<div>
+    <a href="/person-with-product">Person with product</a>
 </div>
 
 </body>
