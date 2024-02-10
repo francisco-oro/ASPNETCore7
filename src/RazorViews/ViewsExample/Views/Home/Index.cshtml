@@ -1,55 +1,37 @@
 ﻿@using ViewsExample.Models
 @using System.Collections.Generic
-@{
-    string appTitle = "Asp.Net Core Demo App";
-    List<Person> people = new List<Person>()
-    {
-        new Person() { Name = "John", DateOfBirth = DateTime.Parse("2000-05-06"), PersonGender = Gender.Male },
-        new Person() { Name = "Linda", DateOfBirth = DateTime.Parse("2005-01-09"), PersonGender = Gender.Female },
-        new Person() { Name = "Susan", DateOfBirth = DateTime.Parse("2000-07-12"), PersonGender = Gender.Other },
-    };
-}
-@{
-    // method
-    double? GetAge(DateTime? DateOfBirth)
-    {
-        if (DateOfBirth is not null)
-        {
-            return Math.Round((DateTime.Now - DateOfBirth.Value).TotalDays / 365.25);
-        }
-        else
-        {
-            return null;
-        }
-    }
 
-    string alertMessage = $"<script>alert('{people.Count} people found')</script>";
-}
 <!DOCTYPE html>
 <html>
     <head>
-        <title>@appTitle</title>
+        <title>@ViewData["appTitle"]</title>
         <meta charset="utf-8"/>
+        <link href="StyleSheet.css" rel="stylesheet"/>
     </head>
 <body>
-@Html.Raw(alertMessage);
-<h1>Welcome</h1>
-@for (int i = 0; i < 2; i++)
-{
-    Person person = people[i];
-    @* <span>Hello to</span> *@
-    @:Hello to 
-    <div>
-        @person.Name
-        <span>, </span>
-        <span>@person.PersonGender </span>
-        @if (person.DateOfBirth != null)
-        {
-            <span>@person.DateOfBirth.Value.ToString("MM/dd/yyyy")</span>
+<div class="page-content">
+    <h1>Welcome</h1>
 
-            <span> @GetAge(person.DateOfBirth) years old</span>
-        }
-    </div>
-}
+    @foreach (Person person in ViewBag.people)
+    {
+        <div class="box float-left w-50">
+                <h3>@person.Name</h3>
+            <table class="table w-100">
+                <tbody>
+                <tr>
+                    <td>Gender</td>
+                    <td>@person.PersonGender</td>
+                </tr>
+                <tr>
+                    <td>Date of Birth</td>
+                    <td>@person.DateOfBirth.Value.ToString("MM/dd/yyyy")</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
 </body>
 </html>
