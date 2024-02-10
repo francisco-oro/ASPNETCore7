@@ -1,10 +1,21 @@
-﻿<!DOCTYPE html>
+﻿@using ViewsExample.Models
+@using System.Collections.Generic
+@{
+    string appTitle = "Asp.Net Core Demo App";
+    List<Person> people = new List<Person>()
+    {
+
+    }
+}
+
+<!DOCTYPE html>
 <html>
-<head>
-    <title>Asp.Net Core App</title>
-    <meta charset="utf-8"/>
-</head>
+    <head>
+        <title>@appTitle</title>
+        <meta charset="utf-8"/>
+    </head>
 <body>
-Welcome
+<h1>Welcome</h1>
+
 </body>
 </html>
