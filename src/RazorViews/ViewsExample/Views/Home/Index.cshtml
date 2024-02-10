@@ -1,10 +1,10 @@
 ﻿@using ViewsExample.Models
-@using System.Collections.Generic
+@model IEnumerable<Person>
 
 <!DOCTYPE html>
 <html>
     <head>
-        <title>@ViewData["appTitle"]</title>
+        <title>@ViewBag.x</title>
         <meta charset="utf-8"/>
         <link href="StyleSheet.css" rel="stylesheet"/>
     </head>
@@ -12,7 +12,7 @@
 <div class="page-content">
     <h1>Welcome</h1>
 
-    @foreach (Person person in ViewBag.people)
+    @foreach (Person person in Model)
     {
         <div class="box float-left w-50">
                 <h3>@person.Name</h3>
@@ -24,7 +24,7 @@
                 </tr>
                 <tr>
                     <td>Date of Birth</td>
-                    <td>@person.DateOfBirth.Value.ToString("MM/dd/yyyy")</td>
+                    <td>@person.DateOfBirth?.ToString("MM/dd/yyyy")</td>
                 </tr>
 
                 </tbody>
