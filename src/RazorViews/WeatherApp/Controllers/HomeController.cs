@@ -7,17 +7,39 @@ namespace WeatherApp.Controllers
     {
         public List<CityWeather> CitiesWeathers { get; set; } = new List<CityWeather>()
         {
-            new CityWeather() { CityUniqueCode = "LDN", CityName = "London", DateAndTime = "2030-01-01 8:00",  TemperatureFahrenheit = 33 }, 
-            new CityWeather() {CityUniqueCode = "NYC", CityName = "London", DateAndTime = "2030-01-01 3:00",  TemperatureFahrenheit = 60}, 
-            new CityWeather() { CityUniqueCode = "PAR", CityName = "Paris", DateAndTime = "2030-01-01 9:00",  TemperatureFahrenheit = 82
+            new CityWeather()
+            {
+                CityUniqueCode = "LDN", CityName = "London", _DateAndTime = "2030-01-01 8:00",
+                TemperatureFahrenheit = 36
+            },
+            new CityWeather()
+            {
+                CityUniqueCode = "NYC", CityName = "London", _DateAndTime = "2030-01-01 3:00",
+                TemperatureFahrenheit = 60
+            },
+            new CityWeather()
+            {
+                CityUniqueCode = "PAR", CityName = "Paris", _DateAndTime = "2030-01-01 9:00", TemperatureFahrenheit = 82
             }
-        } ;
+        };
 
         [Route("/")]
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            return View(CitiesWeathers);
         }
-    }
+
+        [HttpGet("weather/{cityCode:regex(^\\D{3}$)}")]
+        public IActionResult WeatherDetails(string cityCode)
+        {
+            CityWeather? cityWeather = CitiesWeathers.Where(cw => cw.CityUniqueCode.Equals(cityCode)).FirstOrDefault();
+            if (cityWeather != null)
+            {
+                return View(cityWeather);
+            }
+
+            return NotFound();
+        }
+}
 }

@@ -1,0 +1,29 @@
+﻿@model CityWeather
+<!DOCTYPE html>
+<html>
+<head>
+    <title>City Weather</title>
+    <link rel="/StyleSheet.css" rel = "stylesheet"/>
+</head>
+<body>
+<div class="page-content">
+    <h1>Weather</h1>
+    <div class="box w-50">
+        <h3>@Model.CityName</h3>
+        <table class="table">
+            <tbody>
+            <tr>
+                <td>Hour</td>
+                <td>@Model.DateAndTime.ToString("h:mm tt zz")</td>
+            </tr>
+            <tr>
+                <td>Temperature</td>
+                <td>@Model.TemperatureFahrenheit °F</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<a href="/">Back to Weather Home Page</a>
+</body>
+</html>

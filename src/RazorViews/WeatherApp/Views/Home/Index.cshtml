@@ -1,8 +1,33 @@
-﻿@model List<WeatherApp.Models.CityWeather>
+﻿@model IEnumerable<WeatherApp.Models.CityWeather>
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>City Weather</title>
+    <link rel="/StyleSheet.css" rel = "stylesheet"/>
 </head>
+<body>
+<div class="page-content">
+    <h1>Weather</h1>
+    @foreach (CityWeather cityWeather in Model)
+    {
+        <div class="box float-left w-50">
+            <h3>@cityWeather.CityName</h3>
+            <table class="table w-100">
+                <tbody>
+                <tr>
+                    <td>Hour</td>
+                    <td>@cityWeather.DateAndTime.ToString("h:mm tt zz")</td>
+                </tr>
+                <tr>
+                    <td>Temperature</td>
+                    <td>@cityWeather.TemperatureFahrenheit °F</td>
+                </tr>
+                </tbody>
+            </table>
+            <a href="weather/@cityWeather.CityUniqueCode">Details</a>
+        </div>
+    }
+</div>
+</body>
 </html>
