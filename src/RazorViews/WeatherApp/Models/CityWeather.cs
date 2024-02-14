@@ -7,16 +7,9 @@
 
         public string _DateAndTime { get; set; }
 
-        public DateTime DateAndTime
+        public DateTime GetDateAndTime()
         {
-            get
-            {
-                return DateAndTime;
-            }
-            set
-            {
-                DateAndTime = DateTime.Parse(_DateAndTime);
-            }
+            return DateTime.Parse(_DateAndTime);
         }
 
         public int TemperatureFahrenheit  { get; set; }

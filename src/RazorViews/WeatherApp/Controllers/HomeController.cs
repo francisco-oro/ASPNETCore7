@@ -23,15 +23,14 @@ namespace WeatherApp.Controllers
             }
         };
 
-        [Route("/")]
-        [HttpGet]
+        [HttpGet("")]
         public IActionResult Index()
         {
             return View(CitiesWeathers);
         }
 
-        [HttpGet("weather/{cityCode:regex(^\\D{3}$)}")]
-        public IActionResult WeatherDetails(string cityCode)
+        [HttpGet("weather/{cityCode}")]
+        public IActionResult CityWeatherDetails(string cityCode)
         {
             CityWeather? cityWeather = CitiesWeathers.Where(cw => cw.CityUniqueCode.Equals(cityCode)).FirstOrDefault();
             if (cityWeather != null)

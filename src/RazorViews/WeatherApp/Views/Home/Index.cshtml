@@ -1,10 +1,12 @@
-﻿@model IEnumerable<WeatherApp.Models.CityWeather>
+﻿@using WeatherApp.Models
+@model IEnumerable<WeatherApp.Models.CityWeather>
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>City Weather</title>
-    <link rel="/StyleSheet.css" rel = "stylesheet"/>
+    <meta charset="utf-8"/>
+    <link href="/StyleSheet.css" rel = "stylesheet"/>
 </head>
 <body>
 <div class="page-content">
@@ -17,7 +19,7 @@
                 <tbody>
                 <tr>
                     <td>Hour</td>
-                    <td>@cityWeather.DateAndTime.ToString("h:mm tt zz")</td>
+                    <td>@cityWeather.GetDateAndTime().ToString("h:mm tt zz")</td>
                 </tr>
                 <tr>
                     <td>Temperature</td>
