@@ -6,5 +6,16 @@
 </p>
 
 @{
-    await Html.RenderPartialAsync("_ListPartialView");
+    ListModel listModel = new ListModel();
+    listModel.ListTitle = "Programming Languages";
+    listModel.ListItems = new List<string>()
+    {
+        "Java",
+        "C#",
+        "Python",
+        "Scala",
+        "PHP",
+    };
+
+    await Html.RenderPartialAsync("_ListPartialView", listModel);
 }

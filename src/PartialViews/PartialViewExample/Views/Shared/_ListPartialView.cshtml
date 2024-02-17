@@ -1,12 +1,10 @@
-﻿<div class="list-container">
-    <h3>@ViewBag.ListTitle</h3>
-    
-    @{
-        ViewBag.ListTitle = "Updated";
-    }
+﻿@model ListModel
+
+<div class="list-container">
+    <h3>@Model.ListTitle</h3>
 
     <ul class="list">
-        @foreach (string item in ViewBag.ListItems)
+        @foreach (string item in @Model.ListItems)
         {
             <li>@item</li>
         }

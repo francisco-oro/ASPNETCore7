@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PartialViewExample.Models;
 
 namespace PartialViewExample.Controllers
 {
@@ -7,14 +8,6 @@ namespace PartialViewExample.Controllers
         [Route("/")]
         public IActionResult Index()
         {
-            ViewData["ListTitle"] = "Cities";
-            ViewData["ListItems"] = new List<string>()
-            {
-                "Paris",
-                "New York",
-                "New Mumbai",
-                "Rome"
-            };
             return View();
         }
 
@@ -22,6 +15,23 @@ namespace PartialViewExample.Controllers
         public IActionResult About()
         {
             return View();
+        }
+
+        [Route("programming-languages")]
+        public IActionResult ProgrammingLanguages()
+        {
+            ListModel listModel = new ListModel()
+            {
+                ListTitle = "Programming Languages list",
+                ListItems = new List<string>
+                {
+                    "Python",
+                    "C#",
+                    "Go"
+                }
+            };
+
+            return PartialView("_ListPartialView", listModel);
         }
     }
 }
