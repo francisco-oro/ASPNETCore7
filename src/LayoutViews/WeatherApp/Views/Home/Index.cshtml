@@ -1,0 +1,51 @@
+﻿@using WeatherApp.Models
+@model IEnumerable<WeatherApp.Models.CityWeather>
+@{
+    string BackgroundColor;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>City Weather</title>
+    <meta charset="utf-8"/>
+    <link href="/StyleSheet.css" rel = "stylesheet"/>
+</head>
+<body>
+<div class="page-content">
+    <h1>Weather</h1>
+    @foreach (CityWeather cityWeather in Model)
+    {
+        @if (cityWeather.TemperatureFahrenheit > 74)
+        {
+            BackgroundColor = "orange-back";
+        }
+        else if(cityWeather.TemperatureFahrenheit > 44)
+        {
+            BackgroundColor = "green-back";
+        }
+        else
+        {
+            BackgroundColor = "blue-back"; 
+        }
+        <div class="box float-left w-50 @BackgroundColor">
+            <h3>@cityWeather.CityName</h3>
+            <table class="table w-100">
+                <tbody>
+                <tr>
+                    <td>Hour</td>
+                    <td>@cityWeather.GetDateAndTime().ToString("h:mm tt zz")</td>
+                </tr>
+                <tr>
+                    <td>Temperature</td>
+                    <td>@cityWeather.TemperatureFahrenheit °F</td>
+                </tr>
+                </tbody>
+            </table>
+            <a href="weather/@cityWeather.CityUniqueCode">Details</a>
+        </div>
+    }
+</div>
+</body>
+</html>
