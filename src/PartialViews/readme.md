@@ -89,3 +89,30 @@ Generally useful to fetch partial view's content into the browser, by making an 
 [or]
 
 `return PartialView("partial view name", model);`
+
+# Interview Questions
+
+## Explain partial views in asp.net core?
+A partial view is a Razor markup file (.cshtml) that renders HTML output within another markup file's rendered output.
+
+Partial views are an effective way to:
+
+- Break up large views into smaller components.
+
+- Reduce the duplication of common markup content across views.
+
+
+
+You will invoke the partial view either by using the <partial> tag helper or an asynchronous html helper called Html.PartialAsync() or Html.RenderPartialAsync().
+## Explain the difference between PartialAsync() and RenderPartialAsync()
+### 1:
+
+- The Html.PartialAsync() method returns the content to the parent view.
+
+- The Html.RenderPartialAsync() method streams the content to the browser; so it offers faster performance is there is large amount of content in the partial view.
+
+2:
+
+- The return type of PartialAsync() method is IHtmlContent. Hence its output can be stored in a variable.
+
+- The return type of RenderPartialAsync() method is void. So you can’t store its output into a variable. It will be directly streamed to the browser.
