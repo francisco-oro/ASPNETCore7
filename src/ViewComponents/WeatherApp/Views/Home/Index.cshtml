@@ -1,0 +1,18 @@
+﻿@model IEnumerable<WeatherApp.Models.CityWeather>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>City Weather</title>
+    <meta charset="utf-8"/>
+    <link href="/StyleSheet.css" rel = "stylesheet"/>
+</head>
+<body>
+<div class="page-content">
+    <h1>Weather</h1>   
+    @foreach (CityWeather cityWeather in Model)
+        {
+            <vc:weather-details city-weather="cityWeather"></vc:weather-details>
+        }
+    </div>
+</body>
+</html>

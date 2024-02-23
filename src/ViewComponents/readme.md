@@ -90,3 +90,29 @@ return new ViewComponentResult() { ViewName = "view component name", Arguments =
 [or]
 return ViewComponent("view component name", new { param1 = value, param2 = value } });
 ```
+
+# Interview Questions
+## Describe view components?
+ViewComponent was introduced in ASP.NET Core MVC. It can do everything that a partial view can and can do even more. ViewComponents are completely self-contained objects that consistently render html from a razor view. ViewComponents are very powerful UI building blocks of the areas of application which are not directly accessible for controller actions.
+
+Let's suppose we have a page of social icons and we display icons dynamically. We have separate settings for color, urls and names of social icons and we have to render icons dynamically. It’s good to create it as a ViewComponent, because we can pass data to ViewComponent dynamically.
+
+```c#
+public class MyViewComponent : ViewComponent
+{
+ public async Task<IViewComponentResult> InvokeAsync()
+ {
+  return View(model); //invokes the view of ViewComponent
+ }
+}
+```
+
+## When would you use ViewComponent over a partial view?
+If a view needs to render partial view without needing to pass any model data, partial view could be enough.
+
+But if we would like to pass model data (generally, data from database), view component is recommended.
+
+
+
+View Components are completely self-contained objects that consistently render html from a Razor view. View Components offers separation of concerns as they don’t depend on controllers.
+
