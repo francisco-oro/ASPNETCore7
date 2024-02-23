@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DIExample", "DIExample.csproj", "{7EE7730A-3177-4F12-BD5B-C741A6FDC171}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitiesService", "..\Services\CitiesService.csproj", "{5928B49A-5E06-4FD0-B488-0A59986AE0F8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7EE7730A-3177-4F12-BD5B-C741A6FDC171}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EE7730A-3177-4F12-BD5B-C741A6FDC171}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EE7730A-3177-4F12-BD5B-C741A6FDC171}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EE7730A-3177-4F12-BD5B-C741A6FDC171}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5928B49A-5E06-4FD0-B488-0A59986AE0F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5928B49A-5E06-4FD0-B488-0A59986AE0F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5928B49A-5E06-4FD0-B488-0A59986AE0F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5928B49A-5E06-4FD0-B488-0A59986AE0F8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1BB0B61D-B259-4845-AC91-CB5C57964820}
+	EndGlobalSection
+EndGlobal
