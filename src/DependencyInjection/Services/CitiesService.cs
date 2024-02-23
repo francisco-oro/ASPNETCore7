@@ -1,6 +1,8 @@
-﻿namespace Services
+﻿using ServiceContracts;
+
+namespace Services
 {
-    public class CitiesService
+    public class CitiesService : ICitiesService
     {
         private List<string> _cities;
 
@@ -19,6 +21,11 @@
         public List<string> GetCities()
         {
             return _cities;
+        }
+
+        public List<string> GetCountries()
+        {
+            throw new NotImplementedException();
         }
     }
 }

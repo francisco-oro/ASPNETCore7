@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DIExample", "DIExample.cspr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitiesService", "..\Services\CitiesService.csproj", "{5928B49A-5E06-4FD0-B488-0A59986AE0F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceContracts", "..\ServiceContracts\ServiceContracts.csproj", "{CC081510-C2FB-47B0-91D2-76B61D9DA67C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5928B49A-5E06-4FD0-B488-0A59986AE0F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5928B49A-5E06-4FD0-B488-0A59986AE0F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5928B49A-5E06-4FD0-B488-0A59986AE0F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC081510-C2FB-47B0-91D2-76B61D9DA67C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC081510-C2FB-47B0-91D2-76B61D9DA67C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC081510-C2FB-47B0-91D2-76B61D9DA67C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC081510-C2FB-47B0-91D2-76B61D9DA67C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
