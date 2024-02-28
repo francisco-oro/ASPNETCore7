@@ -1,6 +1,6 @@
 ﻿using WeatherApp.Models;
 
-namespace WeatherApp.ServiceContracts
+namespace ServiceContracts
 {
     public interface IWeatherService
     {
