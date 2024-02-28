@@ -422,4 +422,5 @@ Autofac is an IoC container for .NET. It manages the dependencies between classe
 
 Though the default Microsoft DI may offer enough functionality, there is a certain limitations like resolving a service with some associated Metadata, Named/Keyed services, Aggregate Services, Multi-tenant support, lazy instantiation, and much more. As the system grows you might need such features, and Autofac gives you all these features.
 ## What exception do you get when a specific service that you injected, can’t be found in the IoC container?
-NullReferenceException
+I’ll get an “InvalidOperationException” with error message “Unable to resolve service for type 'type’ while attempting to activate ‘class_name'.
+

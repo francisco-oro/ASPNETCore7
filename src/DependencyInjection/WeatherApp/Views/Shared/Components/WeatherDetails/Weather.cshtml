@@ -1,0 +1,33 @@
+﻿@model CityWeather
+
+@{
+    string BackgroundColor;
+}
+@if (Model.TemperatureFahrenheit > 74)
+{
+    BackgroundColor = "orange-back";
+}
+else if (Model.TemperatureFahrenheit > 44)
+{
+    BackgroundColor = "green-back";
+}
+else
+{
+    BackgroundColor = "blue-back";
+}
+<div class="box float-left w-50 @BackgroundColor">
+    <h3>@Model.CityName</h3>
+    <table class="table w-100">
+        <tbody>
+            <tr>
+                <td>Hour</td>
+                <td>@Model.GetDateAndTime().ToString("h:mm tt zz")</td>
+            </tr>
+            <tr>
+                <td>Temperature</td>
+                <td>@Model.TemperatureFahrenheit °F</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="weather/@Model.CityUniqueCode">Details</a>
+</div>
