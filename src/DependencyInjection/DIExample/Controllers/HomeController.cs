@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Autofac;
+using Microsoft.AspNetCore.Mvc;
 using ServiceContracts;
 using Services;
 
@@ -9,15 +10,15 @@ namespace DIExample.Controllers
         private readonly ICitiesService _citiesService1;
         private readonly ICitiesService _citiesService2;
         private readonly ICitiesService _citiesService3;
-        private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly ILifetimeScope _lifetimeScope;
         // constructor
         public HomeController(ICitiesService citiesService1, ICitiesService citiesService2, 
-            ICitiesService citiesService3, IServiceScopeFactory serviceScopeFactory)
+            ICitiesService citiesService3, ILifetimeScope lifetimeScope)
         {
             _citiesService1 = citiesService1; 
             _citiesService2 = citiesService2; 
             _citiesService3 = citiesService3;
-            _serviceScopeFactory = serviceScopeFactory;
+            _lifetimeScope = lifetimeScope;
         }
 
         [Route("/")]
@@ -30,10 +31,10 @@ namespace DIExample.Controllers
 
             ViewBag.InstanceId_CitiesService_3 = _citiesService3.ServiceInstanceID;
 
-            using (IServiceScope scope = _serviceScopeFactory.CreateScope())
+            using (ILifetimeScope scope = _lifetimeScope.BeginLifetimeScope())
             {
                 // Inject CitiesService
-                ICitiesService citiesService = scope.ServiceProvider.GetRequiredService<ICitiesService>();
+                ICitiesService citiesService = scope.Resolve<ICitiesService>();
                 // DB work
 
                 ViewBag.InstanceId_CitiesService_InScope = citiesService.ServiceInstanceID;
