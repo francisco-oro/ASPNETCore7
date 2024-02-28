@@ -4,10 +4,18 @@ namespace Services
 {
     public class CitiesService : ICitiesService
     {
-        private List<string> _cities;
-
+        private readonly List<string> _cities;
+        private readonly Guid _serviceInstanceId;
+        public Guid ServiceInstanceID
+        {
+            get
+            {
+                return _serviceInstanceId;
+            }
+        }
         public CitiesService()
         {
+            _serviceInstanceId = Guid.NewGuid();
             _cities = new List<string>()
             {
                 "London",
@@ -25,7 +33,7 @@ namespace Services
 
         public List<string> GetCountries()
         {
-            throw new NotImplementedException();
+            return _cities;
         }
     }
 }
