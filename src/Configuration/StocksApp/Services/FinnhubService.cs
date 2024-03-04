@@ -21,7 +21,7 @@ namespace StocksApp.Services
                 {
                     RequestUri =
                         new Uri(
-                            $"https://finlsnhub.io/api/v1/quote?symbol={stockSymbol}&token={_configuration["FinnhubToken"]}"),
+                            $"https://finnhub.io/api/v1/quote?symbol={stockSymbol}&token={_configuration["FinnhubToken"]}"),
                     Method = HttpMethod.Get
                 };
 
