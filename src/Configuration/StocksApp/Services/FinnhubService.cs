@@ -6,9 +6,11 @@ namespace StocksApp.Services
     public class FinnhubService : IFinnhubService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public FinnhubService(IHttpClientFactory httpClientFactory)
+        private readonly IConfiguration _configuration;
+        public FinnhubService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
         }
 
         public async Task<Dictionary<string, object>?> GetStockPriceQuote(string stockSymbol)
@@ -19,7 +21,7 @@ namespace StocksApp.Services
                 {
                     RequestUri =
                         new Uri(
-                            $"https://finnhub.io/api/v1/quote?symbol={stockSymbol}&token=cniv5dhr01qkq94g5ibgcniv5dhr01qkq94g5ic0"),
+                            $"https://finlsnhub.io/api/v1/quote?symbol={stockSymbol}&token={_configuration["FinnhubToken"]}"),
                     Method = HttpMethod.Get
                 };
 
