@@ -309,9 +309,14 @@ public ControllerName(IOptions<Model> options)
 
 ## How do you enable Secrets manager and why?
 
-- You have to call the following commands: 
-```bash
-dotnet user-secrets init --project projectName
-```
+A feature in ASP.NET Core named User Secrets allows you to store user secrets outside your project tree in a JSON file, and can even be managed using a command-line tool called the Secrets Manager.
 
-It's the recommended way of doing it as it will create a `secrets.json` file specific to your project
+So as a benefit, you will not push sensitive values like passwords or API keys into your source control – so those values are kept secret to the same developer machine.s it will create a `secrets.json` file specific to your project
+
+
+To enable & store secrets using “secret manager tool” (in PowerShell):
+```c#
+dotnet user-secrets init
+dotnet user-secrets set “Key” “value”
+dotnet user-secrets list
+```
