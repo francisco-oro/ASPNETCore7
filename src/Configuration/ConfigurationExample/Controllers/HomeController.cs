@@ -1,31 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace ConfigurationExample.Controllers
 {
     public class HomeController : Controller
     {
         // private field
-        private readonly IConfiguration _configuration;
+        private readonly WeatherApiOptions _options;
 
         // constructor
 
-        public HomeController(IConfiguration configuration)
+        public HomeController(IOptions<WeatherApiOptions> weatherApiOptions)
         {
-            _configuration = configuration;
+            _options = weatherApiOptions.Value;
         }
-
+        
         [Route("/")]
         public IActionResult Index()
         {
- /*           ViewBag.ClientID = _configuration["weatherapi:ClientID"];
-            ViewBag.ClientSecret = _configuration.GetValue("weatherapi:ClientSecret", "The default client secret");
-                        */
+            ViewBag.ClientID = _options.ClientID;
+            ViewBag.ClientSecret = _options.ClientSecret;
 
-            ViewBag.ClientID = _configuration["weatherapi:ClientID"];
-            ViewBag.ClientSecret = _configuration.GetValue("weatherapi:ClientSecret", "The default client secret");
-            
-            
-            
+
+
             return View();
         }
     }
