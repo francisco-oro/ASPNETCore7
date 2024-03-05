@@ -39,7 +39,7 @@ namespace StocksApp.Controllers
             return View(stockTrade);
         }
 
-        [Route("api/v1/StockPriceQuote")]
+        [Route("trade/api/v1/StockPriceQuote")]
         public async Task<IActionResult> GetStockPriceQuoute([FromQuery] string stockSymbol)
         {
             if (stockSymbol == null)
@@ -48,7 +48,7 @@ namespace StocksApp.Controllers
             }
 
             Dictionary<string, object> companyProfileDictionary =
-                await _finnhubService.GetCompanyProfile(stockSymbol);
+                await _finnhubService.GetStockPriceQuote(stockSymbol);
 
             return Json(companyProfileDictionary);
         }

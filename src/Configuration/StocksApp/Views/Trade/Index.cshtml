@@ -4,3 +4,32 @@
     ViewBag.Title = "TradeDetails";
 }
 
+<div class="box">
+    <h1 class="stock-title">@Model.StockName</h1>
+    <p class="hidden" id="stock-symbol_@Model.StockSymbol">@Model.StockSymbol</p>
+    <small>$</small> <span class="price" id="price_@Model.StockSymbol">@Model.Price.ToString("N")</span>
+</div>
+
+<script type="text/javascript">
+
+    window.addEventListener('load', function () {
+        const fetchInterval = 5000;
+        setInterval(FetchStockPrice, fetchInterval);
+    });
+
+    async function FetchStockPrice() {
+        await fetch("api/v1/StockPriceQuote?stockSymbol=@Model.StockSymbol", { method: "GET" })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                UpdateStockPrice(data);
+            });
+    }
+    // Update: Prevents duplicate rendering
+    function UpdateStockPrice(data) {
+        const stockPrice = document.getElementById('price_@Model.StockSymbol');
+        stockPrice.innerHTML = data.c;
+    }
+
+</script>
