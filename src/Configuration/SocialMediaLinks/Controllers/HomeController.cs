@@ -15,7 +15,7 @@ namespace SocialMediaLinks.Controllers
         public IActionResult Index()
         {
             ViewBag.Facebook = _socialMediaLinksOptions.Facebook;
-            ViewBag.Instagram = _socialMediaLinksOptions.Instagram;
+            ViewBag.Twitter = _socialMediaLinksOptions.Twitter;
             ViewBag.Instagram = _socialMediaLinksOptions.Instagram;
             ViewBag.Youtube = _socialMediaLinksOptions.Youtube;
 
