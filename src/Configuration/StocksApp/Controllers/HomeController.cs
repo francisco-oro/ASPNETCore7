@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using StocksApp.Models;
+using StocksApp.ServiceContracts;
 using StocksApp.Services;
 
 namespace StocksApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly FinnhubService _finnhubService;
+        private readonly IFinnhubService _finnhubService;
         private readonly IOptions<TradingOptions> _tradingOptions;
-        public HomeController(FinnhubService finnhubService, IOptions<TradingOptions> tradingOptions)
+        public HomeController(IFinnhubService finnhubService, IOptions<TradingOptions> tradingOptions)
         {
             _finnhubService = finnhubService;
             _tradingOptions = tradingOptions;
