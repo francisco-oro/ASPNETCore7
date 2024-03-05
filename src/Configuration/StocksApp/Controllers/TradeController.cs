@@ -33,10 +33,24 @@ namespace StocksApp.Controllers
             StockTrade stockTrade = new StockTrade()
             {
                 Price = Convert.ToDouble(stockPriceQuoteDictionary["c"].ToString()),
-                StockName = companyProfileDictionary["name"],
-                StockSymbol = companyProfileDictionary["ticker"]
+                StockName = companyProfileDictionary["name"].ToString(),
+                StockSymbol = companyProfileDictionary["ticker"].ToString()
             };
             return View(stockTrade);
+        }
+
+        [Route("api/v1/StockPriceQuote")]
+        public async Task<IActionResult> GetStockPriceQuoute([FromQuery] string stockSymbol)
+        {
+            if (stockSymbol == null)
+            {
+                return NotFound();
+            }
+
+            Dictionary<string, object> companyProfileDictionary =
+                await _finnhubService.GetCompanyProfile(stockSymbol);
+
+            return Json(companyProfileDictionary);
         }
     }
 }

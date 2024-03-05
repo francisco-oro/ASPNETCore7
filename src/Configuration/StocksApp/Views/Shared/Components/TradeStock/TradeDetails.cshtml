@@ -1,0 +1,11 @@
+﻿@model StocksApp.Models.StockTrade
+
+<div class="box">
+    <h1 class="stock-title">@Model.StockName</h1>
+    <p class="hidden" id="stock-symbol_@Model.StockSymbol">@Model.StockSymbol</p>
+    <small>$</small> <span class="price" id="price_@Model.StockSymbol">@Model.Price.ToString("N")</span>
+</div>
+
+<script>
+    document.querySelector("#price_@Model.StockSymbol").addEventListener("");
+</script>

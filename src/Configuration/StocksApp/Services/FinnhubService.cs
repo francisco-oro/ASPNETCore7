@@ -47,7 +47,7 @@ namespace StocksApp.Services
             }
         }
 
-        public async Task<Dictionary<string, string>?> GetCompanyProfile(string stockSymbol)
+        public async Task<Dictionary<string, object>?> GetCompanyProfile(string stockSymbol)
         {
             using (HttpClient httpClient = _httpClientFactory.CreateClient())
             {
@@ -67,8 +67,8 @@ namespace StocksApp.Services
 
                 string response = reader.ReadToEnd();
 
-                Dictionary<string, string>? responseDictionary =
-                    JsonSerializer.Deserialize<Dictionary<string, string>>(response);
+                Dictionary<string, object>? responseDictionary =
+                    JsonSerializer.Deserialize<Dictionary<string, object>>(response);
 
                 if (responseDictionary == null)
                 {
