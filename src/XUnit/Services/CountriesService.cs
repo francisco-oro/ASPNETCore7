@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using System.Collections;
+using Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
 
@@ -47,8 +48,17 @@ namespace Services
 
         public List<CountryResponse> GetAllCountries()
         {
-            throw new NotImplementedException();
+            return _countries.Select(country => country.ToCountryResponse()).ToList();
         }
 
+        public CountryResponse? GetCountryByCountryID(Guid? countryID)
+        {
+            if (countryID == null)
+            {
+                return null;
+            }
+
+            _countries.FirstOrDefault(temp => temp.CountryID == countryID)
+        }
     }
 }
