@@ -8,6 +8,6 @@ namespace CRUDTests
 {
     internal class MyMath
     {
-        public int Add(int a, int b) => 0;
+        public int Add(int a, int b) => a+b;
     }
 }

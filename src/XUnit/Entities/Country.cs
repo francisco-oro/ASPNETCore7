@@ -1,7 +1,7 @@
 ﻿namespace Entities
 {
     /// <summary>
-    /// Domain Model for Country Details
+    /// Domain Model for Country Detailsww
     /// </summary>
     public class Country
     {
