@@ -17,6 +17,7 @@ namespace ServiceContracts.DTO
         public string? Address { get; set; }
         public bool? ReceiveNewsLetters { get; set; }
         public double? Age { get; set; }
+        public string? Country { get; set; }
 
         /// <summary>
         /// Compares the current object 
