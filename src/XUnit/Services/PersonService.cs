@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
+using Services.Helpers;
 
 namespace Services
 {
@@ -34,14 +35,7 @@ namespace Services
             }
 
             //Model validations
-            ValidationContext validationContext = new ValidationContext(personAddRequest);
-            List<ValidationResult> validationResults = new List<ValidationResult>();
-            bool isValid = Validator.TryValidateObject(personAddRequest, validationContext,
-                validationResults, true);
-            if (!isValid)
-            {
-                throw new ArgumentException(validationResults.FirstOrDefault()?.ErrorMessage);
-            }
+            ValidationHelper.ModelValidation(personAddRequest);
 
             // convert personAddRequest into Person type 
             Person person = personAddRequest.ToPerson();
@@ -57,6 +51,11 @@ namespace Services
         }
 
         public List<PersonResponse> GetAllPeople()
+        {
+            throw new NotImplementedException();
+        }
+
+        public PersonResponse? GetPersonByPersonID(Guid? personID)
         {
             throw new NotImplementedException();
         }
