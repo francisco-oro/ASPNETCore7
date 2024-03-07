@@ -52,10 +52,26 @@ namespace Services
 
         public List<PersonResponse> GetAllPeople()
         {
-            throw new NotImplementedException();
+            return _people.Select(temp => temp.ToPersonResponse()).ToList();
         }
 
         public PersonResponse? GetPersonByPersonID(Guid? personID)
+        {
+            if (personID == null)
+            {
+                return null; 
+            }
+
+            Person? person = _people.FirstOrDefault(temp => temp.PersonID == personID);
+            if (person == null)
+            {
+                return null;
+            }
+
+            return person.ToPersonResponse();
+        }
+
+        public List<PersonResponse> GetFilteredPeople(string searchBy, string? searchString)
         {
             throw new NotImplementedException();
         }
