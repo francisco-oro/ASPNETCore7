@@ -42,7 +42,7 @@ namespace ServiceContracts.DTO
         }
     }
 
-    public static class PersonExtensions()
+    public static class PersonExtensions
     {
         /// <summary>
         /// An extension method to convert an object of Person class into PersonResponse class
@@ -65,7 +65,7 @@ namespace ServiceContracts.DTO
                 Age = (person.DateOfBirth != null)
                     ? Math.Round((DateTime.Now - person.DateOfBirth.Value).TotalDays / 362.25)
                     : null
-            }; 
+            };
         }
     }
 }
