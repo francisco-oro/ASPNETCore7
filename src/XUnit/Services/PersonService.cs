@@ -73,7 +73,36 @@ namespace Services
 
         public List<PersonResponse> GetFilteredPeople(string searchBy, string? searchString)
         {
-            throw new NotImplementedException();
+            List<PersonResponse> allPeople = GetAllPeople();
+            List<PersonResponse> matchingPeople = allPeople;
+
+            if (string.IsNullOrEmpty(searchBy) || string.IsNullOrEmpty(searchString))
+            {
+                return matchingPeople;
+            }
+
+            switch (searchBy)
+            {
+                case nameof(Person.PersonName):
+                    matchingPeople = allPeople.Where(temp => 
+                        (string.IsNullOrEmpty(temp.PersonName) || temp.PersonName.Contains(searchString, StringComparison.OrdinalIgnoreCase))).ToList(); ;
+                    break;
+
+                case nameof(Person.Email):
+                    matchingPeople = allPeople.Where(temp =>
+                        (string.IsNullOrEmpty(temp.Email) || temp.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase))).ToList(); ;
+                    break;
+
+                case nameof(Person.DateOfBirth):
+                    matchingPeople = allPeople.Where(temp =>
+                        (temp.DateOfBirth == null || temp.DateOfBirth.Value.ToString("dd MMMM yyy").Contains(searchString, StringComparison.OrdinalIgnoreCase))).ToList(); ;
+                    break;
+
+                case nameof(Person.Gender):
+                    matchingPeople = allPeople.Where(temp =>
+                        (string.IsNullOrEmpty(temp.Gender) || temp.PersonName.Contains(searchString, StringComparison.OrdinalIgnoreCase))).ToList(); ;
+                    break;
+            }
         }
     }
 }

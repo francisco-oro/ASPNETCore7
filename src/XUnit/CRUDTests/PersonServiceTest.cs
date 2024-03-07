@@ -307,7 +307,7 @@ namespace CRUDTests
             }
         }
 
-
+        [Fact]
         // First we will add few people; and then we will search based on person name with some search string. It should return the matching people
         public void GetAllPeople_SearchByPersonName()
         {
@@ -372,7 +372,14 @@ namespace CRUDTests
             _outputHelper.WriteLine("Expected:");
             foreach (var personResponse in personResponsesFromAdd)
             {
-                _outputHelper.WriteLine(personResponse.ToString());
+                if (personResponse.PersonName == null)
+                {
+                    continue;
+                }
+                if (personResponse.PersonName.Contains("ma", StringComparison.OrdinalIgnoreCase))
+                {
+                    _outputHelper.WriteLine(personResponse.ToString());
+                }
             }
 
             //Act
@@ -388,7 +395,14 @@ namespace CRUDTests
             //Assert 
             foreach (var personResponse in personResponsesFromAdd)
             {
-                Assert.Contains(personResponse, peopleListFromSearch);
+                if (personResponse.PersonName == null)
+                {
+                    continue;
+                }
+                if (personResponse.PersonName.Contains("ma", StringComparison.OrdinalIgnoreCase))
+                {
+                    Assert.Contains(personResponse, peopleListFromSearch);
+                }
             }
         }
 
