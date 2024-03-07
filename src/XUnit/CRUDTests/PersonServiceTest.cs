@@ -15,13 +15,79 @@ namespace CRUDTests
         private readonly ICountriesService _countriesService;
         private readonly ITestOutputHelper _outputHelper;
 
-
         // constructor 
         public PersonServiceTest(ITestOutputHelper testOutputHelper)
         {
             _personService = new PersonService();
             _countriesService = new CountriesService();
             _outputHelper = testOutputHelper;
+        }
+
+        // helper methods
+        private (CountryResponse countryResponse1, CountryResponse countryResponse2) AddCountries()
+        {
+            //Arrange
+            CountryAddRequest countryAddRequest1 = new CountryAddRequest()
+            {
+                CountryName = "USA"
+            };
+            CountryAddRequest countryAddRequest2 = new CountryAddRequest()
+            {
+                CountryName = "India"
+            };
+
+            CountryResponse countryResponse1 = _countriesService.AddCountry(countryAddRequest1);
+            CountryResponse countryResponse2 = _countriesService.AddCountry(countryAddRequest2);
+            return (countryResponse1, countryResponse2);
+        }
+
+        private List<PersonResponse> AddPeople(CountryResponse countryResponse1, CountryResponse countryResponse2)
+        {
+            PersonAddRequest personAddRequest1 = new PersonAddRequest()
+            {
+                PersonName = "Smith",
+                Email = "smith@example.com",
+                Gender = GenderOptions.Male,
+                Address = "address of smith",
+                CountryID = countryResponse1.CountryID,
+                DateOfBirth = DateTime.Parse("2002-05-06"),
+                ReceiveNewsLetters = true
+            };
+            PersonAddRequest personAddRequest2 = new PersonAddRequest()
+            {
+                PersonName = "Mary",
+                Email = "Mary@example.com",
+                Gender = GenderOptions.Female,
+                Address = "address of Mary",
+                CountryID = countryResponse2.CountryID,
+                DateOfBirth = DateTime.Parse("2000-02-02"),
+                ReceiveNewsLetters = false
+            };
+            PersonAddRequest personAddRequest3 = new PersonAddRequest()
+            {
+                PersonName = "Rahman",
+                Email = "Rahman@example.com",
+                Gender = GenderOptions.Male,
+                Address = "address of Rahman",
+                CountryID = countryResponse1.CountryID,
+                DateOfBirth = DateTime.Parse("1999-03-03"),
+                ReceiveNewsLetters = true
+            };
+
+            List<PersonAddRequest> personRequests = new List<PersonAddRequest>()
+            {
+                personAddRequest1, personAddRequest2, personAddRequest3
+            };
+
+            List<PersonResponse> personResponsesFromAdd = new List<PersonResponse>();
+
+            foreach (PersonAddRequest personRequest in personRequests)
+            {
+                PersonResponse personResponse = _personService.AddPerson(personRequest);
+                personResponsesFromAdd.Add(personResponse);
+            }
+
+            return personResponsesFromAdd;
         }
 
         #region AddPerson
@@ -151,49 +217,8 @@ namespace CRUDTests
         public void GetAllPeople_AddFewPeople()
         {
             //Arrange
-            CountryAddRequest countryAddRequest1 = new CountryAddRequest()
-            {
-                CountryName = "USA"
-            };            
-            CountryAddRequest countryAddRequest2 = new CountryAddRequest()
-            {
-                CountryName = "India"
-            };
-
-            CountryResponse countryResponse1 = _countriesService.AddCountry(countryAddRequest1);
-            CountryResponse countryResponse2 = _countriesService.AddCountry(countryAddRequest2);
-
-            PersonAddRequest personAddRequest1 = new PersonAddRequest()
-            {
-                PersonName = "Smith", Email = "smith@example.com", Gender = GenderOptions.Male,
-                Address = "address of smith", CountryID = countryResponse1.CountryID,
-                DateOfBirth = DateTime.Parse("2002-05-06"), ReceiveNewsLetters = true
-            };
-            PersonAddRequest personAddRequest2 = new PersonAddRequest()
-            {
-                PersonName = "Mary", Email = "Mary@example.com", Gender = GenderOptions.Female,
-                Address = "address of Mary", CountryID = countryResponse1.CountryID,
-                DateOfBirth = DateTime.Parse("2000-02-02"), ReceiveNewsLetters = false
-            };
-            PersonAddRequest personAddRequest3 = new PersonAddRequest()
-            {
-                PersonName = "Rahman", Email = "Rahman@example.com", Gender = GenderOptions.Male,
-                Address = "address of Rahman", CountryID = countryResponse1.CountryID,
-                DateOfBirth = DateTime.Parse("1999-03-03"), ReceiveNewsLetters = true
-            };
-
-            List<PersonAddRequest> personRequests = new List<PersonAddRequest>()
-            {
-                personAddRequest1, personAddRequest2, personAddRequest3
-            };
-
-            List<PersonResponse> personResponsesFromAdd = new List<PersonResponse>();
-            
-            foreach (PersonAddRequest personRequest in personRequests)
-            {
-                PersonResponse personResponse = _personService.AddPerson(personRequest);
-                personResponsesFromAdd.Add(personResponse);
-            }
+            var (countryResponse1, countryResponse2) = AddCountries();
+            var personResponsesFromAdd = AddPeople(countryResponse1, countryResponse2);
 
             //print personResponsesFromAdd 
             _outputHelper.WriteLine("Expected:");
@@ -227,61 +252,8 @@ namespace CRUDTests
         public void GetAllPeople_EmptySearchText()
         {
             //Arrange
-            CountryAddRequest countryAddRequest1 = new CountryAddRequest()
-            {
-                CountryName = "USA"
-            };
-            CountryAddRequest countryAddRequest2 = new CountryAddRequest()
-            {
-                CountryName = "India"
-            };
-
-            CountryResponse countryResponse1 = _countriesService.AddCountry(countryAddRequest1);
-            CountryResponse countryResponse2 = _countriesService.AddCountry(countryAddRequest2);
-
-            PersonAddRequest personAddRequest1 = new PersonAddRequest()
-            {
-                PersonName = "Smith",
-                Email = "smith@example.com",
-                Gender = GenderOptions.Male,
-                Address = "address of smith",
-                CountryID = countryResponse1.CountryID,
-                DateOfBirth = DateTime.Parse("2002-05-06"),
-                ReceiveNewsLetters = true
-            };
-            PersonAddRequest personAddRequest2 = new PersonAddRequest()
-            {
-                PersonName = "Mary",
-                Email = "Mary@example.com",
-                Gender = GenderOptions.Female,
-                Address = "address of Mary",
-                CountryID = countryResponse1.CountryID,
-                DateOfBirth = DateTime.Parse("2000-02-02"),
-                ReceiveNewsLetters = false
-            };
-            PersonAddRequest personAddRequest3 = new PersonAddRequest()
-            {
-                PersonName = "Rahman",
-                Email = "Rahman@example.com",
-                Gender = GenderOptions.Male,
-                Address = "address of Rahman",
-                CountryID = countryResponse1.CountryID,
-                DateOfBirth = DateTime.Parse("1999-03-03"),
-                ReceiveNewsLetters = true
-            };
-
-            List<PersonAddRequest> personRequests = new List<PersonAddRequest>()
-            {
-                personAddRequest1, personAddRequest2, personAddRequest3
-            };
-
-            List<PersonResponse> personResponsesFromAdd = new List<PersonResponse>();
-
-            foreach (PersonAddRequest personRequest in personRequests)
-            {
-                PersonResponse personResponse = _personService.AddPerson(personRequest);
-                personResponsesFromAdd.Add(personResponse);
-            }
+            var (countryResponse1, countryResponse2) = AddCountries();
+            var personResponsesFromAdd = AddPeople(countryResponse1, countryResponse2);
 
             //print personResponsesFromAdd 
             _outputHelper.WriteLine("Expected:");
@@ -307,66 +279,16 @@ namespace CRUDTests
             }
         }
 
-        [Fact]
+        [Theory]
+        [InlineData("ma")]
+        [InlineData("sm")]
+        [InlineData("m")]
         // First we will add few people; and then we will search based on person name with some search string. It should return the matching people
-        public void GetAllPeople_SearchByPersonName()
+        public void GetAllPeople_SearchByPersonName(string searchString)
         {
-            //Arrange
-            CountryAddRequest countryAddRequest1 = new CountryAddRequest()
-            {
-                CountryName = "USA"
-            };
-            CountryAddRequest countryAddRequest2 = new CountryAddRequest()
-            {
-                CountryName = "India"
-            };
+            var (countryResponse1, countryResponse2) = AddCountries();
 
-            CountryResponse countryResponse1 = _countriesService.AddCountry(countryAddRequest1);
-            CountryResponse countryResponse2 = _countriesService.AddCountry(countryAddRequest2);
-
-            PersonAddRequest personAddRequest1 = new PersonAddRequest()
-            {
-                PersonName = "Smith",
-                Email = "smith@example.com",
-                Gender = GenderOptions.Male,
-                Address = "address of smith",
-                CountryID = countryResponse1.CountryID,
-                DateOfBirth = DateTime.Parse("2002-05-06"),
-                ReceiveNewsLetters = true
-            };
-            PersonAddRequest personAddRequest2 = new PersonAddRequest()
-            {
-                PersonName = "Mary",
-                Email = "Mary@example.com",
-                Gender = GenderOptions.Female,
-                Address = "address of Mary",
-                CountryID = countryResponse1.CountryID,
-                DateOfBirth = DateTime.Parse("2000-02-02"),
-                ReceiveNewsLetters = false
-            };
-            PersonAddRequest personAddRequest3 = new PersonAddRequest()
-            {
-                PersonName = "Rahman",
-                Email = "Rahman@example.com",
-                Gender = GenderOptions.Male,
-                Address = "address of Rahman",
-                CountryID = countryResponse1.CountryID,
-                DateOfBirth = DateTime.Parse("1999-03-03"),
-                ReceiveNewsLetters = true
-            };
-
-            List<PersonAddRequest> personRequests = new List<PersonAddRequest>()
-            {
-                personAddRequest1, personAddRequest2, personAddRequest3
-            };
-
-            List<PersonResponse> personResponsesFromAdd = new List<PersonResponse>();
-
-            foreach (PersonAddRequest personRequest in personRequests)
-            {
-                PersonResponse personResponse = _personService.AddPerson(personRequest);
-                personResponsesFromAdd.Add(personResponse);
-            }
+            var personResponsesFromAdd = AddPeople(countryResponse1, countryResponse2);
 
             //print personResponsesFromAdd 
             _outputHelper.WriteLine("Expected:");
@@ -376,14 +298,14 @@ namespace CRUDTests
                 {
                     continue;
                 }
-                if (personResponse.PersonName.Contains("ma", StringComparison.OrdinalIgnoreCase))
+                if (personResponse.PersonName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
                 {
                     _outputHelper.WriteLine(personResponse.ToString());
                 }
             }
 
             //Act
-            List<PersonResponse> peopleListFromSearch = _personService.GetFilteredPeople(nameof(Person.PersonName), "ma");
+            List<PersonResponse> peopleListFromSearch = _personService.GetFilteredPeople(nameof(Person.PersonName), searchString);
 
             //print peopleListFromGet 
             _outputHelper.WriteLine("Actual:");
@@ -399,13 +321,50 @@ namespace CRUDTests
                 {
                     continue;
                 }
-                if (personResponse.PersonName.Contains("ma", StringComparison.OrdinalIgnoreCase))
+                if (personResponse.PersonName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
                 {
                     Assert.Contains(personResponse, peopleListFromSearch);
                 }
             }
         }
 
+
+
+        #endregion
+
+        #region GetSortedPeople
+        // When we sort based on PersonName in DESC, it should return people list in descending on PersonName
+        [Fact]
+        public void GetSortedPeople()
+        {
+            //Arrange
+            var (countryResponse1, countryResponse2) = AddCountries();
+            var personResponsesFromAdd = AddPeople(countryResponse1, countryResponse2);
+
+            //print personResponsesFromAdd 
+            _outputHelper.WriteLine("Expected:");
+            foreach (var personResponse in personResponsesFromAdd)
+            {
+                _outputHelper.WriteLine(personResponse.ToString());
+            }
+
+            List<PersonResponse> allPeople = _personService.GetAllPeople();
+            //Act
+            List<PersonResponse> peopleListFromSort = _personService.GetSortedPeople(allPeople, nameof(Person.PersonName), SortOrderOptions.DESC);
+
+            //print peopleListFromGet 
+            _outputHelper.WriteLine("Actual:");
+            foreach (var personResponse in peopleListFromSort)
+            {
+                _outputHelper.WriteLine(personResponse.ToString());
+            }
+
+            //Assert 
+            foreach (var personResponse in personResponsesFromAdd)
+            {
+                Assert.Contains(personResponse, peopleListFromSort);
+            }
+        }
         #endregion
     }
 }

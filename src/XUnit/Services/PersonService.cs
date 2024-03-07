@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
+using ServiceContracts.Enums;
 using Services.Helpers;
 
 namespace Services
@@ -100,9 +101,29 @@ namespace Services
 
                 case nameof(Person.Gender):
                     matchingPeople = allPeople.Where(temp =>
-                        (string.IsNullOrEmpty(temp.Gender) || temp.PersonName.Contains(searchString, StringComparison.OrdinalIgnoreCase))).ToList(); ;
+                        (string.IsNullOrEmpty(temp.Gender) || temp.Gender.Contains(searchString, StringComparison.OrdinalIgnoreCase))).ToList(); ;
+                    break;
+
+                case nameof(Person.CountryID):
+                    matchingPeople = allPeople.Where(temp =>
+                        (string.IsNullOrEmpty(temp.Country) || temp.Country.Contains(searchString, StringComparison.OrdinalIgnoreCase))).ToList(); ;
+                    break;
+
+                case nameof(Person.Address):
+                    matchingPeople = allPeople.Where(temp =>
+                        (string.IsNullOrEmpty(temp.Address) || temp.Address.Contains(searchString, StringComparison.OrdinalIgnoreCase))).ToList(); ;
+                    break;
+                default:
+                    matchingPeople = allPeople;
                     break;
             }
+
+            return matchingPeople;
+        }
+
+        public List<PersonResponse> GetSortedPeople(List<PersonResponse> allPeople, string sortBy, SortOrderOptions sortOrder)
+        {
+            throw new NotImplementedException();
         }
     }
 }
