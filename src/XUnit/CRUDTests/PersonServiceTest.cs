@@ -358,13 +358,14 @@ namespace CRUDTests
             {
                 _outputHelper.WriteLine(personResponse.ToString());
             }
-
+            personResponsesFromAdd = personResponsesFromAdd.OrderByDescending(temp => temp.PersonName).ToList();
             //Assert 
-            foreach (var personResponse in personResponsesFromAdd)
+            for (int i = 0; i < personResponsesFromAdd.Count; i++)
             {
-                Assert.Contains(personResponse, peopleListFromSort);
+                Assert.Equal(personResponsesFromAdd[i], peopleListFromSort[i]);
             }
         }
+
         #endregion
     }
 }
