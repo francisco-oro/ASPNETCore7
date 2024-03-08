@@ -424,7 +424,7 @@ namespace CRUDTests
 
         }
 
-        //First, add a new person and try to update the person name and email
+        //First, add a new person and try to update the person name and email       
         [Fact]
         public void UpdatePerson_PersonFullDetailsUpdate()
         {
@@ -443,6 +443,39 @@ namespace CRUDTests
 
             //Assert 
             Assert.Equal(personResponseFromGet, personResponseFromUpdatePerson);
+        }
+        #endregion
+
+        #region DeletePerson
+
+        //If you supply an valid PersonID, it should return true
+        [Fact]
+        public void DeletePerson_ValidPersonID()
+        {
+            //Arrange
+            var (countryResponse1, countryResponse2) = AddCountries();
+            var peopleFromAdd = AddPeople(countryResponse1, countryResponse2);
+
+            //Act 
+            bool isDeleted = _personService.DeletePerson(peopleFromAdd[2].PersonID);
+
+            //Assert
+            Assert.True(isDeleted);
+        }
+
+        //If you supply an invalid PersonID, it should return false
+        [Fact]
+        public void DeletePerson_InvalidPersonID()
+        {
+            //Arrange
+            var (countryResponse1, countryResponse2) = AddCountries();
+            var peopleFromAdd = AddPeople(countryResponse1, countryResponse2);
+
+            //Act 
+            bool isDeleted = _personService.DeletePerson(Guid.NewGuid());
+
+            //Assert
+            Assert.False(isDeleted);
         }
         #endregion
     }

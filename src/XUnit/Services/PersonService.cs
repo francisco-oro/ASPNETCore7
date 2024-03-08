@@ -214,5 +214,23 @@ namespace Services
 
             return matchingPerson.ToPersonResponse();
         }
+
+        public bool DeletePerson(Guid? personID)
+        {
+            if (personID == null)
+            {
+                throw new ArgumentNullException(nameof(personID));
+            }
+
+            Person? person = _people.FirstOrDefault(temp => temp.PersonID == personID);
+            if (person == null)
+            {
+                return false; 
+            }
+
+            _people.RemoveAll(temp => temp.PersonID == personID);
+
+            return true;
+        }
     }
 }
