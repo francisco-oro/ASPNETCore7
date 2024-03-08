@@ -367,5 +367,82 @@ namespace CRUDTests
         }
 
         #endregion
+
+        #region UpdatePerson
+
+        //When we supply null as PersonUpdateRequest, it should throw ArgumentNullException
+        [Fact]
+        public void UpdatePerson_NullPerson()
+        {
+            //Arrange
+            PersonUpdateRequest? personUpdateRequest = null;
+
+            //Assert
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                //Act 
+                _personService.UpdatePerson(personUpdateRequest);
+            });
+        }
+
+        //When we supply invalid person id, it should throw ArgumentException
+        [Fact]
+        public void UpdatePerson_InvalidPersonID()
+        {
+            //Arrange 
+            PersonUpdateRequest? personUpdateRequest = new PersonUpdateRequest()
+            {
+                PersonID = Guid.NewGuid()
+            };
+
+            //Assert
+            Assert.Throws<ArgumentException>(() =>
+            {
+                //Act 
+                _personService.UpdatePerson(personUpdateRequest);
+            });
+        }
+
+
+        //When personName is null, it should throw ArgumentException
+        [Fact]
+        public void UpdatePerson_PersonNameIsNull()
+        {
+            //Arrange 
+            var (countryResponse1, countryResponse2) = AddCountries();
+            var personFromAdd = AddPeople(countryResponse1, countryResponse2);
+
+            PersonUpdateRequest personUpdateRequest = personFromAdd[0].ToPersonUpdateRequest();
+            personUpdateRequest.PersonName = null;
+
+            //Act
+            Assert.Throws<ArgumentException>(() =>
+            {
+                //Act
+                _personService.UpdatePerson(personUpdateRequest);
+            });
+
+        }
+
+        //First, add a new person and try to update the person name and email
+        [Fact]
+        public void UpdatePerson_PersonFullDetailsUpdate()
+        {
+            //Arrange 
+            var (countryResponse1, countryResponse2) = AddCountries();
+            var personFromAdd = AddPeople(countryResponse1, countryResponse2);
+
+            PersonUpdateRequest personUpdateRequest = personFromAdd[0].ToPersonUpdateRequest();
+            personUpdateRequest.PersonName = null;
+
+            //Act
+            Assert.Throws<ArgumentException>(() =>
+            {
+                //Act
+                _personService.UpdatePerson(personUpdateRequest);
+            });
+
+        }
+        #endregion
     }
 }

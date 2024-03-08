@@ -9,6 +9,8 @@ namespace ServiceContracts.DTO
     /// </summary>
     public class PersonUpdateRequest
     {
+        [Required(ErrorMessage = "Person ID can't be blank")]
+        public Guid PersonID { get; set; }
         [Required(ErrorMessage = "Person Name can't be blank")]
         public string? PersonName { get; set; }
         [Required(ErrorMessage = "Email can't be blank")]
@@ -18,23 +20,24 @@ namespace ServiceContracts.DTO
         public GenderOptions? Gender { get; set; }
         public Guid? CountryID { get; set; }
         public string? Address { get; set; }
-        public bool ReceiveNewsLetters { get; set; }
+        public bool? ReceiveNewsLetters { get; set; }
 
         /// <summary>
         /// Converts the current object of PersonAddRequest into a new object of person type 
         /// </summary>
-        /// <returns>An object of the Person Class</returns>
+        /// <returns>Returns the Person object</returns>
         public Person ToPerson()
         {
             return new Person()
             {
+                PersonID = PersonID,
                 PersonName = PersonName,
                 Email = Email,
                 DateOfBirth = DateOfBirth,
                 Gender = Gender.ToString(),
                 Address = Address,
                 CountryID = CountryID,
-                RecieveNewsLetters = ReceiveNewsLetters
+                ReceiveNewsLetters = ReceiveNewsLetters
             };
         }
     }
