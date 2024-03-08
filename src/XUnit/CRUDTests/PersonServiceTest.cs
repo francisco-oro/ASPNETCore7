@@ -433,15 +433,16 @@ namespace CRUDTests
             var personFromAdd = AddPeople(countryResponse1, countryResponse2);
 
             PersonUpdateRequest personUpdateRequest = personFromAdd[0].ToPersonUpdateRequest();
-            personUpdateRequest.PersonName = null;
+            personUpdateRequest.PersonName = "William";
+            personUpdateRequest.Email = "william@example.com";
 
             //Act
-            Assert.Throws<ArgumentException>(() =>
-            {
-                //Act
-                _personService.UpdatePerson(personUpdateRequest);
-            });
+            PersonResponse personResponseFromUpdatePerson = _personService.UpdatePerson(personUpdateRequest);
 
+            PersonResponse? personResponseFromGet = _personService.GetPersonByPersonID(personResponseFromUpdatePerson.PersonID);
+
+            //Assert 
+            Assert.Equal(personResponseFromGet, personResponseFromUpdatePerson);
         }
         #endregion
     }
