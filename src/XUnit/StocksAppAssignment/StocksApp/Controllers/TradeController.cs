@@ -40,7 +40,7 @@ namespace StocksApp.Controllers
         }
 
         [Route("trade/api/v1/StockPriceQuote")]
-        public async Task<IActionResult> GetStockPriceQuoute([FromQuery] string stockSymbol)
+        public async Task<IActionResult> GetStockPriceQuote([FromQuery] string stockSymbol)
         {
             if (stockSymbol == null)
             {

@@ -23,9 +23,19 @@ namespace ServiceContracts
         /// Adds a new SellOrder into the list of SellOrders
         /// </summary>
         /// <param name="request">Sell Order to add</param>
-        /// <returns>Returns the same BuyOrder SellOrder details, along with newly generated SellOrderID</returns>
+        /// <returns>Returns the same SellOrder details, along with newly generated SellOrderID</returns>
         Task<SellOrderResponse> CreateSellOrder(SellOrderRequest? request);
+
+        /// <summary>
+        /// Returns all BuyOrders
+        /// </summary>
+        /// <returns>Returns a list of objects of BuyOrderResponse type</returns>
         Task<List<BuyOrderResponse>> GetBuyOrders();
+
+        /// <summary>
+        /// Returns all SellOrders
+        /// </summary>
+        /// <returns>Returns a list of objects of SellOrder type</returns>
         Task<List<SellOrderResponse>> GetSellOrders();
     }
 }
