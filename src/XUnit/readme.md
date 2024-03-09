@@ -53,6 +53,9 @@ public CountryResponse? GetCountryByCountryID(Guid? countryID)
 
 
 ## Add Person - xUnit Test
+
+![addperson(assets/addperson.png)
+
 ```c#
 public PersonResponse AddPerson(PersonAddRequest? personAddRequest)
 {
@@ -68,6 +71,8 @@ public PersonResponse AddPerson(PersonAddRequest? personAddRequest)
 
 
 ## Get Person by Person ID - xUnit Test
+![getpersonbypersonid](assets/getpersonbypersonid.png)
+
 ```c#
 public PersonResponse GetPersonByPersonID(Guid? personID)
 {
@@ -80,19 +85,23 @@ public PersonResponse GetPersonByPersonID(Guid? personID)
 
 
 
-Get All Persons - xUnit Test
+## Get All People - xUnit Test
+![getallpeople](assets/getallpeople.png)
 
+```c#
 public List<PersonResponse> GetAllPersons()
 {
  //Convert all persons from "Person" type to "PersonResponse" type.
  //Return all PersonResponse objects
 }
+```
 
 
 
+## Get Filtered People - xUnit Test
+![getfilteredpeople](assets/getfilteredpeople.png)
 
-Get Filtered Persons - xUnit Test
-
+```c#
 public List<PersonResponse> GetFilteredPersons(string searchBy, string? searchString)
 {
  //Check if "searchBy" is not null.
@@ -100,12 +109,14 @@ public List<PersonResponse> GetFilteredPersons(string searchBy, string? searchSt
  //Convert the matching persons from "Person" type to "PersonResponse" type.
  //Return all matching PersonResponse objects
 }
+```
 
 
 
+## Get Sorted People - xUnit Test
+![getsortedpeople](assets/getsortedpeople.png)
 
-Get Sorted Persons - xUnit Test
-
+```c#
 public List<PersonResponse> GetSortedPersons(List<PersonResponse> allPersons,
 string sortBy, SortOrderEnum sortOrder)
 {
@@ -114,12 +125,14 @@ string sortBy, SortOrderEnum sortOrder)
  //Convert the sorted persons from "Person" type to "PersonResponse" type.
  //Return all sorted PersonResponse objects
 }
+```
 
 
 
+## Update Person - xUnit Test
+![updateperson](assets/updateperson.png)
 
-Update Person - xUnit Test
-
+```c#
 public PersonResponse UpdatePerson(PersonUpdateRequest? personUpdateRequest)
 {
  //Check if "personUpdateRequest" is not null.
@@ -130,12 +143,14 @@ public PersonResponse UpdatePerson(PersonUpdateRequest? personUpdateRequest)
  //Convert the person object from "Person" to "PersonResponse" type
  //Return PersonResponse object with updated details
 }
+```
 
 
 
+## Delete Person - xUnit Test.
+![deleteperson](assets/deleteperson.png)
 
-Delete Person - xUnit Test
-
+```c#
 public bool DeletePerson(Guid? personID)
 {
  //Check if "personID" is not null.
@@ -145,3 +160,18 @@ public bool DeletePerson(Guid? personID)
  //Return Boolean value indicating whether person object was deleted or not
 }
 }
+```
+
+# Interview Questinos 
+## Tell some brief about Unit testing?
+A unit test is a way to test a unit, the smallest code in a system that can logically be isolated. This is a function, a subroutine, a procedure, or a property in most programming languages. The single part of the definition is significant. The unit test should not test / access external data sources or external services other than the one that is being tested.
+
+Author Michael Feathers says in his book “Working Effectively with Legacy Code” that tests are not unit tests when relying on external systems: “If you talk to the database, you talk through the network, touch the file system, you need a system configuration, or you cannot run it simultaneously with any other test.”
+## Who can perform Unit Testing?
+The developers usually perform unit testing during the development phase. At the same time, unit testing is usually done by automation engineers and QA experts if developers are occupied with other development tasks.
+
+
+## What is TDD?
+TDD is a development methodology which focuses on writing tests first, and then code to make those tests pass. This approach can help to ensure that your code is well-tested and of high quality.
+
+	
