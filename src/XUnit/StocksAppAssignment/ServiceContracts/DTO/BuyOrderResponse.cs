@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities;
 
 namespace ServiceContracts.DTO
 {
@@ -48,7 +49,7 @@ namespace ServiceContracts.DTO
     public static class BuyOrderExtensions
     {
         // Converts from BuyOrder object to BuyOrderResponse object
-        public static BuyOrderResponse ToBuyOrderResponse(this BuyOrderResponse buyOrderResponse)
+        public static BuyOrderResponse ToBuyOrderResponse(this BuyOrder buyOrderResponse)
         {
             return new BuyOrderResponse()
             {

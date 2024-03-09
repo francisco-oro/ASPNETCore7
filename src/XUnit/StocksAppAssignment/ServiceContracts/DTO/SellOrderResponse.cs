@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities;
 
 namespace ServiceContracts.DTO
 {
@@ -14,7 +15,7 @@ namespace ServiceContracts.DTO
         public DateTime? DateAndTimeOfOrder { get; set; }
         public int? Quantity { get; set; }
         public double? Price { get; set; }
-        public double? TrradeAmount { get; set; }
+        public double? TradeAmount { get; set; }
 
 
         // It compares the current object to another object of CurrentResponse type and returns true, if both values are the same;
@@ -40,6 +41,25 @@ namespace ServiceContracts.DTO
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+    }
+
+    public static class SellOrderExtensions
+    {
+        // Converts from SellOrder object to SellOrderResponse object
+        public static SellOrderResponse ToSellOrderResponse(this SellOrder sellOrder)
+        {
+            return new SellOrderResponse()
+            {
+                SellOrderID = sellOrder.SellOrderID,
+                StockSymbol = sellOrder.StockSymbol,
+                Price = sellOrder.Price,
+                StockName = sellOrder.StockName,
+                DateAndTimeOfOrder = sellOrder.DateAndTimeOfOrder,
+                Quantity = sellOrder.Quantity,
+                TradeAmount = Convert.ToDouble(sellOrder.Quantity) * sellOrder.Price
+
+            };
         }
     }
 }
