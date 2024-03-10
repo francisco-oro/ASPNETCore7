@@ -68,7 +68,14 @@ namespace Services
 
         public List<PersonResponse> GetAllPeople()
         {
-            return _people.Select(temp => temp.ToPersonResponse()).ToList();
+            return _people.Select(temp =>
+            {
+                PersonResponse person = temp.ToPersonResponse();
+
+                // People's country search functionality 
+                person.Country = _countriesService.GetCountryByCountryID(person.CountryID)?.CountryName;
+                return person;
+            }).ToList();
         }
 
         public PersonResponse? GetPersonByPersonID(Guid? personID)
