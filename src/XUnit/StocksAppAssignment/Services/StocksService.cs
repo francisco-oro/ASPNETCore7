@@ -7,7 +7,10 @@ namespace Services
     {
         public Task<BuyOrderResponse> CreateBuyOrder(BuyOrderRequest? request)
         {
-            throw new NotImplementedException();
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
         }
 
         public Task<SellOrderResponse> CreateSellOrder(SellOrderRequest? request)
