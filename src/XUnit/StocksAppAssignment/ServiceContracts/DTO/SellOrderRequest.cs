@@ -22,7 +22,7 @@ namespace ServiceContracts.DTO
         [Range(1, 100000, ErrorMessage = "Value should be between 1 and 100000")]
         public int? Quantity { get; set; }
 
-        [Range(1, 100000, ErrorMessage = "Value should be between 1 and 100000")]
+        [Range(1, 10000, ErrorMessage = "Value should be between 1 and 100000")]
         public double? Price { get; set; }
 
         public SellOrder ToSellOrder()
