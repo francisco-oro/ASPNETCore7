@@ -1,8 +1,8 @@
 ﻿using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using ServiceContracts;
 using StocksApp.Models;
-using StocksApp.ServiceContracts;
 using StocksApp.Services;
 
 namespace StocksApp.Controllers
@@ -11,11 +11,12 @@ namespace StocksApp.Controllers
     {
         private readonly IFinnhubService _finnhubService;
         private readonly IOptions<TradingOptions> _tradingOptions;
-
-        public TradeController(IFinnhubService finnhubService, IOptions<TradingOptions> tradingOptions)
+        private readonly IStocksService _stocksService;
+        public TradeController(IFinnhubService finnhubService, IOptions<TradingOptions> tradingOptions, IStocksService stocksService)
         {
             _tradingOptions = tradingOptions;
             _finnhubService = finnhubService;
+            _stocksService = stocksService;
         }
 
         [Route("Trade/Index")]
