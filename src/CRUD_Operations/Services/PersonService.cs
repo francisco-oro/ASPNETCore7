@@ -14,10 +14,24 @@ namespace Services
         private readonly List<Person> _people;
         private readonly ICountriesService _countriesService;
         //constructor 
-        public PersonService()
+        public PersonService(bool initialize = true)
         {
             _people = new List<Person>();
             _countriesService = new CountriesService();
+
+            if (initialize)
+            {
+                _people.AddRange(new List<Person>()
+                {
+                    new Person() { PersonID = Guid.Parse("AF2F5711-6D77-4DA3-9888-F1F50E95A868"), },
+                    new Person() { PersonID = Guid.Parse("1579EC0E-D3D0-4C3E-9AA8-5987F328C3DE"), },
+                    new Person() { PersonID = Guid.Parse("0A0EE9B5-AB0F-4728-8F83-D9F4D0E59DA8"), },
+                    new Person() { PersonID = Guid.Parse("DD7D8297-4FBB-49B0-A453-5FC14AD53F75"), },
+                    new Person() { PersonID = Guid.Parse("735D6F0E-A12C-457E-937D-A571922B5655"), },
+                    new Person() { PersonID = Guid.Parse("3988A11B-4942-413A-B08D-C6A8B9BF4E53"), },
+                    new Person() { PersonID = Guid.Parse("C44A255C-31CD-46E9-B219-2332900DF099"), }
+                });
+            }
         }
 
         private PersonResponse ConvertPersonToPersonResponse(Person person)
