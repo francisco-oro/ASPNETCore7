@@ -3,36 +3,57 @@
     ViewBag.Title = "People";
 }
 
-<h1>People</h1>
+<form action="/people/index" method="get">
+    <h1>People</h1>
 
-<div class="box"></div>
-<table class="table w-100 mt">
-    <thead>
-        <tr>
-            <th>Person Name</th>
-            <th>Email</th>
-            <th>Date of Birth</th>
-            <th>Age</th>
-            <th>Gender</th>
-            <th>Country</th>
-            <th>Address</th>
-            <td>Receive News Letters</td>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (PersonResponse person in Model)
-    {
-        <tr>
-            <td>@person.PersonName</td>
-            <td>@person.Email</td>
-            <td>@person.DateOfBirth?.ToString("dd MM yyyy")</td>
-            <td>@person.Age</td>
-            <td>@person.Gender</td>
-            <td>@person.Country</td>
-            <td>@person.Address</td>
-            <td>@person.ReceiveNewsLetters</td>
-        </tr>
-    }
-    <tr></tr>
-    </tbody>
-</table>
+    <div class="box flex">
+        <div class="flex-1">
+            <select class="form-input" name="searchBy">
+                @foreach (var field in ViewBag.SearchFields)
+                {
+                    <option value="@field.Key">@field.Value</option>
+                }
+                @* Eg: searchBy=PersonName&searchString=abc *@
+            </select>
+        </div>
+
+        <div class="flex-1">
+            <input type="search" id="Search" class="form-input" placeholder="Search" name="searchString"/>
+        </div>
+
+        <div class="flex-1">
+            <button class="button button-blue-back">Search</button>
+            <a href="/people/index" class="link-hover">Clear all</a>
+        </div>
+    </div>
+    <table class="table w-100 mt">
+        <thead>
+            <tr>
+                <th>Person Name</th>
+                <th>Email</th>
+                <th>Date of Birth</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Country</th>
+                <th>Address</th>
+                <td>Receive News Letters</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (PersonResponse person in Model)
+            {
+                <tr>
+                    <td>@person.PersonName</td>
+                    <td>@person.Email</td>
+                    <td>@person.DateOfBirth?.ToString("dd MM yyyy")</td>
+                    <td>@person.Age</td>
+                    <td>@person.Gender</td>
+                    <td>@person.Country</td>
+                    <td>@person.Address</td>
+                    <td>@person.ReceiveNewsLetters</td>
+                </tr>
+            }
+            <tr></tr>
+        </tbody>
+    </table>
+</form>
