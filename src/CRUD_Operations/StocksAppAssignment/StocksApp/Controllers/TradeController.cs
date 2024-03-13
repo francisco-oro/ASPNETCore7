@@ -7,6 +7,7 @@ using StocksApp.Services;
 
 namespace StocksApp.Controllers
 {
+    [Route("[controller]")]
     public class TradeController : Controller
     {
         private readonly IFinnhubService _finnhubService;
@@ -19,7 +20,7 @@ namespace StocksApp.Controllers
             _stocksService = stocksService;
         }
 
-        [Route("Trade/Index")]
+        [Route("[action]")]
         public async Task<IActionResult> Index()
         {
             if (_tradingOptions.Value.DefaultStockSymbol == null)
@@ -40,7 +41,7 @@ namespace StocksApp.Controllers
             return View(stockTrade);
         }
 
-        [Route("trade/api/v1/StockPriceQuote")]
+        [Route("api/v1/StockPriceQuote")]
         public async Task<IActionResult> GetStockPriceQuote([FromQuery] string stockSymbol)
         {
             if (stockSymbol == null)
