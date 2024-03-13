@@ -1,5 +1,20 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@if (ViewBag.CurrentSortBy == ViewBag.ColumnName && ViewBag.CurrentSortOrder == SortOrderOptions.ASC.ToString())
+{
+    <th>
+        <a href="/people/index?searchBy=@(ViewBag.CurrentSearchBy)&searchString=@(ViewBag.CurrentSearchString)&sortBy=@(ViewBag.ColumnName)&sortOrder=@nameof(SortOrderOptions.DESC)">@(ViewBag.DisplayName)</a>
+        <i class="fa-solid fa-sort-up"></i>                
+    </th>
+}
+else if (ViewBag.CurrentSortBy == ViewBag.ColumnName && ViewBag.CurrentSortOrder == SortOrderOptions.DESC.ToString())
+{
+    <th>
+        <a href="/people/index?searchBy=@(ViewBag.CurrentSearchBy)&searchString=@(ViewBag.CurrentSearchString)&sortBy=@(ViewBag.ColumnName)&sortOrder=@nameof(SortOrderOptions.ASC)">@(ViewBag.DisplayName)</a>
+        <i class="fa-solid fa-sort-down"></i>
+    </th>
+} 
+else
+{
+    <th>
+        <a href="/people/index?searchBy=@(ViewBag.CurrentSearchBy)&searchString=@(ViewBag.CurrentSearchString)&sortBy=@(ViewBag.ColumnName)&sortOrder=@nameof(SortOrderOptions.ASC)">@(ViewBag.DisplayName)</a>
+    </th>
 }
