@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ServiceContracts;
+using ServiceContracts.DTO;
 using StocksApp.Models;
 using StocksApp.Services;
 
@@ -39,6 +40,49 @@ namespace StocksApp.Controllers
                 StockSymbol = companyProfileDictionary["ticker"].ToString()
             };
             return View(stockTrade);
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        public IActionResult BuyOrder(BuyOrderRequest buyOrderRequest)
+        {
+            buyOrderRequest.DateAndTimeOfOrder = DateTime.Now;
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return View("Index");
+            }
+
+            return RedirectToAction(nameof(Orders));
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        public IActionResult SellOrder(SellOrderRequest sellOrderRequest)
+        {
+            sellOrderRequest.DateAndTimeOfOrder = DateTime.Now;
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return View("Index");
+            }
+
+            return RedirectToAction(nameof(Orders));
+        }
+
+        [Route("[action]")]
+        [HttpGet]
+        public async Task<IActionResult> Orders()
+        {
+            List<BuyOrderResponse> buyOrderResponses = await _stocksService.GetBuyOrders();
+            List<SellOrderResponse> sellOrderResponses = await _stocksService.GetSellOrders();
+
+            Orders orders = new Orders()
+            {
+                BuyOrders = buyOrderResponses,
+                SellOrders = sellOrderResponses
+            };
+            return View(orders);
         }
 
         [Route("api/v1/StockPriceQuote")]

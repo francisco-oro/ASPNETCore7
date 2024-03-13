@@ -4,7 +4,8 @@
 });
 
 async function FetchStockPrice() {
-    await fetch("api/v1/StockPriceQuote?stockSymbol=@Model.StockSymbol", { method: "GET" })
+    const stockSymbol = document.getElementById('StockSymbol').value;
+    await fetch("api/v1/StockPriceQuote?stockSymbol=" + stockSymbol, { method: "GET" })
         .then(function (response) {
             return response.json();
         })

@@ -10,10 +10,18 @@ namespace Services
         private readonly List<BuyOrder> _buyOrders;
         private readonly List<SellOrder> _sellOrders;
 
-        public StocksService()
+        public StocksService(bool initialize = true)
         {
             _buyOrders = new List<BuyOrder>();
             _sellOrders = new List<SellOrder>();
+
+            if (initialize)
+            {
+                _buyOrders.AddRange(new List<BuyOrder>()
+                {
+                    
+                });
+            }
         }
 
         public Task<BuyOrderResponse> CreateBuyOrder(BuyOrderRequest? request)
