@@ -1,37 +1,79 @@
 ﻿@model StockTrade
  
-@{
-    ViewBag.Title = "TradeDetails";
-}
-<div class="page-content">
-    
-    @{ await Html.RenderPartialAsync("_StockDetailsBox", Model); }
-    @* <div class="box">
-    <h1 class="stock-title">@Model.StockName</h1>
-    <p class="hidden" id="stock-symbol_@Model.StockSymbol">@Model.StockSymbol</p>
-    <small>$</small> <span class="price" id="price_@Model.StockSymbol">@Model.Price.ToString("N")</span>
-</div> *@
+<div class="text-grey ml">
+    <span>Stocks</span>
+    <i class="fa-solid fa-caret-right"></i>
+    <span>@Model.StockName</span>
 </div>
-@* <script type="text/javascript">
 
-    window.addEventListener('load', function () {
-        const fetchInterval = 5000;
-        setInterval(FetchStockPrice, fetchInterval);
-    });
+<form method="post">
+    <div class="box trading-panel">
 
-    async function FetchStockPrice() {
-        await fetch("api/v1/StockPriceQuote?stockSymbol=@Model.StockSymbol", { method: "GET" })
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(data) {
-                UpdateStockPrice(data);
-            });
-    }
-    // Update: Prevents duplicate rendering
-    function UpdateStockPrice(data) {
-        const stockPrice = document.getElementById('price_@Model.StockSymbol');
-        stockPrice.innerHTML = data.c;
-    }
+        <div class="flex trading-panel-flex">
+            <div id="stock-price-panel">
 
-</script> *@
+                <div class="stock">
+                    <h1 class="stock-title">@Model.StockName (@Model.StockSymbol)</h1>
+                    <h2 class="stock-price"><small class="text-grey">$</small> <span class="price">@Model.Price.ToString("N")</span></h2>
+                </div>
+
+                <div class="date"></div>
+            </div>
+
+
+
+
+            <div id="new-order-panel">
+
+                <div class="flex flex-direction-vertical">
+                    <h3 class="text-grey mb">New Order</h3>
+
+                    <label for="Quantity" class="mt">Quantity:</label>
+                    <div class="w-25">
+                        <input type="number" name="Quantity" id="Quantity" value="@Model.Quantity" min="1" max="100000" placeholder="Quantity" required="required" class="form-input mb" autofocus="autofocus" />
+                    </div>
+                </div>
+
+                <div class="button-panel">
+
+                    <button type="submit" formaction="~/Trade/SellOrder" class="button button-red-back trading-button sell-button">
+                        <i class="fa-solid fa-arrow-down"></i>
+                        <span>Sell</span>
+                    </button>
+
+                    <button type="submit" formaction="~/Trade/BuyOrder" class="button button-green-back trading-button buy-button">
+                        <i class="fa-solid fa-arrow-up"></i>
+                        <span>Buy</span>
+                    </button>
+
+                    @if (ViewBag.Errors != null)
+                    {
+                        <div class="text-red mt">
+                            <ul>
+                                @foreach (string error in ViewBag.Errors)
+                                {
+                                    <li class="ml">@error</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <input type="hidden" name="StockSymbol" id="StockSymbol" value="@Model.StockSymbol" />
+    <input type="hidden" name="StockName" id="StockName" value="@Model.StockName" />
+    <input type="hidden" name="Price" id="price" value="@Model.Price" />
+    <input type="hidden" id="FinnhubToken" value="@ViewBag.FinnhubToken" />
+
+</form>
+
+
+@section Scripts {
+    @* import the stocks.js file to update the price *@
+    <script src="~/Scripts/Stocks.js">
+    </script>
+}
