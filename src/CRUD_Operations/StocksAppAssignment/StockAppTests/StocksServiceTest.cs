@@ -15,7 +15,7 @@ namespace StockAppTests
         public StocksServiceTest(ITestOutputHelper outputHelper)
         {
             _outputHelper = outputHelper;
-            _stocksService = new StocksService();
+            _stocksService = new StocksService(false);
         }
 
         // helper methods
