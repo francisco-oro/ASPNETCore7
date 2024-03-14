@@ -90,8 +90,8 @@ namespace Services
             {
                 return null;
             }
-            PersonResponse personResponse = person.ToPersonResponse();
-            personResponse.Country = _countriesService.GetCountryByCountryID(person.CountryID)?.CountryName;
+
+            PersonResponse personResponse = ConvertPersonToPersonResponse(person);
             return personResponse;
         }
 
