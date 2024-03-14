@@ -53,6 +53,7 @@ namespace StocksApp.Controllers
                 return View("Index");
             }
 
+            _stocksService.CreateBuyOrder(buyOrderRequest);
             return RedirectToAction(nameof(Orders));
         }
 
@@ -67,6 +68,7 @@ namespace StocksApp.Controllers
                 return View("Index");
             }
 
+            _stocksService.CreateSellOrder(sellOrderRequest);
             return RedirectToAction(nameof(Orders));
         }
 
