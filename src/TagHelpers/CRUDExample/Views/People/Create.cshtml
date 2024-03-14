@@ -1,18 +1,19 @@
-﻿@{
+﻿@model PersonAddRequest
+@{
     ViewBag.Title = "Create Person";
 }
-<a href="/people/index" class="link-hover">Back to people list</a>
+<a asp-controller="People" asp-action="Index" class="link-hover">Back to people list</a>
 <h2>Create Person</h2>
 
 <div class="w-50">
-    <form action="/people/create" method="post">
+    <form asp-controller="People" asp-action="Create" method="post">
         @* PersonName *@
         <div class="flex">
             <div class="flex-1">
                 <label for="PersonName" class="form-label pt">Person Name</label>
             </div>
             <div class="flex-1">
-                <input type="text" id="PersonName" name="PersonName" class="form-input"/>
+                <input asp-for="PersonName" class="form-input"/>
             </div>
         </div>
         
@@ -22,7 +23,7 @@
                 <label for="Email" class="form-label pt">Email</label>
             </div>
             <div class="flex-1">
-                <input type="email" id="Email" name="Email" class="form-input"/>
+                <input asp-for="Email" class="form-input"/>
             </div>
         </div>
         
@@ -32,7 +33,7 @@
                 <label for="DateOfBirth" class="form-label pt">Date of Birth</label>
             </div>
             <div class="flex-1">
-                <input type="date" id="DateOfBirth" name="DateOfBirth" class="form-input"/>
+                <input asp-for="DateOfBirth" class="form-input"/>
             </div>
         </div>
         
@@ -42,12 +43,15 @@
                 <label class="form-label">Gender</label>
             </div>
             <div class="flex-1">
-                <input type="radio" id="Male" name="Gender" value="Male"/>
-                <label for="Male">Male</label>
-                <input type="radio" id="Female" name="Gender" value="Female" class="ml"/>
-                <label for="Female">Female</label>
-                <input type="radio" id="Other" name="Gender" value="Other" class="ml"/>
-                <label for="Other">Other</label>
+                @{
+                    string[] genders = (string[])Enum.GetNames(typeof(GenderOptions));
+                }
+                @foreach (string gender in genders)
+                {
+                    <input type="radio" asp-for="Gender" value="@gender"/>
+                    <label for="@gender">@gender</label>
+                }
+
             </div>
         </div>
         
@@ -57,7 +61,7 @@
                 <label class="form-label" for="CountryID">Country</label>
             </div>
             <div class="flex-1">
-                <select name="CountryID" id="CountryID" class="form-input">
+                <select asp-for="CountryID" class="form-input">
                     <option value="">Please select</option>
                     @foreach (CountryResponse country in ViewBag.Countries)
                     {
@@ -73,7 +77,7 @@
                 <label for="Address" class="form-label pt">Address</label>
             </div>
             <div class="flex-1">
-                <textarea id="Address" name="Address" class="form-input"></textarea>
+                <textarea asp-for="Address" class="form-input"></textarea>
             </div>
         </div>
         
@@ -82,7 +86,7 @@
             <div class="w-25">
             </div>
             <div class="flex-1">
-                <input type="checkbox" name="ReceiveNewsLetters" id="ReceiveNewsLetters" value="true"/>
+                <input asp-for="ReceiveNewsLetters" type="checkbox"  value="true"/>
                 <label for="ReceiveNewsLetters" class="form-label">Receive News Letters</label>
             </div>
         </div>
