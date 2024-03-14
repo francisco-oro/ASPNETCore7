@@ -10,7 +10,9 @@
 <body>
 <div class="container">
     <div class="navbar">
-        <div class="navbar-brand">CRUD Demo</div>
+        <div class="navbar-brand">
+            <img src="/logo_rectangle.png" asp-append-version="true" width="25px"/>
+        </div>
         <ul>
             <li>
                 <a href="/people/index">People</a>
@@ -22,5 +24,7 @@
         @RenderBody()
     </div>
 </div>
+
+@await RenderSectionAsync("scripts", required:false)
 </body>
 </html>
