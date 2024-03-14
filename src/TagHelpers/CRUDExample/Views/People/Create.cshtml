@@ -14,6 +14,7 @@
             </div>
             <div class="flex-1">
                 <input asp-for="PersonName" class="form-input"/>
+                <span asp-validation-for="PersonName" class="text-red"></span>
             </div>
         </div>
         
@@ -24,6 +25,8 @@
             </div>
             <div class="flex-1">
                 <input asp-for="Email" class="form-input"/>
+                <span asp-validation-for="Email" class="text-red"></span>
+
             </div>
         </div>
         
@@ -34,6 +37,8 @@
             </div>
             <div class="flex-1">
                 <input asp-for="DateOfBirth" class="form-input"/>
+                <span asp-validation-for="DateOfBirth" class="text-red"></span>
+
             </div>
         </div>
         
@@ -51,6 +56,7 @@
                     <input type="radio" asp-for="Gender" value="@gender"/>
                     <label for="@gender">@gender</label>
                 }
+                <span asp-validation-for="Gender" class="text-red"></span>
 
             </div>
         </div>
@@ -64,6 +70,8 @@
                 <select asp-for="CountryID" class="form-input" asp-items="@ViewBag.Countries">
                     <option value="">Please select</option>
                 </select>
+                <span asp-validation-for="CountryID" class="text-red"></span>
+
             </div>
         </div>
         
@@ -74,6 +82,8 @@
             </div>
             <div class="flex-1">
                 <textarea asp-for="Address" class="form-input"></textarea>
+                <span asp-validation-for="Address" class="text-red"></span>
+
             </div>
         </div>
         
@@ -84,6 +94,8 @@
             <div class="flex-1">
                 <input asp-for="ReceiveNewsLetters" type="checkbox"  value="true"/>
                 <label asp-for="ReceiveNewsLetters" class="form-label">Receive News Letters</label>
+                <span asp-validation-for="ReceiveNewsLetters" class="text-red"></span>
+
             </div>
         </div>
         
@@ -94,6 +106,7 @@
             <div class="flex-1">
                 <button class="button button-green-back">Create</button>
                 
+                <div asp-validation-summary="All" class="text-red"></div>
                 @if (ViewBag.Errors != null)
                 {
                     <ul class="text-red ml">
@@ -109,4 +122,6 @@
     </form>
 </div>
 
-            <script src=""></script>
+<script asp-fallback-test="window.jQuery" asp-fallback-src="/jquery.min.js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script asp-fallback-test="window.jQuery.validator" asp-fallback-src="/jquery.validate.min.js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script asp-fallback-test="window.jQuery.validator.unobstrusive" asp-fallback-src="/jquery.validate.unobtrusive.min.js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js" integrity="sha512-xq+Vm8jC94ynOikewaQXMEkJIOBp7iArs3IhFWSWdRT3Pq8wFz46p+ZDFAR7kHnSFf+zUv52B3prRYnbDRdgog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
