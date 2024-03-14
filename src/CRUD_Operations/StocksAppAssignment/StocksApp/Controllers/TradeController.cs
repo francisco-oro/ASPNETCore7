@@ -21,6 +21,7 @@ namespace StocksApp.Controllers
             _stocksService = stocksService;
         }
 
+        [Route("/")]
         [Route("[action]")]
         public async Task<IActionResult> Index()
         {
@@ -44,7 +45,7 @@ namespace StocksApp.Controllers
 
         [Route("[action]")]
         [HttpPost]
-        public IActionResult BuyOrder(BuyOrderRequest buyOrderRequest)
+        public async Task<IActionResult> BuyOrder(BuyOrderRequest buyOrderRequest)
         {
             buyOrderRequest.DateAndTimeOfOrder = DateTime.Now;
             if (!ModelState.IsValid)
@@ -53,13 +54,13 @@ namespace StocksApp.Controllers
                 return View("Index");
             }
 
-            _stocksService.CreateBuyOrder(buyOrderRequest);
+            await _stocksService.CreateBuyOrder(buyOrderRequest);
             return RedirectToAction(nameof(Orders));
         }
 
         [Route("[action]")]
         [HttpPost]
-        public IActionResult SellOrder(SellOrderRequest sellOrderRequest)
+        public async Task<IActionResult> SellOrder(SellOrderRequest sellOrderRequest)
         {
             sellOrderRequest.DateAndTimeOfOrder = DateTime.Now;
             if (!ModelState.IsValid)
@@ -68,7 +69,7 @@ namespace StocksApp.Controllers
                 return View("Index");
             }
 
-            _stocksService.CreateSellOrder(sellOrderRequest);
+            await _stocksService.CreateSellOrder(sellOrderRequest);
             return RedirectToAction(nameof(Orders));
         }
 
@@ -87,7 +88,7 @@ namespace StocksApp.Controllers
             return View(orders);
         }
 
-        [Route("api/v1/StockPriceQuote")]
+        [Route("/api/v1/StockPriceQuote")]
         public async Task<IActionResult> GetStockPriceQuote([FromQuery] string stockSymbol)
         {
             if (stockSymbol == null)
