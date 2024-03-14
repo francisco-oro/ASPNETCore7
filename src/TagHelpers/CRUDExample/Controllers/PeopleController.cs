@@ -121,8 +121,36 @@ namespace CRUDExample.Controllers
                 ViewBag.Countries = countries.Select(temp =>
                     new SelectListItem() { Text = temp.CountryName, Value = temp.CountryID.ToString() }); ;
                 ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return View();
+                return View(personResponse.ToPersonUpdateRequest());
             }
+        }
+
+        [HttpGet]
+        [Route("[action]/{personID}")]
+        public IActionResult Delete(Guid? personID)
+        {
+            PersonResponse? personResponse = _personService.GetPersonByPersonID(personID);
+
+            if (personResponse == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View(personResponse);
+        }
+
+        [HttpPost]
+        [Route("[action]/{personID}")]
+        public IActionResult Delete(PersonUpdateRequest personUpdateRequest)
+        {
+            PersonResponse? personResponse = _personService.GetPersonByPersonID(personUpdateRequest.PersonID);
+            if (personResponse == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            _personService.DeletePerson(personUpdateRequest.PersonID);
+            return RedirectToAction("Index");
         }
     }
 }
