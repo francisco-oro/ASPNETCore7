@@ -1,9 +1,9 @@
-﻿@model PersonAddRequest
+﻿@model PersonUpdateRequest
 @{
     ViewBag.Title = "Create Person";
 }
 <a asp-controller="People" asp-action="Index" class="link-hover">Back to people list</a>
-<h2>Create Person</h2>
+<h2>Update Person</h2>
 
 <div class="center-box">
     <form asp-controller="People" asp-action="Create" method="post">
@@ -92,8 +92,8 @@
             <div class="w-25">
             </div>
             <div class="flex-1">
-                <input asp-for="ReceiveNewsLetters" type="checkbox"  value="true"/>
-                <label asp-for="ReceiveNewsLetters" class="form-label">Receive News Letters</label>
+                <input asp-for="ReceiveNewsLetters" />
+                <label asp-for="ReceiveNewsLetters" type="checkbox" class="form-label">Receive News Letters</label>
                 <span asp-validation-for="ReceiveNewsLetters" class="text-red"></span>
 
             </div>
@@ -104,7 +104,7 @@
             <div class="w-25">
             </div>
             <div class="flex-1">
-                <button class="button button-green-back">Create</button>
+                <button class="button button-green-back">Update</button>
                 
                 <div asp-validation-summary="All" class="text-red"></div>
                 @if (ViewBag.Errors != null)

@@ -59,6 +59,8 @@ namespace ServiceContracts.DTO
                 DateOfBirth = this.DateOfBirth,
                 Gender = (GenderOptions)Enum.Parse(typeof(GenderOptions), this.Gender, true), 
                 ReceiveNewsLetters = this.ReceiveNewsLetters,
+                CountryID = this.CountryID, 
+                Address = this.Address,
             };
         }
     }

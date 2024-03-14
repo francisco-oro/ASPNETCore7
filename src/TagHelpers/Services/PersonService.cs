@@ -90,8 +90,9 @@ namespace Services
             {
                 return null;
             }
-
-            return person.ToPersonResponse();
+            PersonResponse personResponse = person.ToPersonResponse();
+            personResponse.Country = _countriesService.GetCountryByCountryID(person.CountryID)?.CountryName;
+            return personResponse;
         }
 
         public List<PersonResponse> GetFilteredPeople(string searchBy, string? searchString)
