@@ -54,7 +54,9 @@ namespace Services
 
         public List<PersonResponse> GetAllPeople()
         {
-            return _db.People.Select(temp => ConvertPersonToPersonResponse(temp)).ToList();
+            // SELECT * from People
+            return _db.People.ToList()
+                .Select(ConvertPersonToPersonResponse).ToList();
         }
 
         public PersonResponse? GetPersonByPersonID(Guid? personID)
@@ -198,7 +200,7 @@ namespace Services
             ValidationHelper.ModelValidation(personUpdateRequest);
 
             //get matching person object to update
-            Person? matchingPerson = _db.FirstOrDefault(temp => temp.PersonID == personUpdateRequest.PersonID);
+            Person? matchingPerson = _db.People.FirstOrDefault(temp => temp.PersonID == personUpdateRequest.PersonID);
 
             if (matchingPerson == null)
             {
@@ -214,6 +216,7 @@ namespace Services
             matchingPerson.Address = personUpdateRequest.Address;
             matchingPerson.ReceiveNewsLetters = personUpdateRequest.ReceiveNewsLetters;
 
+            _db.SaveChanges(); //UPDATE
             return matchingPerson.ToPersonResponse();
         }
 
@@ -224,14 +227,14 @@ namespace Services
                 throw new ArgumentNullException(nameof(personID));
             }
 
-            Person? person = _db.FirstOrDefault(temp => temp.PersonID == personID);
+            Person? person = _db.People.FirstOrDefault(temp => temp.PersonID == personID);
             if (person == null)
             {
                 return false; 
             }
 
-            _db.RemoveAll(temp => temp.PersonID == personID);
-
+            _db.People.Remove(_db.People.First(temp => temp.PersonID == personID));
+            _db.SaveChanges();
             return true;
         }
     }
