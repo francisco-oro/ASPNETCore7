@@ -1,9 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace Entities
 {
     public class PeopleDbContext : DbContext
     {
+        public PeopleDbContext(DbContextOptions options) : base(options)
+        {
+
+        }
+
         public DbSet<Country> Countries { get; set; }
         public DbSet<Person> People { get; set; }
 
@@ -13,10 +19,25 @@ namespace Entities
             modelBuilder.Entity<Person>().ToTable("People");
 
             //Seed to Countries 
-            modelBuilder.Entity<Country>().HasData(new Country()
-            {
-                CountryID = Guid.NewGuid(), CountryName = "Sample"
-            });
+            string countriesJson = File.ReadAllText("countries.json");
+            List<Country>? countries =  JsonSerializer.Deserialize<List<Country>>(countriesJson);
+
+            if (countries != null)
+                foreach (Country country in countries)
+                {
+                    modelBuilder.Entity<Country>().HasData(country);
+                }
+
+            //Seed to People 
+            string peopleJson = File.ReadAllText("people.json");
+            List<Person>? people = JsonSerializer.Deserialize<List<Person>>(peopleJson);
+
+            if (people != null)
+                foreach (Person person in people)
+                {
+                    modelBuilder.Entity<Person>().HasData(person);
+                }
+
         }
     }
 }
