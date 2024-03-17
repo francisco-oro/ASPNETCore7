@@ -12,7 +12,7 @@ namespace CRUDTests
         //constructor
         public CountriesServiceTest()
         {
-            _countriesService = new CountriesService(new PeopleDbContext(new DbContextOptions<>()));
+            _countriesService = new CountriesService(new PeopleDbContext(new DbContextOptionsBuilder<PeopleDbContext>().Options));
         }
 
         #region AddCountry
