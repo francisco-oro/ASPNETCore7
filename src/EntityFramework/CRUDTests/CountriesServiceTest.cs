@@ -8,11 +8,14 @@ namespace CRUDTests
 {
     public class CountriesServiceTest
     {
+        private readonly IPersonService _personService;
         private readonly ICountriesService _countriesService;
         //constructor
         public CountriesServiceTest()
         {
             _countriesService = new CountriesService(new PeopleDbContext(new DbContextOptionsBuilder<PeopleDbContext>().Options));
+            _personService = new PersonService(new PeopleDbContext(
+                new DbContextOptionsBuilder<PeopleDbContext>().Options), _countriesService);
         }
 
         #region AddCountry
