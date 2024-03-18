@@ -8,7 +8,7 @@ namespace Entities
     {
         public PeopleDbContext(DbContextOptions options) : base(options)
         {
-
+            
         }
 
         public DbSet<Country> Countries { get; set; }
@@ -50,6 +50,14 @@ namespace Entities
             modelBuilder
                 .Entity<Person>()
                 .ToTable(b => b.HasCheckConstraint("CHK_TIN", "len([TaxIdentificationNumber]) = 8"));
+
+            //Table Relations
+            //modelBuilder.Entity<Person>(entity =>
+            //{
+            //    entity.HasOne<Country>(person => person.Country)
+            //        .WithMany(country => country.People)
+            //        .HasForeignKey(person => person.CountryID);
+            //});
         }
 
         public List<Person> sp_GetAllPeople()

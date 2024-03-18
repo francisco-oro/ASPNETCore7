@@ -1,6 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
@@ -19,13 +20,6 @@ namespace Services
         {
             _db = db;
             _countriesService = countriesService;
-        }
-
-        private PersonResponse ConvertPersonToPersonResponse(Person person)
-        {
-            PersonResponse personResponse = person.ToPersonResponse();
-            personResponse.Country = _countriesService.GetCountryByCountryID(person.CountryID)?.CountryName;
-            return personResponse;
         }
 
         public PersonResponse AddPerson(PersonAddRequest? personAddRequest)
@@ -50,14 +44,16 @@ namespace Services
             _db.SaveChanges();
             //_db.sp_InsertPerson(person);
             // Convert the Person object into PersonResponse type
-            return ConvertPersonToPersonResponse(person);
+            return person.ToPersonResponse();
         }
 
         public List<PersonResponse> GetAllPeople()
         {
             // SELECT * from People
-            return _db.People.ToList()
-                .Select(ConvertPersonToPersonResponse).ToList();
+            var people = _db.People.Include("Country").ToList();
+
+            return people
+                .Select(temp => temp.ToPersonResponse()).ToList();
 
             //return _db.sp_GetAllPeople()
             //    .Select(ConvertPersonToPersonResponse).ToList();
@@ -70,14 +66,14 @@ namespace Services
                 return null; 
             }
 
-            Person? person = _db.People.FirstOrDefault(temp => temp.PersonID == personID);
+            Person? person = _db.People.Include("Country")
+                .FirstOrDefault(temp => temp.PersonID == personID);
             if (person == null)
             {
                 return null;
             }
 
-            PersonResponse personResponse = ConvertPersonToPersonResponse(person);
-            return personResponse;
+            return person.ToPersonResponse();
         }
 
         public List<PersonResponse> GetFilteredPeople(string searchBy, string? searchString)
