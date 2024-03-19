@@ -38,7 +38,7 @@ namespace ServiceContracts.DTO
     public static class CountryExtensions
     {
         //Converts from Country object to CountryResponse object
-        public static CountryResponse ToCountryResponse(this Country country)
+        public static CountryResponse? ToCountryResponse(this Country country)
         {
             return new CountryResponse()
             {

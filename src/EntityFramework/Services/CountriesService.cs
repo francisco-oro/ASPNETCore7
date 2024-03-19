@@ -16,7 +16,7 @@ namespace Services
         {
             _db = peopleDbContext;
         }
-        public async Task<CountryResponse> AddCountry(CountryAddRequest? countryAddRequest)
+        public async Task<CountryResponse?> AddCountry(CountryAddRequest? countryAddRequest)
         {
             // Validation: countryAddRequest parameter can't be null 
             if (countryAddRequest == null)
