@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using CsvHelper;
+using CsvHelper.Configuration;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
@@ -240,15 +241,46 @@ namespace Services
             return true;
         }
 
-        public Task<MemoryStream> GetPeopleCSV()
+        public async Task<MemoryStream> GetPeopleCSV()
         {
             MemoryStream memoryStream = new MemoryStream();
             StreamWriter streamWriter = new StreamWriter(memoryStream);
-            CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture, leaveOpen: true);
 
-            csvWriter.WriteHeader<PersonResponse>(); // PersonID, PersonName, ...
-            csvWriter.NextRecord();
-            csvWriter.WriteRecordsAsync()
+            CsvConfiguration csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture);
+            CsvWriter csvWriter = new CsvWriter(streamWriter, csvConfiguration);
+
+            // PersonName, Email
+            csvWriter.WriteField(nameof(PersonResponse.PersonName));
+            csvWriter.WriteField(nameof(PersonResponse.Email));
+            csvWriter.WriteField(nameof(PersonResponse.DateOfBirth));
+            csvWriter.WriteField(nameof(PersonResponse.Age));
+            csvWriter.WriteField(nameof(PersonResponse.Country));
+            csvWriter.WriteField(nameof(PersonResponse.Gender));
+            csvWriter.WriteField(nameof(PersonResponse.Address));
+            csvWriter.WriteField(nameof(PersonResponse.ReceiveNewsLetters));
+            await csvWriter.NextRecordAsync();
+
+            List<PersonResponse> people = await _db.People
+                .Include("Country")
+                .Select(temp => temp.ToPersonResponse()).ToListAsync();
+
+            foreach (var personResponse in people)
+            {
+                csvWriter.WriteField(personResponse.PersonName);
+                csvWriter.WriteField(personResponse.Email);
+                csvWriter.WriteField(personResponse.DateOfBirth?.ToString("yyyy-MM-dd"));
+                csvWriter.WriteField(personResponse.Age);
+                csvWriter.WriteField(personResponse.Country);
+                csvWriter.WriteField(personResponse.Gender);
+                csvWriter.WriteField(personResponse.Address);
+                csvWriter.WriteField(personResponse.ReceiveNewsLetters);
+                await csvWriter.NextRecordAsync();
+
+                await csvWriter.FlushAsync();
+            }
+
+            memoryStream.Position = 0;
+            return memoryStream;
         }
     }
 }

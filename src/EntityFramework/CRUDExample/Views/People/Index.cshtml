@@ -8,7 +8,9 @@
     
     <a asp-controller="People" asp-action="Create">Create Person</a>
 
-    <a asp-controller="People" asp-action="PeoplePDF">Download as PDF</a>
+    <a asp-controller="People" asp-action="PeoplePDF" class="ml">Download as PDF</a>
+
+    <a asp-controller="People" asp-action="PeopleCSV" class="ml">Download as CSV</a>
     <div class="box flex">
         <div class="flex-1">
             <select class="form-input" name="searchBy">
