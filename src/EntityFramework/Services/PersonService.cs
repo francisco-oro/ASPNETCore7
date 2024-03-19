@@ -1,5 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using CsvHelper;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
@@ -236,6 +238,17 @@ namespace Services
             _db.People.Remove(await _db.People.FirstAsync(temp => temp.PersonID == personID));
             await _db.SaveChangesAsync();
             return true;
+        }
+
+        public Task<MemoryStream> GetPeopleCSV()
+        {
+            MemoryStream memoryStream = new MemoryStream();
+            StreamWriter streamWriter = new StreamWriter(memoryStream);
+            CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture, leaveOpen: true);
+
+            csvWriter.WriteHeader<PersonResponse>(); // PersonID, PersonName, ...
+            csvWriter.NextRecord();
+            csvWriter.WriteRecordsAsync()
         }
     }
 }

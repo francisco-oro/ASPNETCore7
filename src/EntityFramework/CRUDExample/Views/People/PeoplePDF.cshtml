@@ -2,7 +2,7 @@
 @{
     Layout = null;
 }
-<link href="@("http://" + Context.Request.Host.ToString() + "/StyleSheet.css") rel="stylesheet"/>
+<link href="@("http://" + Context.Request.Host.ToString() + "/StyleSheet.css")" rel="stylesheet"/>
 @* http://localhost:port/StyleSheet.css *@
 
 <h1>People</h1>
@@ -12,6 +12,7 @@
             <th>Person Name</th>
             <th>Email</th>
             <th>Date of Birth</th>
+            <th>Age</th>
             <th>Gender</th>
             <th>Country</th>
             <th>Address</th>
