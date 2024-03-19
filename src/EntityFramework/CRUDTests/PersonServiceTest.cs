@@ -376,22 +376,22 @@ namespace CRUDTests
 
         //When we supply null as PersonUpdateRequest, it should throw ArgumentNullException
         [Fact]
-        public void UpdatePerson_NullPerson()
+        public async Task UpdatePerson_NullPerson()
         {
             //Arrange
             PersonUpdateRequest? personUpdateRequest = null;
 
             //Assert
-            Assert.Throws<ArgumentNullException>(() =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
             {
                 //Act 
-                _personService.UpdatePerson(personUpdateRequest);
+                await _personService.UpdatePerson(personUpdateRequest);
             });
         }
 
         //When we supply invalid person id, it should throw ArgumentException
         [Fact]
-        public void UpdatePerson_InvalidPersonID()
+        public async Task UpdatePerson_InvalidPersonID()
         {
             //Arrange 
             PersonUpdateRequest? personUpdateRequest = new PersonUpdateRequest()
@@ -400,50 +400,50 @@ namespace CRUDTests
             };
 
             //Assert
-            Assert.Throws<ArgumentException>(() =>
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 //Act 
-                _personService.UpdatePerson(personUpdateRequest);
+                await _personService.UpdatePerson(personUpdateRequest);
             });
         }
 
 
         //When personName is null, it should throw ArgumentException
         [Fact]
-        public void UpdatePerson_PersonNameIsNull()
+        public async Task UpdatePerson_PersonNameIsNull()
         {
             //Arrange 
-            var (countryResponse1, countryResponse2) = AddCountries();
-            var personFromAdd = AddPeople(countryResponse1, countryResponse2);
+            var (countryResponse1, countryResponse2) = await AddCountries();
+            var personFromAdd = await AddPeople(countryResponse1, countryResponse2);
 
             PersonUpdateRequest personUpdateRequest = personFromAdd[0].ToPersonUpdateRequest();
             personUpdateRequest.PersonName = null;
 
             //Act
-            Assert.Throws<ArgumentException>(() =>
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 //Act
-                _personService.UpdatePerson(personUpdateRequest);
+                await _personService.UpdatePerson(personUpdateRequest);
             });
 
         }
 
         //First, add a new person and try to update the person name and email       
         [Fact]
-        public void UpdatePerson_PersonFullDetailsUpdate()
+        public async Task UpdatePerson_PersonFullDetailsUpdate()
         {
             //Arrange 
-            var (countryResponse1, countryResponse2) = AddCountries();
-            var personFromAdd = AddPeople(countryResponse1, countryResponse2);
+            var (countryResponse1, countryResponse2) = await AddCountries();
+            var personFromAdd = await AddPeople(countryResponse1, countryResponse2);
 
             PersonUpdateRequest personUpdateRequest = personFromAdd[0].ToPersonUpdateRequest();
             personUpdateRequest.PersonName = "William";
             personUpdateRequest.Email = "william@example.com";
 
             //Act
-            PersonResponse personResponseFromUpdatePerson = _personService.UpdatePerson(personUpdateRequest);
+            PersonResponse personResponseFromUpdatePerson = await _personService.UpdatePerson(personUpdateRequest);
 
-            PersonResponse? personResponseFromGet = _personService.GetPersonByPersonID(personResponseFromUpdatePerson.PersonID);
+            PersonResponse? personResponseFromGet = await _personService.GetPersonByPersonID(personResponseFromUpdatePerson.PersonID);
 
             //Assert 
             Assert.Equal(personResponseFromGet, personResponseFromUpdatePerson);
@@ -454,14 +454,14 @@ namespace CRUDTests
 
         //If you supply an valid PersonID, it should return true
         [Fact]
-        public void DeletePerson_ValidPersonID()
+        public async Task DeletePerson_ValidPersonID()
         {
             //Arrange
-            var (countryResponse1, countryResponse2) = AddCountries();
-            var peopleFromAdd = AddPeople(countryResponse1, countryResponse2);
+            var (countryResponse1, countryResponse2) = await AddCountries();
+            var peopleFromAdd = await AddPeople(countryResponse1, countryResponse2);
 
             //Act 
-            bool isDeleted = _personService.DeletePerson(peopleFromAdd[2].PersonID);
+            bool isDeleted = await _personService.DeletePerson(peopleFromAdd[2].PersonID);
 
             //Assert
             Assert.True(isDeleted);
@@ -469,14 +469,14 @@ namespace CRUDTests
 
         //If you supply an invalid PersonID, it should return false
         [Fact]
-        public void DeletePerson_InvalidPersonID()
+        public async Task DeletePerson_InvalidPersonID()
         {
             //Arrange
-            var (countryResponse1, countryResponse2) = AddCountries();
-            var peopleFromAdd = AddPeople(countryResponse1, countryResponse2);
+            var (countryResponse1, countryResponse2) = await AddCountries();
+            var peopleFromAdd = await AddPeople(countryResponse1, countryResponse2);
 
             //Act 
-            bool isDeleted = _personService.DeletePerson(Guid.NewGuid());
+            bool isDeleted = await _personService.DeletePerson(Guid.NewGuid());
 
             //Assert
             Assert.False(isDeleted);
