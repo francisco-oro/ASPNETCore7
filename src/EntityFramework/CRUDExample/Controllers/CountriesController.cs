@@ -23,7 +23,7 @@ namespace CRUDExample.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> UploadFromExcel([FromForm] IFormFile? excelFile)
+        public async Task<IActionResult> UploadFromExcel(IFormFile? excelFile)
         {
             if (excelFile == null || excelFile.Length == 0)
             {
