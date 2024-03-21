@@ -497,25 +497,56 @@ Sets or gets formatting style of the specific cell.
 # Interview Questions 
 
 ## What is Entity Framework?
-Entity Framework is a framework for accessing databases in .NET applications. It relies on the Objet Relation Mapping `ORM` functionality to perform these operations
+- Entity Framework (EF) is an objet-relational mapper (ORM) for . NET applications. 
+- It allows developers to work with relational data using domain-specific objects.
+- EF eliminates the need for writing most of the data-access code manually. 
+- It supports querying, saving, concurrency, transactions, caching and migrations. 
+
 ## “What other libraries or frameworks might you use with ASP.NET Core to build your application, and for what purposes?”
+- `Blazor:` A full-stack web UI framework that allows building interactive web components using C#.
+- `Razor-Pages:` A page-based model for server-rendered web UI. 
+- `MVC (Model-View-Controller):` Renders UI on the server and follows the MVC architectural pattern
+- `Single Page Applications (SPA):` Use popluar JavaScript frameworks (Angular, React, Vue) for client-side logic
 
 ## What is SQL injection attack?
-
+- A SQL injection attack occurs when malicious SQL code is injected into an application
+- It allows attackers to read sensitive data, modify data, execute admin operations and more. 
+- SQL injection is a high-impact security issue 
 ## How to handle SQL injection attacks in Entity Framework?
+- Entity Framework migrates SQL injection by using parameterized queries
+- Always use parameterized queries instead of directly injection user input into SQL commands. 
+- Avoid returning `IQueryable<T>` types from ethods exposed to untrusted callers
 
 ## What are POCO classes?
-
+- POCO classes are simple, plain C# or VB.NET classes. 
+- They don't deppend on any framework-specific base class. 
+- Used to represent persistent entities without ORM-specific attributes
+- Implement domain business logic and support LINQ queries
 ## What is the proxy object?
-
+- In EF, a proxy object is a dynamically generated subclass of an entity class. 
+- It enables lazy loading, change tracking, and navigations properties. 
+- Proxy objects are used for POCO proxy entities. 
 ## What are the various Entity States in EF?
-
+- `Added:` Entity is new and not yet saved to the database. 
+- `Modified:` Entity has been modified and needs to be updated. 
+- `Deleted:` Entity is marked for deletion. 
+- `Unchanged:` Entity in unchanged since it was retrieved from the database. 
 ## What are various approaches in Code First for model designing?
-
+- `Data Annotations`: Use attributes to define model properties
+- `Fluent API`: Configure model relationships and constraints fluently 
+- `Convention Over Configuration`: Follow conventions for naming and mapping. 
 ## What C# Datatype is mapped with which Datatype in SQL Server?
-
+- `int` maps to `int` or `bigint`
+- `string` maps to `nvarchar(max`
+- `DateTime` maps to `datetime2`
+- And so on.. 
 ## What is Code First Migrations in Entity Framework?
-
+- `Code First Migrations` allow you to evolve your database schema over time. 
+- You create migrations to update the database schema based on changes in your model
+- Migrations generate SQL scripts for schema changes
 ## What is Migrations History Table?
-
+- The `__MigrationHistory` table stores information about applied migrations
+- It tracks which migrations have been applied to the database
 ## How you apply code first migrations through code in EF Core?
+- Use the `Add-Migration` command in the Package Manager Console. 
+- Then apply migrations using `Update-Database`. 
