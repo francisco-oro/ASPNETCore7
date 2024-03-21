@@ -11,11 +11,12 @@
 <div class="container">
     <div class="navbar">
         <div class="navbar-brand">
-            <img src="/logo_rectangle.png" asp-append-version="true" width="25px"/>
+            <img src="/logo_rectangle.png" asp-append-version="true" width="50px"/>
         </div>
         <ul>
             <li>
-                <a href="/people/index">People</a>
+                <a asp-controller="People" asp-action="Index">People</a>
+                <a asp-controller="Countries" asp-action="UploadFromExcel">Upload Countries</a>
             </li>
         </ul>
     </div>
