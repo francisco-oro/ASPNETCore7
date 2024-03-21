@@ -1,10 +1,12 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.Reflection;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
@@ -281,6 +283,48 @@ namespace Services
 
             memoryStream.Position = 0;
             return memoryStream;
+        }
+
+        public async Task<MemoryStream> GetPeopleExcel()
+        {
+            MemoryStream memoryStream = new MemoryStream();
+            using (ExcelPackage package = new ExcelPackage(memoryStream))
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("PeopleSheet");
+                worksheet.Cells["A1"].Value = "Person Name";
+                worksheet.Cells["B1"].Value = "Email";
+                worksheet.Cells["C1"].Value = "Date of birth";
+                worksheet.Cells["D1"].Value = "Age";
+                worksheet.Cells["E1"].Value = "Gender";
+                worksheet.Cells["F1"].Value = "Country";
+                worksheet.Cells["G1"].Value = "Address";
+                worksheet.Cells["H1"].Value = "Receive News Letters";
+                int row = 2;
+                List<PersonResponse> people = await _db.People.Include("Country").Select(temp => temp.ToPersonResponse())
+                    .ToListAsync();
+
+                foreach (PersonResponse personResponse in people)
+                {
+                    worksheet.Cells[row, 1].Value = personResponse.PersonName;
+                    worksheet.Cells[row, 2].Value = personResponse.Email;
+                    if (personResponse.DateOfBirth != null)
+                        worksheet.Cells[row, 3].Value = personResponse.DateOfBirth.Value.ToString("yyy-MM-dd");
+                    worksheet.Cells[row, 4].Value = personResponse.Age;
+                    worksheet.Cells[row, 5].Value = personResponse.Gender;
+                    worksheet.Cells[row, 6].Value = personResponse.Country;
+                    worksheet.Cells[row, 7].Value = personResponse.Address;
+                    worksheet.Cells[row, 8].Value = personResponse.ReceiveNewsLetters;
+
+                    row++;
+                }
+
+                worksheet.Cells[$"A1:H{row}"].AutoFitColumns();
+
+                await package.SaveAsync();
+            }
+
+            memoryStream.Position = 0;
+            return memoryStream; 
         }
     }
 }
