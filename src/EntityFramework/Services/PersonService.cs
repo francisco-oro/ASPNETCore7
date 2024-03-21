@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using CsvHelper;
@@ -299,6 +300,13 @@ namespace Services
                 worksheet.Cells["F1"].Value = "Country";
                 worksheet.Cells["G1"].Value = "Address";
                 worksheet.Cells["H1"].Value = "Receive News Letters";
+
+                using (ExcelRange range = worksheet.Cells["A1:H1"])
+                {
+                    range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                    range.Style.Font.Bold = true;
+                }
                 int row = 2;
                 List<PersonResponse> people = await _db.People.Include("Country").Select(temp => temp.ToPersonResponse())
                     .ToListAsync();
