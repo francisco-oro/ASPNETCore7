@@ -3,7 +3,7 @@
     "BuyOrderID": "C9AE2F7F-29FB-4CB0-8C59-0A07062EB104",
     "StockSymbol" : "GGP",
     "StockName" : "GGP Inc.",
-    "DateAndTimeOfOrder" :"2023/10/22",
+    "DateAndTimeOfOrder" :"2023-10-22",
     "Quantity" : 96,
     "Price" : 25.73
   },
@@ -11,7 +11,7 @@
     "BuyOrderID" : "876177C0-CCA7-4BEA-B21E-DCE33825D91B",
     "StockSymbol" : "PEO",
     "StockName" : "Adams Natural  Resources Fund, Inc.",
-    "DateAndTimeOfOrder" :"2023/09/25",
+    "DateAndTimeOfOrder" :"2023-09-25",
     "Quantity" : 97,
     "Price" : 15.08
   },
@@ -19,7 +19,7 @@
     "BuyOrderID" :"B5FF3BA9-602C-41D2-97F2-3FCAD7786422",
     "StockSymbol" : "SGU",
     "StockName" : "Star Gas Partners, L.P.",
-    "DateAndTimeOfOrder" :"2024/02/03",
+    "DateAndTimeOfOrder" :"2024-02-03",
     "Quantity" : 62,
     "Price" : 64.70
   },
@@ -27,7 +27,7 @@
     "BuyOrderID" : "A7B27A7C-4FE3-442C-9D8B-E60D6473C7A5",
     "StockSymbol" : "BXE",
     "StockName" : "Bellatrix Exploration Ltd",
-    "DateAndTimeOfOrder" :"2023/07/06",
+    "DateAndTimeOfOrder" :"2023-07-06",
     "Quantity" : 100,
     "Price" : 3.65
   }

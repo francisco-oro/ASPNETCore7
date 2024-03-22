@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Rotativa.AspNetCore;
+using Rotativa.AspNetCore.Options;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using StocksApp.Models;
@@ -97,7 +98,8 @@ namespace StocksApp.Controllers
             Orders orders = new Orders() { BuyOrders = buyOrders, SellOrders = sellOrder };
             return new ViewAsPdf("OrdersPDF", orders, ViewData)
             {
-
+                PageMargins = new Margins() { Top = 20, Bottom = 20, Left = 20, Right = 20},
+                PageOrientation = Orientation.Landscape
             };
         }
 
