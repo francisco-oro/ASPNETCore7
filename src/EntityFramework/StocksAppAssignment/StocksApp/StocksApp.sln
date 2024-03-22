@@ -5,13 +5,13 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StocksApp", "StocksApp.csproj", "{C2AD0C92-D4E7-4FD0-B339-1274BCFFBBF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "..\Entities\Entities.csproj", "{0BD76720-2E90-43CD-A005-831085B56FC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "..\Entities\Entities.csproj", "{0BD76720-2E90-43CD-A005-831085B56FC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceContracts", "..\ServiceContracts\ServiceContracts.csproj", "{618335A7-DF0D-48E3-B4EF-ECDEB4967232}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceContracts", "..\ServiceContracts\ServiceContracts.csproj", "{618335A7-DF0D-48E3-B4EF-ECDEB4967232}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockAppTests", "..\StockAppTests\StockAppTests.csproj", "{B8024D50-A0FE-401C-94F2-67114C92AD06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockAppTests", "..\StockAppTests\StockAppTests.csproj", "{B8024D50-A0FE-401C-94F2-67114C92AD06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "..\Services\Services.csproj", "{E28EBAC1-3E4E-4E51-A59C-6FE5417098D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "..\Services\Services.csproj", "{E28EBAC1-3E4E-4E51-A59C-6FE5417098D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

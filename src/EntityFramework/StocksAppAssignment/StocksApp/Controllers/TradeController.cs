@@ -1,6 +1,7 @@
 ﻿using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Rotativa.AspNetCore;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using StocksApp.Models;
@@ -87,6 +88,19 @@ namespace StocksApp.Controllers
             };
             return View(orders);
         }
+
+        [Route("[action]")]
+        public async Task<IActionResult> OrdersPDF()
+        {
+            List<BuyOrderResponse>? buyOrders = await _stocksService.GetBuyOrders();
+            List<SellOrderResponse>? sellOrder = await _stocksService.GetSellOrders();
+            Orders orders = new Orders() { BuyOrders = buyOrders, SellOrders = sellOrder };
+            return new ViewAsPdf("OrdersPDF", orders, ViewData)
+            {
+
+            };
+        }
+
 
         [Route("/api/v1/StockPriceQuote")]
         public async Task<IActionResult> GetStockPriceQuote([FromQuery] string stockSymbol)

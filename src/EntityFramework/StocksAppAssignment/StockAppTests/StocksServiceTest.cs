@@ -1,3 +1,5 @@
+using Entities;
+using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using Services;
@@ -15,7 +17,7 @@ namespace StockAppTests
         public StocksServiceTest(ITestOutputHelper outputHelper)
         {
             _outputHelper = outputHelper;
-            _stocksService = new StocksService(false);
+            _stocksService = new StocksService( new StockMarketDbContext( new DbContextOptionsBuilder<StockMarketDbContext>().Options));
         }
 
         // helper methods
