@@ -40,6 +40,8 @@ namespace Entities
                     modelBuilder.Entity<BuyOrder>().HasData(sellOrder);
                 }
             }
+
+
         }
     }
 }
