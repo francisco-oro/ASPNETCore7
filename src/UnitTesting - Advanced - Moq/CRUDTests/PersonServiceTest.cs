@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using Entities;
 using EntityFrameworkCoreMock;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
 using ServiceContracts.DTO;
@@ -90,11 +91,11 @@ namespace CRUDTests
             //Arrange
             PersonAddRequest? personAddRequest = null; 
             //Act 
-            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            Func<Task> action = async () =>
             { 
                 await _personService.AddPerson(personAddRequest);
-            });
-
+            };
+            await action.Should().ThrowAsync<ArgumentNullException>(); 
         }
 
         //When we supply null value as null value as PersonName, it should throw ArgumentException
