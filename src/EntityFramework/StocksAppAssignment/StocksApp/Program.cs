@@ -1,5 +1,6 @@
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using Rotativa.AspNetCore;
 using ServiceContracts;
 using Services;
 using StocksApp.Services;
@@ -18,7 +19,7 @@ builder.Services.AddDbContext<StockMarketDbContext>(options =>
 
 var app = builder.Build();
 
-
+RotativaConfiguration.Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa");
 app.UseStaticFiles();
 app.UseRouting();
 app.MapControllers();

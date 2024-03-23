@@ -3,41 +3,45 @@
     Layout = null;
 }
 
-<link href="@("http://" + Context.Request.Host.ToString() + "/StyleSheet.css")" rel="stylesheet"/>
+<link href="@("http://" + Context.Request.Host.ToString() + "/StyleSheet.css")" rel="stylesheet" />
 @* http://localhost:port/StyleSheet.css *@
 
 <h1>Orders </h1>
 
 <table class="table w-100 mt">
     <thead>
-    <tr>
-        <th>Date and Time</th>
-        <th>Stock</th>
-        <th>Order Type</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th>Trade Amount</th>
-    </tr>
+        <tr>
+            <th>Date and Time</th>
+            <th>Stock</th>
+            <th>Order Type</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Trade Amount</th>
+        </tr>
     </thead>
-    
+
     <tbody>
-    @foreach (SellOrderResponse sellOrderResponse in Model.SellOrders)
-    {
-        <tr style="width: 20%">@sellOrderResponse.DateAndTimeOfOrder?.ToString("dd MM yyyy")</tr>
-        <tr style="width: 20%">@sellOrderResponse.StockName (@sellOrderResponse.StockSymbol)</tr>
-        <tr style="width: 15%">Sell Order</tr>
-        <tr style="width: 10%">@sellOrderResponse.Quantity</tr>
-        <tr style="width: 10%">@sellOrderResponse.Price</tr>
-        <tr style="width: 15%">@sellOrderResponse.TradeAmount</tr>
-    }
-    @foreach (BuyOrderResponse buyOrder in Model.BuyOrders)
-    {
-        <tr style="width: 20%">@buyOrder.DateAndTimeOfOrder?.ToString("dd MM yyyy")</tr>
-        <tr style="width: 20%">@buyOrder.StockName (@buyOrder.StockSymbol)</tr>
-        <tr style="width: 15%">Buy Order</tr>
-        <tr style="width: 10%">@buyOrder.Quantity</tr>
-        <tr style="width: 10%">@buyOrder.Price</tr>
-        <tr style="width: 15%">@buyOrder.TradeAmount</tr>
-    }
+        @foreach (SellOrderResponse sellOrderResponse in Model.SellOrders)
+        {
+            <tr>
+                <td style="width: 20%">@sellOrderResponse.DateAndTimeOfOrder?.ToString("dd MM yyyy")</td>
+                <td style="width: 20%">@sellOrderResponse.StockName (@sellOrderResponse.StockSymbol)</td>
+                <td style="width: 15%">Sell Order</td>
+                <td style="width: 10%">@sellOrderResponse.Quantity</td>
+                <td style="width: 10%">@sellOrderResponse.Price</td>
+                <td style="width: 15%">@sellOrderResponse.TradeAmount</td>
+            </tr>
+        }
+        @foreach (BuyOrderResponse buyOrder in Model.BuyOrders)
+        {
+            <tr>
+                <td style="width: 20%">@buyOrder.DateAndTimeOfOrder?.ToString("dd MM yyyy")</td>
+                <td style="width: 20%">@buyOrder.StockName (@buyOrder.StockSymbol)</td>
+                <td style="width: 15%">Buy Order</td>
+                <td style="width: 10%">@buyOrder.Quantity</td>
+                <td style="width: 10%">@buyOrder.Price</td>
+                <td style="width: 15%">@buyOrder.TradeAmount</td>
+            </tr>
+        }
     </tbody>
 </table>
