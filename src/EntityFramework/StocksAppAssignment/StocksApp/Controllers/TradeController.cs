@@ -1,5 +1,8 @@
 ﻿using System.Reflection.Metadata;
+using Entities;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Rotativa.AspNetCore;
 using Rotativa.AspNetCore.Options;
@@ -7,6 +10,7 @@ using ServiceContracts;
 using ServiceContracts.DTO;
 using StocksApp.Models;
 using StocksApp.Services;
+using System.Text.Json;
 
 namespace StocksApp.Controllers
 {

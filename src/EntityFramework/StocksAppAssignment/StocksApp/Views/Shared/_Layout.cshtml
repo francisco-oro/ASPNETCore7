@@ -41,7 +41,7 @@
                 }
                 else
                 {
-                        <li><a asp-controller="Trade" asp-action="Index">Trade</a></li>
+                    <li><a asp-controller="Trade" asp-action="Index">Trade</a></li>
                 }
 
                 @if (ViewBag.CurrentUrl == "~/Trade/Orders")
@@ -52,6 +52,8 @@
                 {
                     <li><a asp-controller="Trade" asp-action="Orders">Orders</a></li>
                 }
+                
+                <li><a asp-controller="Trade" asp-action="OrdersPDF">Download as PDF</a></li>
             </ul>
         </div>
 

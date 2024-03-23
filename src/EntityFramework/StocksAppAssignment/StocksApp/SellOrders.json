@@ -1,58 +1,34 @@
 [
   {
-    "SellOrderID": "0CC05E32-8F51-40E2-8135-E9082FD47912",
-    "StockSymbol": "AXTI",
-    "StockName": "AXT Inc",
-    "DateAndTimeOfOrder": "4-24-2023",
-    "Quantity": 57,
-    "Price": 60.215
+    "SellOrderID": "EE78A812-FBF9-495E-849C-F289CE661EE4",
+    "StockSymbol": "GGP",
+    "StockName": "GGP Inc.",
+    "DateAndTimeOfOrder": "2023-10-22",
+    "Quantity": 45,
+    "Price": 25.73
   },
   {
-    "SellOrderID": "{6C7B407E-9EC9-4B66-BE8E-9A89B4ADF37E}",
-    "StockSymbol": "CLNS",
-    "StockName": "Colony NorthStar, Inc.",
-    "DateAndTimeOfOrder": "2023-12-20",
-    "Quantity": 39,
-    "Price": 11.729
+    "SellOrderID": "6A68F8E7-8457-41BC-92DD-89880FB0D788",
+    "StockSymbol": "PEO",
+    "StockName": "Adams Natural  Resources Fund, Inc.",
+    "DateAndTimeOfOrder": "2023-09-25",
+    "Quantity": 15,
+    "Price": 15.08
   },
   {
-    "SellOrderID": "58C97D4B-9AE3-49E9-A4B1-51EB95ADA3C9",
-    "StockSymbol": "SREV",
-    "StockName": "ServiceSource International, Inc.",
-    "DateAndTimeOfOrder": "2023-5-13",
-    "Quantity": 53,
-    "Price": 59.995
+    "SellOrderID": "9723BD32-86A1-4974-9A4C-5C209DAD3579",
+    "StockSymbol": "SGU",
+    "StockName": "Star Gas Partners, L.P.",
+    "DateAndTimeOfOrder": "2024-02-03",
+    "Quantity": 792,
+    "Price": 64.70
   },
   {
-    "SellOrderID": "C3A0D8B0-4F56-4D09-9A3A-36C9257CD929",
-    "StockSymbol": "ALX",
-    "StockName": "Alexander's, Inc.",
-    "DateAndTimeOfOrder": "2023-8-8",
-    "Quantity": 17,
-    "Price": 48.751
-  },
-  {
-    "SellOrderID": "2F242FBE-CEB9-497D-AA55-62A598CC8CCB",
-    "StockSymbol": "TKF",
-    "StockName": "Turkish Investment Fund, Inc. (The)",
-    "DateAndTimeOfOrder": "2023-3-17",
-    "Quantity": 10,
-    "Price": 50.206
-  },
-  {
-    "SellOrderID": "872C647A-4C7B-4D5D-BBD0-04D3F7445313",
-    "StockSymbol": "PBI^B",
-    "StockName": "Pitney Bowes Inc.",
-    "DateAndTimeOfOrder": "2023-6-22",
-    "Quantity": 48,
-    "Price": 25.538
-  },
-  {
-    "SellOrderID": "872C647A-4C7B-4D5D-BBD0-04D3F7445313",
-    "StockSymbol": "MPVD",
-    "StockName": "Mountain Province Diamonds Inc.",
-    "DateAndTimeOfOrder": "2023-3-15",
-    "Quantity": 79,
-    "Price": 18.294
+    "SellOrderID": "33EBA596-71D8-421D-99D0-F31AF0BBE439",
+    "StockSymbol": "BXE",
+    "StockName": "Bellatrix Exploration Ltd",
+    "DateAndTimeOfOrder": "2023-07-06",
+    "Quantity": 235,
+    "Price": 3.65
   }
 ]

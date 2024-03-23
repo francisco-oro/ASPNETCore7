@@ -19,6 +19,7 @@ namespace Entities
 
             //Seed to BuyOrders 
             string buyOrdersJson = File.ReadAllText("BuyOrders.json");
+            Console.WriteLine(buyOrdersJson);
             List<BuyOrder>? buyOrders = JsonSerializer.Deserialize<List<BuyOrder>>(buyOrdersJson);
 
             if (buyOrders != null)
@@ -37,7 +38,7 @@ namespace Entities
             {
                 foreach (SellOrder sellOrder in sellOrders)
                 {
-                    modelBuilder.Entity<BuyOrder>().HasData(sellOrder);
+                    modelBuilder.Entity<SellOrder>().HasData(sellOrder);
                 }
             }
 

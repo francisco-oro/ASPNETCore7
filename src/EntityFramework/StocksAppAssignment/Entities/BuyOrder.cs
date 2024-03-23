@@ -8,7 +8,7 @@ namespace Entities
     public class BuyOrder
     {
         [Key]
-        public Guid? BuyOrderID;
+        public Guid BuyOrderID { get; set; }
 
         [StringLength(10)]
         public string? StockSymbol { get; set; }
