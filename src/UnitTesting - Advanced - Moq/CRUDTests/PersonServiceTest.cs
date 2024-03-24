@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using System.Linq.Expressions;
+using AutoFixture;
 using Entities;
 using EntityFrameworkCoreMock;
 using FluentAssertions;
@@ -186,6 +187,7 @@ namespace CRUDTests
             //Arrange 
             Person personRequest = _fixture.Build<Person>()
                 .With(temp => temp.Email, "person@example.com")
+                .With(temp => temp.Country, null as Country)
                 .Create();
             PersonResponse personResponseExpected = personRequest.ToPersonResponse();
 
@@ -209,6 +211,11 @@ namespace CRUDTests
         [Fact]
         public async Task GetAllPeople_EmptyList()
         {
+            var people = new List<Person>();
+            //Arrange 
+            _peopleRepositoryMock.Setup(temp => temp.GetAllPeople())
+                .ReturnsAsync(people);
+
             //Act 
             List<PersonResponse> peopleFromGet = await _personService.GetAllPeople();
 
@@ -220,19 +227,34 @@ namespace CRUDTests
         // First, we will add few people; and then when we call GetAllPeople(), it should
         // return the same people that were added 
         [Fact]
-        public async Task GetAllPeople_AddFewPeople()
+        public async Task GetAllPeople_WithFewPeople_ToBeSuccessful()
         {
             //Arrange
-            var (countryResponse1, countryResponse2) = await AddCountries();
-            var personResponsesFromAdd = await AddPeople(countryResponse1, countryResponse2);
+            List<Person> people = new List<Person>();
+            _fixture.Build<Person>()
+                .With(temp => temp.Email, "someone_1@example.com")
+                .With(temp => temp.Country, null as Country)
+                .Create();
+            _fixture.Build<Person>()
+                .With(temp => temp.Email, "someone_2@example.com")
+                .With(temp => temp.Country, null as Country)
+                .Create();
+            _fixture.Build<Person>()
+                .With(temp => temp.Email, "someone_3@example.com")
+                .With(temp => temp.Country, null as Country)
+                .Create();
 
+            List<PersonResponse> personResponseListExpected = 
+                people.Select(temp => temp.ToPersonResponse()).ToList();
             //print personResponsesFromAdd 
             _outputHelper.WriteLine("Expected:");
-            foreach (var personResponse in personResponsesFromAdd)
+            foreach (var personResponse in personResponseListExpected)
             {
                 _outputHelper.WriteLine(personResponse.ToString());
             }
 
+            _peopleRepositoryMock.Setup(temp => temp.GetAllPeople())
+                .ReturnsAsync(people);
             //Act
             List<PersonResponse> peopleListFromGet = await _personService.GetAllPeople();
 
@@ -246,22 +268,39 @@ namespace CRUDTests
 
             //Assert 
 
-            peopleListFromGet.Should().BeEquivalentTo(personResponsesFromAdd);
+            peopleListFromGet.Should().BeEquivalentTo(personResponseListExpected);
         }
         #endregion
 
         #region GetFilteredPeople
         //If the search text is empty and search by is "PersonName", it should return all people
         [Fact]
-        public async Task GetFilteredPeople_EmptySearchText()
+        public async Task GetFilteredPeople_EmptySearchText_ToBeSuccessful()
         {
             //Arrange
-            var (countryResponse1, countryResponse2) = await AddCountries();
-            var personResponsesFromAdd = await AddPeople(countryResponse1, countryResponse2);
+            List<Person> people = new List<Person>();
+            _fixture.Build<Person>()
+                .With(temp => temp.Email, "someone_1@example.com")
+                .With(temp => temp.Country, null as Country)
+                .Create();
+            _fixture.Build<Person>()
+                .With(temp => temp.Email, "someone_2@example.com")
+                .With(temp => temp.Country, null as Country)
+                .Create();
+            _fixture.Build<Person>()
+                .With(temp => temp.Email, "someone_3@example.com")
+                .With(temp => temp.Country, null as Country)
+                .Create();
 
+            List<PersonResponse> personResponseListExpected =
+                people.Select(temp => temp.ToPersonResponse()).ToList();
+
+            _peopleRepositoryMock.Setup(temp =>
+                    temp.GetFilteredPeople(It.IsAny<Expression<Func<Person, bool>>>())).
+                ReturnsAsync(people);
             //print personResponsesFromAdd 
             _outputHelper.WriteLine("Expected:");
-            foreach (var personResponse in personResponsesFromAdd)
+            foreach (var personResponse in personResponseListExpected)
             {
                 _outputHelper.WriteLine(personResponse.ToString());
             }
@@ -277,7 +316,7 @@ namespace CRUDTests
             }
 
             //Assert 
-            peopleListFromSearch.Should().BeEquivalentTo(personResponsesFromAdd);
+            peopleListFromSearch.Should().BeEquivalentTo(personResponseListExpected);
         }
 
         [Theory]
@@ -285,24 +324,36 @@ namespace CRUDTests
         [InlineData("sm")]
         [InlineData("m")]
         // First we will add few people; and then we will search based on person name with some search string. It should return the matching people
-        public async Task GetFilteredPeople_SearchByPersonName(string searchString)
+        public async Task GetFilteredPeople_SearchByPersonName_ToBeSuccessFull(string searchString)
         {
-            var (countryResponse1, countryResponse2) = await AddCountries();
+            //Arrange
+            List<Person> people = new List<Person>();
+            _fixture.Build<Person>()
+                .With(temp => temp.Email, "someone_1@example.com")
+                .With(temp => temp.PersonName, "Smith")
+                .With(temp => temp.Country, null as Country)
+                .Create();
+            _fixture.Build<Person>()
+                .With(temp => temp.Email, "someone_2@example.com")
+                .With(temp => temp.PersonName, "Maria")
+                .With(temp => temp.Country, null as Country)
+                .Create();
+            _fixture.Build<Person>()
+                .With(temp => temp.Email, "someone_3@example.com")
+                .With(temp => temp.Country, null as Country)
+                .Create();
 
-            var personResponsesFromAdd = await AddPeople(countryResponse1, countryResponse2);
+            List<PersonResponse> personResponseListExpected =
+                people.Select(temp => temp.ToPersonResponse()).ToList();
 
+            _peopleRepositoryMock.Setup(temp =>
+                    temp.GetFilteredPeople(It.IsAny<Expression<Func<Person, bool>>>())).
+                ReturnsAsync(people);
             //print personResponsesFromAdd 
             _outputHelper.WriteLine("Expected:");
-            foreach (var personResponse in personResponsesFromAdd)
+            foreach (var personResponse in personResponseListExpected)
             {
-                if (personResponse.PersonName == null)
-                {
-                    continue;
-                }
-                if (personResponse.PersonName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-                {
-                    _outputHelper.WriteLine(personResponse.ToString());
-                }
+                _outputHelper.WriteLine(personResponse.ToString());
             }
 
             //Act
@@ -316,8 +367,7 @@ namespace CRUDTests
             }
 
             //Assert 
-            peopleListFromSearch.Should().OnlyContain(temp => 
-                temp.PersonName != null && temp.PersonName.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+            peopleListFromSearch.Should().BeEquivalentTo(personResponseListExpected);
         }
 
 
