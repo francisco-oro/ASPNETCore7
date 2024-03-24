@@ -3,6 +3,8 @@ using Entities;
 using EntityFrameworkCoreMock;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Moq;
+using RepositoryContracts;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
@@ -17,6 +19,10 @@ namespace CRUDTests
         // private fields
         private readonly IPersonService _personService;
         private readonly ICountriesService _countriesService;
+
+        private readonly Mock<IPeopleRepository> _peopleRepositoryMock;
+        private readonly IPeopleRepository _peopleRepository;
+        
         private readonly ITestOutputHelper _outputHelper;
         private readonly IFixture _fixture;
 
@@ -24,7 +30,10 @@ namespace CRUDTests
         public PersonServiceTest(ITestOutputHelper testOutputHelper)
         {
             _fixture = new Fixture();
-            var peopleInitialData = new List<Person>() { };
+            _peopleRepositoryMock = new Mock<IPeopleRepository>();
+            _peopleRepository = _peopleRepositoryMock.Object;
+
+                var peopleInitialData = new List<Person>() { };
             if (peopleInitialData == null) throw new ArgumentNullException(nameof(peopleInitialData));
             var countriesInitialData = new List<Country>() { };
             if (countriesInitialData == null) throw new ArgumentNullException(nameof(countriesInitialData));
@@ -108,6 +117,8 @@ namespace CRUDTests
             PersonAddRequest? personAddRequest = _fixture.Build<PersonAddRequest>()
                 .With(temp => temp.PersonName, null as string)
                 .Create();
+            
+            Person person = personAddRequest.ToPerson();
             // Act 
            Func<Task> action = async() =>
             {
@@ -120,12 +131,18 @@ namespace CRUDTests
         //When we supply proper person details, it should insert the person into the people list; 
         // it should return an object of PersonResponse, which includes with the newly generated person id
         [Fact]
-        public async Task AddPerson_ProperPersonDetails()
+        public async Task AddPerson_ProperPersonDetails_ToBeSuccessful()
         {
             //Arrange 
             PersonAddRequest? personAddRequest = _fixture.Build<PersonAddRequest>()
                 .With(temp => temp.Email, "someone@example.com")
                 .Create();
+            Person person = personAddRequest.ToPerson();
+
+            // If we supply anr argument value to the AddPerson method, it should return the same return value
+            _peopleRepositoryMock.Setup(
+                    temp => temp.AddPerson(It.IsAny<Person>()))
+                .ReturnsAsync(person);
             // Act 
             PersonResponse personResponseFromAdd = await _personService.AddPerson(personAddRequest);
             List<PersonResponse> peopleList = await _personService.GetAllPeople();
