@@ -31,7 +31,7 @@ namespace RepositoryContracts
         /// </summary>
         /// <param name="personID">PersonID (guid) to search</param>
         /// <returns>A person object or null</returns>
-        Task<List<Person>> GetPersonByPersonID(Guid personID);
+        Task<Person?> GetPersonByPersonID(Guid personID);
 
         /// <summary>
         /// Returns all person objects based on the given expression 
@@ -52,6 +52,6 @@ namespace RepositoryContracts
         /// </summary>
         /// <param name="person">Person object to update</param>
         /// <returns>Returns the updated person object</returns>
-        Task<Person> UpdatePerson(Person person);
+        Task<Person?> UpdatePerson(Person person);
     }
 }
