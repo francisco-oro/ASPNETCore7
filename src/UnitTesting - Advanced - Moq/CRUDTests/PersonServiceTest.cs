@@ -33,7 +33,7 @@ namespace CRUDTests
             _peopleRepositoryMock = new Mock<IPeopleRepository>();
             _peopleRepository = _peopleRepositoryMock.Object;
 
-                var peopleInitialData = new List<Person>() { };
+            var peopleInitialData = new List<Person>() { };
             if (peopleInitialData == null) throw new ArgumentNullException(nameof(peopleInitialData));
             var countriesInitialData = new List<Country>() { };
             if (countriesInitialData == null) throw new ArgumentNullException(nameof(countriesInitialData));
@@ -46,7 +46,7 @@ namespace CRUDTests
             doContextMock.CreateDbSetMock(temp => temp.People, peopleInitialData);
 
             _countriesService = new CountriesService(null);
-            _personService = new PersonService(null);
+            _personService = new PersonService(_peopleRepository);
             _outputHelper = testOutputHelper;
         }
 
@@ -97,7 +97,7 @@ namespace CRUDTests
 
         //When we supply null value as PersonAddRequest, it should throw ArgumentNullException
         [Fact]
-        public async Task AddPerson_NullPerson()
+        public async Task AddPerson_NullPerson_ToBeArgumentNullException()
         {
             //Arrange
             PersonAddRequest? personAddRequest = null; 
@@ -111,7 +111,7 @@ namespace CRUDTests
 
         //When we supply null value as null value as PersonName, it should throw ArgumentException
         [Fact]
-        public async Task AddPerson_PersonNameIsNull()
+        public async Task AddPerson_PersonNameIsNull_ToBeArgumentException()
         {
             //Arrange 
             PersonAddRequest? personAddRequest = _fixture.Build<PersonAddRequest>()
@@ -119,13 +119,19 @@ namespace CRUDTests
                 .Create();
             
             Person person = personAddRequest.ToPerson();
-            // Act 
-           Func<Task> action = async() =>
+
+            // When PeopleRepository.AddPerson is called, it has tu return the same "person" object
+
+            _peopleRepositoryMock
+                .Setup(temp => temp.AddPerson(It.IsAny<Person>()))
+                .ReturnsAsync(person);
+            // Act
+            Func<Task> action = async() =>
             {
                 await _personService.AddPerson(personAddRequest);
-            };
-
-           await action.Should().ThrowAsync<ArgumentException>();
+            }; 
+            
+            await action.Should().ThrowAsync<ArgumentException>();
         }
 
         //When we supply proper person details, it should insert the person into the people list; 
@@ -138,6 +144,7 @@ namespace CRUDTests
                 .With(temp => temp.Email, "someone@example.com")
                 .Create();
             Person person = personAddRequest.ToPerson();
+            PersonResponse personResponseExpected = person.ToPersonResponse();
 
             // If we supply anr argument value to the AddPerson method, it should return the same return value
             _peopleRepositoryMock.Setup(
@@ -145,12 +152,12 @@ namespace CRUDTests
                 .ReturnsAsync(person);
             // Act 
             PersonResponse personResponseFromAdd = await _personService.AddPerson(personAddRequest);
-            List<PersonResponse> peopleList = await _personService.GetAllPeople();
+
+            personResponseExpected.PersonID = personResponseFromAdd.PersonID;
             //Assert
-            //Assert.True(personResponseFromAdd.PersonID != Guid.Empty);
+
             personResponseFromAdd.PersonID.Should().NotBe(Guid.Empty);
-            //Assert.Contains(personResponseFromAdd, peopleList);
-            peopleList.Should().Contain(personResponseFromAdd);
+            personResponseFromAdd.Should().Be(personResponseExpected);
         }
 
 
@@ -160,7 +167,7 @@ namespace CRUDTests
 
         // If we supply null as PersonID, it should return null as PersonResponse
         [Fact]
-        public async Task GetPersonByPersonID_NullPersonID()
+        public async Task GetPersonByPersonID_NullPersonID_ToBeNull()
         {
             // Arrange 
             Guid? personID = null; 
@@ -169,28 +176,30 @@ namespace CRUDTests
             PersonResponse? personResponseFromGet = await _personService.GetPersonByPersonID(personID);
 
             //Assert 
-            //Assert.Null(personResponseFromGet);
             personResponseFromGet.Should().BeNull();
         }
 
         // If we supply a valid person id, it should return the valid person details as PersonResponse object
         [Fact]
-        public async Task GetPersonByPersonID_WithPersonID()
+        public async Task GetPersonByPersonID_WithPersonID_ToBeSuccessful()
         {
             //Arrange 
-            CountryAddRequest countryRequest = _fixture.Create<CountryAddRequest>();
-            CountryResponse? countryResponse = await _countriesService.AddCountry(countryRequest);
-
-            // Act 
-            PersonAddRequest personAddRequest = _fixture.Build<PersonAddRequest>()
+            Person personRequest = _fixture.Build<Person>()
                 .With(temp => temp.Email, "person@example.com")
                 .Create();
+            PersonResponse personResponseExpected = personRequest.ToPersonResponse();
 
-            PersonResponse personResponseFromAdd = await _personService.AddPerson(personAddRequest);
-            PersonResponse? personResponseFromGet = await _personService.GetPersonByPersonID(personResponseFromAdd.PersonID);
+            _peopleRepositoryMock.Setup(temp =>
+                    temp.GetPersonByPersonID(It.IsAny<Guid>()))
+                .ReturnsAsync(personRequest);
+            // Act 
+            PersonResponse? personResponseFromGet = await _personService.GetPersonByPersonID(personRequest.PersonID); 
+
+
+
             //Assert 
             //Assert.Equal(personResponseFromGet, personResponseFromAdd);
-            personResponseFromGet.Should().Be(personResponseFromAdd);
+            personResponseFromGet.Should().Be(personResponseExpected);
         }
         #endregion
 
