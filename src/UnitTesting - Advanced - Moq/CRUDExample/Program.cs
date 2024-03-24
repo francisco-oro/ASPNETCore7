@@ -1,6 +1,8 @@
 using Entities;
 using ServiceContracts;
 using Microsoft.EntityFrameworkCore;
+using Repositories;
+using RepositoryContracts;
 using Rotativa.AspNetCore;
 using Services;
 
@@ -8,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 //add services into IoC container
+builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+builder.Services.AddScoped<IPeopleRepository, PeopleRepository>();
 builder.Services.AddScoped<ICountriesService, CountriesService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 
