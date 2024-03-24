@@ -8,6 +8,7 @@ using CsvHelper.Configuration;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using RepositoryContracts;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
@@ -18,13 +19,13 @@ namespace Services
     public class PersonService : IPersonService
     {
         //private fields
-        private readonly ApplicationDbContext _db;
+        private readonly IPeopleRepository _peopleRepository;
         private readonly ICountriesService _countriesService;
         
         //constructor 
-        public PersonService(ApplicationDbContext db, ICountriesService countriesService)
+        public PersonService(ApplicationDbContext peopleRepository, ICountriesService countriesService)
         {
-            _db = db;
+            _peopleRepository = peopleRepository;
             _countriesService = countriesService;
         }
 
@@ -46,9 +47,9 @@ namespace Services
             person.PersonID = Guid.NewGuid();
 
             //add person object to people list
-            _db.People.Add(person);
-            await _db.SaveChangesAsync();
-            //_db.sp_InsertPerson(person);
+            _peopleRepository.People.Add(person);
+            await _peopleRepository.SaveChangesAsync();
+            //_peopleRepository.sp_InsertPerson(person);
             // Convert the Person object into PersonResponse type
             return person.ToPersonResponse();
         }
@@ -56,12 +57,12 @@ namespace Services
         public async Task<List<PersonResponse>> GetAllPeople()
         {
             // SELECT * from People
-            var people =await  _db.People.Include("Country").ToListAsync();
+            var people =await  _peopleRepository.People.Include("Country").ToListAsync();
 
             return people
                 .Select(temp => temp.ToPersonResponse()).ToList();
 
-            //return _db.sp_GetAllPeople()
+            //return _peopleRepository.sp_GetAllPeople()
             //    .Select(ConvertPersonToPersonResponse).ToList();
         }
 
@@ -72,7 +73,7 @@ namespace Services
                 return null; 
             }
 
-            Person? person = await _db.People.Include("Country")
+            Person? person = await _peopleRepository.People.Include("Country")
                 .FirstOrDefaultAsync(temp => temp.PersonID == personID);
             if (person == null)
             {
@@ -206,7 +207,7 @@ namespace Services
             ValidationHelper.ModelValidation(personUpdateRequest);
 
             //get matching person object to update
-            Person? matchingPerson = await _db.People.FirstOrDefaultAsync(temp => temp.PersonID == personUpdateRequest.PersonID);
+            Person? matchingPerson = await _peopleRepository.People.FirstOrDefaultAsync(temp => temp.PersonID == personUpdateRequest.PersonID);
 
             if (matchingPerson == null)
             {
@@ -222,7 +223,7 @@ namespace Services
             matchingPerson.Address = personUpdateRequest.Address;
             matchingPerson.ReceiveNewsLetters = personUpdateRequest.ReceiveNewsLetters;
 
-            await _db.SaveChangesAsync(); //UPDATE
+            await _peopleRepository.SaveChangesAsync(); //UPDATE
             return matchingPerson.ToPersonResponse();
         }
 
@@ -233,14 +234,14 @@ namespace Services
                 throw new ArgumentNullException(nameof(personID));
             }
 
-            Person? person = await _db.People.FirstOrDefaultAsync(temp => temp.PersonID == personID);
+            Person? person = await _peopleRepository.People.FirstOrDefaultAsync(temp => temp.PersonID == personID);
             if (person == null)
             {
                 return false; 
             }
 
-            _db.People.Remove(await _db.People.FirstAsync(temp => temp.PersonID == personID));
-            await _db.SaveChangesAsync();
+            _peopleRepository.People.Remove(await _peopleRepository.People.FirstAsync(temp => temp.PersonID == personID));
+            await _peopleRepository.SaveChangesAsync();
             return true;
         }
 
@@ -263,7 +264,7 @@ namespace Services
             csvWriter.WriteField(nameof(PersonResponse.ReceiveNewsLetters));
             await csvWriter.NextRecordAsync();
 
-            List<PersonResponse> people = await _db.People
+            List<PersonResponse> people = await _peopleRepository.People
                 .Include("Country")
                 .Select(temp => temp.ToPersonResponse()).ToListAsync();
 
@@ -308,7 +309,7 @@ namespace Services
                     range.Style.Font.Bold = true;
                 }
                 int row = 2;
-                List<PersonResponse> people = await _db.People.Include("Country").Select(temp => temp.ToPersonResponse())
+                List<PersonResponse> people = await _peopleRepository.People.Include("Country").Select(temp => temp.ToPersonResponse())
                     .ToListAsync();
 
                 foreach (PersonResponse personResponse in people)

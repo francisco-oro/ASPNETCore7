@@ -27,7 +27,7 @@ namespace CRUDTests
             ApplicationDbContext dbContextOptions = dbContextMock.Object;
             dbContextMock.CreateDbSetMock(temp => temp.Countries, countriesInitialData);
 
-            _countriesService = new CountriesService(dbContextOptions);
+            _countriesService = new CountriesService(null);
 
         }
 
