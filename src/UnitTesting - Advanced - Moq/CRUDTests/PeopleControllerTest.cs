@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using AutoFixture;
 using CRUDExample.Controllers;
+using Entities;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -156,49 +158,65 @@ namespace CRUDTests
         public async Task Edit_IfModelErrors_ToReturnToEditView()
         {
             //Arrange
-            PersonUpdateRequest personUpdateRequest = _fixture.Create<PersonUpdateRequest>();
-            List<CountryResponse> countries = _fixture.Create<List<CountryResponse>>();
+            List<Country> countries = new List<Country>()
+            {
+                _fixture.Build<Country>()
+                    .With(temp => temp.People, new List<Person>())
+                    .Create(),
+                _fixture.Build<Country>()
+                    .With(temp => temp.People, new List<Person>())
+                    .Create(),
+                _fixture.Build<Country>()
+                    .With(temp => temp.People, new List<Person>())
+                    .Create()
+            };
 
+            List<CountryResponse?> countryResponses = countries.Select(temp => temp.ToCountryResponse()).ToList();
+            Person person = _fixture.Build<Person>()
+                .With(temp => temp.Email, "user@sample.com")
+                .With(temp => temp.CountryID, countries[0].CountryID)
+                .With(temp => temp.Country, countries[0])
+                .With(temp => temp.Gender, "Male")
+                .Create();
+
+            PersonUpdateRequest personUpdateRequest = person.ToPersonResponse().ToPersonUpdateRequest();
+
+            
             _countriesServiceMock
                 .Setup(temp => temp.GetAllCountries())!
-                .ReturnsAsync(countries); 
+                .ReturnsAsync(countryResponses); 
 
             _peoplesServiceMock
                 .Setup(temp => temp.GetPersonByPersonID(It.IsAny<Guid>()))
-                .ReturnsAsync(null as PersonResponse);
+                .ReturnsAsync(personUpdateRequest.ToPerson().ToPersonResponse);
 
             PeopleController peopleController = new PeopleController(_peopleService, _countriesService);
 
             //Act 
-            peopleController.ModelState.AddModelError(nameof(PersonUpdateRequest.PersonName), "PersonName is invalid");
+            peopleController.ModelState.AddModelError(nameof(PersonUpdateRequest.Email), "Email is invalid");
             
             IActionResult result = await peopleController.Edit(personUpdateRequest);
 
             //Assert
 
-            RedirectToActionResult redirectResult = Assert.IsType<RedirectToActionResult>(result);
-            redirectResult.ActionName.Should().Be(nameof(PeopleController.Index));
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+            viewResult.ViewData.Model.Should().BeAssignableTo<PersonUpdateRequest>();
+            viewResult.ViewData.Model.Should().Be(personUpdateRequest);
         }
 
         [Fact]
-        public async Task Edit_IfPersonUpdateRequestIsValid_ToReturnRedirectToIndex()
+        public async Task Edit_IfNoModelErrors_ToReturnRedirectToIndex()
         {
             //Arrange
             PersonUpdateRequest personUpdateRequest = _fixture.Create<PersonUpdateRequest>();
-            List<CountryResponse> countries = _fixture.Create<List<CountryResponse>>();
-
-            _countriesServiceMock
-                .Setup(temp => temp.GetAllCountries())!
-                .ReturnsAsync(countries);
 
             _peoplesServiceMock
-                .Setup(temp => temp.GetPersonByPersonID(It.IsAny<Guid>()))
-                .ReturnsAsync(null as PersonResponse);
+                .Setup(temp => temp.UpdatePerson(It.IsAny<PersonUpdateRequest>()))
+                .ReturnsAsync(personUpdateRequest.ToPerson().ToPersonResponse);
 
             PeopleController peopleController = new PeopleController(_peopleService, _countriesService);
 
             //Act 
-            peopleController.ModelState.AddModelError(nameof(PersonUpdateRequest.PersonName), "PersonName is invalid");
 
             IActionResult result = await peopleController.Edit(personUpdateRequest);
 
