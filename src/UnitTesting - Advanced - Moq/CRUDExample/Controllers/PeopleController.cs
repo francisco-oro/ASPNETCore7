@@ -34,10 +34,10 @@ namespace CRUDExample.Controllers
                 { nameof(PersonResponse.CountryID), "Country" },
                 { nameof(PersonResponse.Address), "Address" },
             };
-            List<PersonResponse> people= await _peopleService.GetFilteredPeople(searchBy, searchString);
+            List<PersonResponse> people = await _peopleService.GetFilteredPeople(searchBy, searchString);
             ViewBag.CurrentSearchBy = searchBy;
-            ViewBag.CurrentSearchString = searchString; 
-            
+            ViewBag.CurrentSearchString = searchString;
+
             //Sort
             List<PersonResponse> sortedPeople = await _peopleService.GetSortedPeople(people, sortBy, sortOrder);
 
@@ -72,7 +72,7 @@ namespace CRUDExample.Controllers
                 ViewBag.Countries = countries.Select(temp =>
                     new SelectListItem() { Text = temp?.CountryName, Value = temp?.CountryID.ToString() }); ;
                 ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return View();
+                return View(personAddRequest);
             }
 
             // call the service method
@@ -91,7 +91,7 @@ namespace CRUDExample.Controllers
             {
                 return RedirectToAction("Index");
             }
-            
+
             PersonUpdateRequest personUpdateRequest = personResponse.ToPersonUpdateRequest();
 
             List<CountryResponse?> countries = await _countriesService.GetAllCountries();
@@ -117,14 +117,12 @@ namespace CRUDExample.Controllers
                 PersonResponse updatedPerson = await _peopleService.UpdatePerson(personUpdateRequest);
                 return RedirectToAction("Index");
             }
-            else
-            {
-                List<CountryResponse> countries = await _countriesService.GetAllCountries();
-                ViewBag.Countries = countries.Select(temp =>
-                    new SelectListItem() { Text = temp.CountryName, Value = temp.CountryID.ToString() }); ;
-                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return View(personResponse.ToPersonUpdateRequest());
-            }
+
+            List<CountryResponse?> countries = await _countriesService.GetAllCountries();
+            ViewBag.Countries = countries.Select(temp =>
+                new SelectListItem() { Text = temp?.CountryName, Value = temp?.CountryID.ToString() }); ;
+            ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return View(personResponse.ToPersonUpdateRequest());
         }
 
         [HttpGet]
@@ -165,7 +163,7 @@ namespace CRUDExample.Controllers
             return new ViewAsPdf("PeoplePDF", people, ViewData)
             {
                 PageMargins = new Margins()
-                    {Top = 20, Right = 20, Bottom = 20, Left = 20},
+                { Top = 20, Right = 20, Bottom = 20, Left = 20 },
                 PageOrientation = Orientation.Landscape
             };
         }
@@ -183,7 +181,7 @@ namespace CRUDExample.Controllers
             MemoryStream memoryStream = await _peopleService.GetPeopleExcel();
 
             return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                "people.xlsx"); 
+                "people.xlsx");
         }
     }
 }
