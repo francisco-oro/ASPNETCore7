@@ -13,7 +13,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IPeopleRepository, PeopleRepository>();
 builder.Services.AddScoped<ICountriesService, CountriesService>();
-builder.Services.AddScoped<IPersonService, PersonService>();
+builder.Services.AddScoped<IPeopleService, PeopleService>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {

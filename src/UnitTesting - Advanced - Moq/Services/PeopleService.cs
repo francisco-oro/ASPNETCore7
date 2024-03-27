@@ -17,13 +17,13 @@ using Services.Helpers;
 
 namespace Services
 {
-    public class PersonService : IPersonService
+    public class PeopleService : IPeopleService
     {
         //private fields
         private readonly IPeopleRepository _peopleRepository;
         
         //constructor 
-        public PersonService(IPeopleRepository peopleRepository)
+        public PeopleService(IPeopleRepository peopleRepository)
         {
             _peopleRepository = peopleRepository;
         }
