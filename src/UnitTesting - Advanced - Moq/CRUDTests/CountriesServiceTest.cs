@@ -2,6 +2,8 @@
 using Entities;
 using EntityFrameworkCoreMock;
 using Microsoft.EntityFrameworkCore;
+using Moq;
+using RepositoryContracts;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using Services;
@@ -12,6 +14,9 @@ namespace CRUDTests
     {
         private readonly ICountriesService _countriesService;
 
+        private readonly Mock<ICountriesRepository> _countriesRepositoryMock;
+        private readonly ICountriesRepository _countriesRepository;
+
         private readonly IFixture _fixture;
         //constructor
         public CountriesServiceTest()
@@ -19,15 +24,8 @@ namespace CRUDTests
             _fixture = new Fixture();
             var countriesInitialData = new List<Country>() {  };
             if (countriesInitialData == null) throw new ArgumentNullException(nameof(countriesInitialData));
-            
-            DbContextMock<ApplicationDbContext> dbContextMock = new DbContextMock<ApplicationDbContext>(
-                new DbContextOptionsBuilder<ApplicationDbContext>().Options
-                );
 
-            ApplicationDbContext dbContextOptions = dbContextMock.Object;
-            dbContextMock.CreateDbSetMock(temp => temp.Countries, countriesInitialData);
-
-            _countriesService = new CountriesService(null);
+            _countriesRepository = new Mock<ICountriesRepository>();
 
         }
 
