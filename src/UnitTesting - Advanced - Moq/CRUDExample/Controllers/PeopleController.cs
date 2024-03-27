@@ -140,7 +140,7 @@ namespace CRUDExample.Controllers
         }
 
         [HttpPost]
-        [Route("[action]/{personID}")]
+        [Route("[action]")]
         public async Task<IActionResult> Delete(PersonUpdateRequest personUpdateRequest)
         {
             PersonResponse? personResponse = await _peopleService.GetPersonByPersonID(personUpdateRequest.PersonID);

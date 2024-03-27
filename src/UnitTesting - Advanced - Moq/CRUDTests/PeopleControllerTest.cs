@@ -226,5 +226,77 @@ namespace CRUDTests
             redirectResult.ActionName.Should().Be(nameof(PeopleController.Index));
         }
         #endregion
+
+        #region Delete
+
+        [Fact]
+        public async Task Delete_IfPersonIsNotFound_ToReturnRedirectToIndex()
+        {
+            //Arrange
+
+            _peoplesServiceMock
+                .Setup(temp => temp.GetPersonByPersonID(It.IsAny<Guid>()))
+                .ReturnsAsync(null as PersonResponse);
+
+            PeopleController peopleController = new PeopleController(_peopleService, _countriesService);
+
+            //Act 
+
+            IActionResult result = await peopleController.Delete(Guid.NewGuid());
+
+            //Assert
+
+            RedirectToActionResult redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            redirectResult.ActionName.Should().Be(nameof(PeopleController.Index));
+        }
+
+        [Fact]
+        public async Task Delete_IfPersonIsFound_ToReturnRedirectToIndex()
+        {
+            //Arrange
+            //Arrange
+            List<Country> countries = new List<Country>()
+            {
+                _fixture.Build<Country>()
+                    .With(temp => temp.People, new List<Person>())
+                    .Create(),
+                _fixture.Build<Country>()
+                    .With(temp => temp.People, new List<Person>())
+                    .Create(),
+                _fixture.Build<Country>()
+                    .With(temp => temp.People, new List<Person>())
+                    .Create()
+            };
+
+            List<CountryResponse?> countryResponses = countries.Select(temp => temp.ToCountryResponse()).ToList();
+            Person person = _fixture.Build<Person>()
+                .With(temp => temp.Email, "user@sample.com")
+                .With(temp => temp.CountryID, countries[0].CountryID)
+                .With(temp => temp.Country, countries[0])
+                .With(temp => temp.Gender, "Male")
+                .Create();
+
+            PersonUpdateRequest personUpdateRequest = person.ToPersonResponse().ToPersonUpdateRequest();
+
+            _peoplesServiceMock
+                .Setup(temp => temp.GetPersonByPersonID(It.IsAny<Guid>()))
+                .ReturnsAsync(person.ToPersonResponse);
+            _peoplesServiceMock
+                .Setup(temp => temp.DeletePerson(It.IsAny<Guid>()))
+                .ReturnsAsync(true);
+
+            PeopleController peopleController = new PeopleController(_peopleService, _countriesService);
+
+            //Act 
+
+            IActionResult result = await peopleController.Delete(personUpdateRequest);
+
+            //Assert
+
+            RedirectToActionResult redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            redirectResult.ActionName.Should().Be(nameof(PeopleController.Index));
+        }
+
+        #endregion
     }
 }
