@@ -23,4 +23,7 @@
     <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+        <InternalsVisibleTo Include="CRUDTests" />
+	</ItemGroup>
 </Project>
