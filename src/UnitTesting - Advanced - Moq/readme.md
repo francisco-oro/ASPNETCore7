@@ -495,34 +495,51 @@ If you want to unit test a private method, something may be wrong. Unit tests ar
 
 - Add more tests to the public methods that call the private method, testing the private method's functionality. (As the commentators indicated, you should only do this if these private methods' functionality is really a part in with the public interface. If they actually perform functions that are hidden from the user (i.e. the unit test), this is probably bad).
 ## Is writing Unit Tests worth it for already exciting functionality?
-- **Worth It?**: 
-	- Yes, especially for critical or complex functionality.
-	- Helps prevent regressions when making changes 
-	- Provides confidence in mantaining existing features
-## What is Code Coverage?
-- **Definition**: Code coverage measures the percentage of code executed during testing 
-- **Importance**: High coverage indicates thorough testing, but it doesn't guarantee correctness
-- **Balance**: Aim for good coverage without excessive effort
-## When and where should I use Mocking?
-- **Scenarios**: 
-	- Use mocking when isolating components for unit testing 
-	- Particularly useful for external dependencies (e.g., databases, APIs). 
-	- Helps avoid side effects during testing
-## Explain how and why to use repository pattern in Asp.Net Core?
-- **Purpose**: Separates data access logic from business logic 
-- **Benefits**: 
-	- Modularity: Easily switch between data sources (e.g., SQL, NoSQL). 
-	- Testability: Mock repositories for unit testing
-	- Encapsulation: Centralizes data access operations 
-- **Implementation**: Create interfaces for repositories and inject them into services
+It's absolutely worth it. If you write tests that cover the functionality you're adding or modifying, you'll get an immediate benefit. If you wait for a re-write, you may never have automated tests.
 
+
+
+You shouldn't spend a lot of time writing tests for existing things that already work. Most of the time, you don't have a specification for the existing code, so the main thing you're testing is your reverse-engineering ability. On the other hand, if you're going to modify something, you need to cover that functionality with tests so you'll know you made the changes correctly. And of course, for new functionality, write tests that fail, then implement the missing functionality.
+## What is Code Coverage?
+Code coverage is a metric that determines the number of lines of code validated successfully by a testing process, which helps to analyze how software is verified in depth. Of course, the ultimate aim of any software company is the development of software products for businesses. But, in order to achieve that goal, companies must ensure that all the essential quality features of the software they develop are accurate, maintainable, effective, trustworthy, and safe
+## When and where should I use Mocking?
+**Rule of thumb**:
+
+If the function you are testing needs a complicated object as a parameter, and it would be a pain to simply instantiate this object (if, for example, it tries to establish a TCP connection), use a mock.
+
+Typically you write a mock object if:
+
+- The real object is too complex to incorporate it in a unit testing (For example a networking communication, you can have a mock object that simulate been the other peer)
+
+- The result of your object is non-deterministic
+## Explain how and why to use repository pattern in Asp.Net Core?
+Repository (or Repository Pattern) is an abstraction between Data Access Layer (EF DbContext) and business logic layer (Service) of the application.
+
+Repositories are classes or components that encapsulate the logic required to access data sources. They centralize common data access functionality, providing better maintainability and decoupling the infrastructure or technology used to access databases from the domain model layer.
+![repository_2](assets/repository_2.png)
+A Repository Pattern allows all of your code to use objects without having to know how the objects are persisted. All of the knowledge of persistence, including mapping from tables to objects, is safely contained in the repository.
+
+### Under the covers:
+
+- For reading, it creates the query satisfying the supplied criteria and returns the result set.
+
+- For writing, it issues the commands necessary to make the underlying persistence engine (e.g. an SQL database) save the data.
+
+
+
+Very often, you will find SQL queries scattered in the codebase and when you come to add a column to a table you have to search code files to try and find usages of a table. The impact of the change is far-reaching
 ## How does EF Core support Transactions?
-- **Support for Transactions**: 
-	- EF Core supports transactions using `DbContext`'s `Database.BeginTransaction()` method. 
-	- Allows grouping multiple database operations into a single transaction 
-	- Ensures atomicity and consistency
+In EF Core, whenever you execute SaveChanges() to insert, update or delete data into the database, it wraps that operation in a transaction. So, you don’t need to open a transaction scope explicitly.
+
+If multiple CUD operations are done, and if one operation is failed due to exception, all the executed operations are rolled back automatically, by the transaction.
 ## How do you execute plain SQL in Entity Framework Core?
-- **Raw SQL Queries**:
-	- Use `FromSqlRaw` or `FromSqlInterpolated` methods to execute raw SQL queries
-	- Allows combining SQL with LINQ queries 
-	- Be cautious of SQL injection vulnerabilities
+### For non-query operations such as INSERT, UPDATE, DELETE:
+```c#
+DbContext.Database.ExecuteSqlRaw(string sql, params object[ ] parameters)
+```
+
+
+### For query operations such as SELECT:
+```c#
+DbSet.FromSqlRaw(string sql, params object[] parameters)
+```
