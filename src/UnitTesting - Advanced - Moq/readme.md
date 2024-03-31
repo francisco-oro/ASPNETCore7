@@ -442,3 +442,58 @@ HttpResponseMessage response = await client.GetAsync("url");
 //Assert
 result.Should().BeSuccessful(); //Response status code should be 200 to 299
 ```
+
+# Interview Questions
+
+## Name some Unit Testing benefits for developers that you personally experienced?
+- **Eearly Bug Detection:** Unit tests catch issues early in the development process, minimizing rework and debugging time
+- **Code refinement: ** Writing unit tests encourages code refinement and simplification
+- **Documentation:**  Tests serve as documentation, explaining how components should behave
+- **Regression Testing:** Ensures existing functionality still works after changes
+- **Improved Code Quality**: Writing testable code leads to better design and modularity
+## What is Mocking?
+- **Definition**: Mocking involves creating simulated objects (mocks) to replace real dependencies during testing
+- **Purpose**: Allows testing of specific components in isolation without relying on external systems.
+- **Example**: Mocking a database connectino to aviod actual database ecalls during unit tests 
+## What is the difference between Unit Tests and Functional Tests?
+- **Unit Tests**:
+	- Test individual components (e.g., methods, classes)
+	- Focus on specific functionality within a unit
+	- Isolate dependencies using mocks or stubs 
+- **Functional Tests**: 
+	- Test the entire system's functionality 
+	- Verify if the application meets business requirements
+	- Black-box testing without examining internal code
+## How to unit test an object with database queries?
+- **Mocking Database Calls**:
+	- Use mock objects to simulate database interactions
+	- Isolate the tested component from the actual database
+	- Verify that the component interacts correctly with the mock
+- **Transaction Scopes**: 
+	- Use transaction scopes to create a controlled environment
+	- Roll back changes made during the test to mantain database integrity 
+
+## Should unit tests be written for Getter and Setters?
+- **General Approach**:
+	- Test getters and setters only if they contain logic beyond simple property access 
+	- Focus on testing methods with more complexity 
+	- Consider overall code coverage rather than testing trivial getters/setters 
+## How would you unit test private methods?
+- **Challenges**: 
+	- Private methods are not directly accessible for testing
+	- Coonsider whether private methods should be tested or if their behavior is covered by public methods 
+	- Some frameworks allow testing of private methods using reflection 
+## Is writing Unit Tests worth it for already exciting functionality?
+- **Worth It?**: 
+	- Yes, especially for critical or complex functionality.
+	- Helps prevent regressions when making changes 
+	- Provides confidence in mantaining existing features
+## What is Code Coverage?
+
+## When and where should I use Mocking?
+
+## Explain how and why to use repository pattern in Asp.Net Core?
+
+## How does EF Core support Transactions?
+
+## How do you execute plain SQL in Entity Framework Core?
