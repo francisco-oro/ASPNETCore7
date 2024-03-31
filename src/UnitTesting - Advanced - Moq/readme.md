@@ -446,54 +446,83 @@ result.Should().BeSuccessful(); //Response status code should be 200 to 299
 # Interview Questions
 
 ## Name some Unit Testing benefits for developers that you personally experienced?
-- **Eearly Bug Detection:** Unit tests catch issues early in the development process, minimizing rework and debugging time
-- **Code refinement: ** Writing unit tests encourages code refinement and simplification
-- **Documentation:**  Tests serve as documentation, explaining how components should behave
-- **Regression Testing:** Ensures existing functionality still works after changes
-- **Improved Code Quality**: Writing testable code leads to better design and modularity
+- Unit Tests allow you to make big changes to code quickly. You know it works now because you've run the tests, when you make the changes you need to make, you need to get the tests working again. This saves hours.
+
+- TDD helps you to realize when to stop coding. Your tests give you confidence that you've done enough for now and can stop tweaking and move on to the next thing.
+
+- The tests and the code work together to achieve better code. Your code could be bad / buggy. Your TEST could be bad / buggy. In TDD you are banking on the chances of both being bad / buggy being low. Often it's the test that needs fixing but that's still a good outcome.
+
+- TDD helps with coding constipation. When faced with a large and daunting piece of work ahead writing the tests will get you moving quickly.
+
+- Unit Tests help you really understand the design of the code you are working on. Instead of writing code to do something, you are starting by outlining all the conditions you are subjecting the code to and what outputs you'd expect from that.
+
+- Unit Tests give you instant visual feedback, we all like the feeling of all those green lights when we've done. It's very satisfying. It's also much easier to pick up where you left off after an interruption because you can see where you got to - that next red light that needs fixing.
+
+- Contrary to popular belief unit testing does not mean writing twice as much code or coding slower. It's faster and more robust than coding without tests once you've got the hang of it. Test code itself is usually relatively trivial and doesn't add a big overhead to what you're doing. This is one you'll only believe when you're doing it :)
+
+- I think it was Fowler who said: "Imperfect tests, run frequently, are much better than perfect tests that are never written at all". I interpret this as giving me permission to write tests where I think they'll be most useful even if the rest of my code coverage is woefully incomplete.
+
+- Good unit tests can help document and define what something is supposed to do
+
+- Unit tests help with code re-use. Migrate both your code and your tests to your new project. Tweak the code till the tests run again.
 ## What is Mocking?
-- **Definition**: Mocking involves creating simulated objects (mocks) to replace real dependencies during testing
-- **Purpose**: Allows testing of specific components in isolation without relying on external systems.
-- **Example**: Mocking a database connectino to aviod actual database ecalls during unit tests 
+Mocking is primarily used in unit testing. An object under test may have dependencies on other (complex) objects. To isolate the behavior of the object you want to replace the other objects by mocks that simulate the behavior of the real objects. This is useful if the real objects are impractical to incorporate into the unit test.
+
+In short, mocking is creating objects that simulate the behavior of real objects.
 ## What is the difference between Unit Tests and Functional Tests?
-- **Unit Tests**:
-	- Test individual components (e.g., methods, classes)
-	- Focus on specific functionality within a unit
-	- Isolate dependencies using mocks or stubs 
-- **Functional Tests**: 
-	- Test the entire system's functionality 
-	- Verify if the application meets business requirements
-	- Black-box testing without examining internal code
+**Unit Test** - Testing an individual unit, such as a method (function) in a class, with all dependencies mocked up.
+
+**Integration Test** - Checking if different modules are working fine when combined together as a group. This will test many methods and may interact with dependencies like Databases or Web Services.
+
+- Integration tests tell what's not working. But they are of no use in guessing where the problem could be.
+
+- Unit tests are the sole tests that tell you where exactly the bug is. To draw this information, they must run the method in a mocked environment, where all other dependencies are supposed to correctly work.
 ## How to unit test an object with database queries?
-- **Mocking Database Calls**:
-	- Use mock objects to simulate database interactions
-	- Isolate the tested component from the actual database
-	- Verify that the component interacts correctly with the mock
-- **Transaction Scopes**: 
-	- Use transaction scopes to create a controlled environment
-	- Roll back changes made during the test to mantain database integrity 
+If your objects are tightly coupled to your data layer, it is difficult to do proper unit testing. Your objects should be persistent ignorant. You should have a data access layer, that you would make requests to, that would return objects.
+
+Then mock out your calls to the database. This way, you can leave that DB dependents part out of your unit tests, test them in isolation or write integration tests.
 
 ## Should unit tests be written for Getter and Setters?
-- **General Approach**:
-	- Test getters and setters only if they contain logic beyond simple property access 
-	- Focus on testing methods with more complexity 
-	- Consider overall code coverage rather than testing trivial getters/setters 
+Properties (getters/setters) are good examples of code that usually doesn’t contain any logic, and doesn’t require testing. But watch out: once you add any check inside the property, you’ll want to make sure that logic is being tested.
+
+In other words, if your getters and setters do more than just get and set (i.e. they're properly complex methods), then yes, they should be tested. But don't write a unit test case just to test a getter or setters, that's a waste of time.
 ## How would you unit test private methods?
-- **Challenges**: 
-	- Private methods are not directly accessible for testing
-	- Coonsider whether private methods should be tested or if their behavior is covered by public methods 
-	- Some frameworks allow testing of private methods using reflection 
+If you want to unit test a private method, something may be wrong. Unit tests are (generally speaking) meant to test the interface of a class, meaning its public (and protected) methods. You can of course "hack" a solution to this (even if just by making the methods public), but you may also want to consider:
+
+
+
+- If the method you'd like to test is really worth testing, it may be worth to move it into its own class.
+
+- Add more tests to the public methods that call the private method, testing the private method's functionality. (As the commentators indicated, you should only do this if these private methods' functionality is really a part in with the public interface. If they actually perform functions that are hidden from the user (i.e. the unit test), this is probably bad).
 ## Is writing Unit Tests worth it for already exciting functionality?
 - **Worth It?**: 
 	- Yes, especially for critical or complex functionality.
 	- Helps prevent regressions when making changes 
 	- Provides confidence in mantaining existing features
 ## What is Code Coverage?
-
+- **Definition**: Code coverage measures the percentage of code executed during testing 
+- **Importance**: High coverage indicates thorough testing, but it doesn't guarantee correctness
+- **Balance**: Aim for good coverage without excessive effort
 ## When and where should I use Mocking?
-
+- **Scenarios**: 
+	- Use mocking when isolating components for unit testing 
+	- Particularly useful for external dependencies (e.g., databases, APIs). 
+	- Helps avoid side effects during testing
 ## Explain how and why to use repository pattern in Asp.Net Core?
+- **Purpose**: Separates data access logic from business logic 
+- **Benefits**: 
+	- Modularity: Easily switch between data sources (e.g., SQL, NoSQL). 
+	- Testability: Mock repositories for unit testing
+	- Encapsulation: Centralizes data access operations 
+- **Implementation**: Create interfaces for repositories and inject them into services
 
 ## How does EF Core support Transactions?
-
+- **Support for Transactions**: 
+	- EF Core supports transactions using `DbContext`'s `Database.BeginTransaction()` method. 
+	- Allows grouping multiple database operations into a single transaction 
+	- Ensures atomicity and consistency
 ## How do you execute plain SQL in Entity Framework Core?
+- **Raw SQL Queries**:
+	- Use `FromSqlRaw` or `FromSqlInterpolated` methods to execute raw SQL queries
+	- Allows combining SQL with LINQ queries 
+	- Be cautious of SQL injection vulnerabilities
