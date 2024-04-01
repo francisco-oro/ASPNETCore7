@@ -9,7 +9,6 @@ using Rotativa.AspNetCore.Options;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using StocksApp.Models;
-using StocksApp.Services;
 using System.Text.Json;
 
 namespace StocksApp.Controllers
@@ -27,7 +26,6 @@ namespace StocksApp.Controllers
             _stocksService = stocksService;
         }
 
-        [Route("/")]
         [Route("[action]")]
         public async Task<IActionResult> Index()
         {
@@ -35,16 +33,16 @@ namespace StocksApp.Controllers
             {
                 _tradingOptions.Value.DefaultStockSymbol = "MSFT";
             }
-            Dictionary<string, object> companyProfileDictionary = 
+            Dictionary<string, object>? companyProfileDictionary = 
                 await _finnhubService.GetCompanyProfile(_tradingOptions.Value.DefaultStockSymbol);
-            Dictionary<string, object> stockPriceQuoteDictionary = 
+            Dictionary<string, object>? stockPriceQuoteDictionary = 
                 await _finnhubService.GetStockPriceQuote(_tradingOptions.Value.DefaultStockSymbol);
 
             StockTrade stockTrade = new StockTrade()
             {
-                Price = Convert.ToDouble(stockPriceQuoteDictionary["c"].ToString()),
-                StockName = companyProfileDictionary["name"].ToString(),
-                StockSymbol = companyProfileDictionary["ticker"].ToString()
+                Price = Convert.ToDouble(stockPriceQuoteDictionary?["c"].ToString()),
+                StockName = companyProfileDictionary?["name"].ToString(),
+                StockSymbol = companyProfileDictionary?["ticker"].ToString()
             };
             return View(stockTrade);
         }
@@ -109,14 +107,14 @@ namespace StocksApp.Controllers
 
 
         [Route("/api/v1/StockPriceQuote")]
-        public async Task<IActionResult> GetStockPriceQuote([FromQuery] string stockSymbol)
+        public async Task<IActionResult> GetStockPriceQuote([FromQuery] string? stockSymbol)
         {
             if (stockSymbol == null)
             {
                 return NotFound();
             }
 
-            Dictionary<string, object> companyProfileDictionary =
+            Dictionary<string, object>? companyProfileDictionary =
                 await _finnhubService.GetStockPriceQuote(stockSymbol);
 
             return Json(companyProfileDictionary);

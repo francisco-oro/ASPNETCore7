@@ -56,9 +56,16 @@ namespace Services
             return null;
         }
 
-        public Task<Dictionary<string, object>?> SearchStocks(string query)
+        public async Task<Dictionary<string, object>?> SearchStocks(string query)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(query))
+            {
+                return null;
+            }
+
+            Dictionary<string, object>? matchingStocks = await _finnhubRespository.SearchStocks(query);
+            if (matchingStocks != null) return matchingStocks;
+            return null;
         }
     }
 }
