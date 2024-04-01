@@ -101,6 +101,7 @@ namespace Repositories
                 Stream stream = httpResponseMessage.Content.ReadAsStream();
                 StreamReader reader = new StreamReader(stream);
                 string response = reader.ReadToEnd();
+                
                 List<Dictionary<string, string>>? responseList =
                     JsonSerializer.Deserialize<List<Dictionary<string, string>?>>(response);
 
