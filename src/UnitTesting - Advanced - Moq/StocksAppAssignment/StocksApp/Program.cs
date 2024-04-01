@@ -12,7 +12,7 @@ builder.Services.AddScoped<IFinnhubService,FinnhubService>();
 builder.Services.AddScoped<IStocksService, StocksService>();
 
 //Db context
-builder.Services.AddDbContext<StockMarketDbContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });

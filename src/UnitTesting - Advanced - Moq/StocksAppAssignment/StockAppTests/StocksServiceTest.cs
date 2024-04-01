@@ -17,7 +17,7 @@ namespace StockAppTests
         public StocksServiceTest(ITestOutputHelper outputHelper)
         {
             _outputHelper = outputHelper;
-            _stocksService = new StocksService( new StockMarketDbContext( new DbContextOptionsBuilder<StockMarketDbContext>().Options));
+            _stocksService = new StocksService( new ApplicationDbContext( new DbContextOptionsBuilder<ApplicationDbContext>().Options));
         }
 
         // helper methods
