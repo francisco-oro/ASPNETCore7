@@ -86,13 +86,14 @@ namespace Repositories
 
         public async Task<List<Dictionary<string, string>>?> GetStocks()
         {
+            string exchangeSymbol = _configuration["TradingOptions:DefaultExchangeSymbol"] ?? "US";
             using (HttpClient httpClient = _httpClientFactory.CreateClient())
             {
                 HttpRequestMessage httpRequestMessage = new HttpRequestMessage()
                 {
                     RequestUri =
                         new Uri(
-                            $"https://finnhub.io/api/v1/stock/symbol?exchange={_configuration["DefaultExchangeSymbol"]}&token={_configuration["FinnhubToken"]}"),
+                            $"https://finnhub.io/api/v1/stock/symbol?exchange={exchangeSymbol}&token={_configuration["FinnhubToken"]}"),
                     Method = HttpMethod.Get
                 };
 

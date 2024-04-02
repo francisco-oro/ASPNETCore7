@@ -1,1 +1,36 @@
-﻿@Model
+﻿@model IEnumerable<Stock>
+
+@{
+    ViewBag.Title = "Explore";
+    ViewBag.CurrentUrl = "~/Stocks/Explore";
+}
+
+<div class="flex">
+    <div class="flex-1">
+        <div class="text-grey ml">
+            <span>Stocks</span>
+            <i class="fa-solid fa-caret-right"></i>
+            <span>Explore</span>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="flex orders-list">
+    <div id="buy-orders-list">
+        <div class="box">
+            <h4 class="text-grey mb">Stocks</h4>
+            <a class="mt text-blue">Show all stocks</a>
+            @foreach (Stock stock in Model)
+            {
+                <div class="border-bottom p">
+                    <h3>@stock.StockName</h3>
+                    <h5 class="mb">@stock.StockSymbol</h5>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</div>

@@ -60,7 +60,7 @@ namespace Services
         {
             if (string.IsNullOrEmpty(query))
             {
-                List<Dictionary<string, string>>? allStocks = await GetStocks();
+                return null;
             }
 
             Dictionary<string, object>? matchingStocks = await _finnhubRespository.SearchStocks(query);

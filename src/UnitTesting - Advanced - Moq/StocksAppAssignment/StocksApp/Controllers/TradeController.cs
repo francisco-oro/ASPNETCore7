@@ -43,7 +43,7 @@ namespace StocksApp.Controllers
                 Price = Convert.ToDouble(stockPriceQuoteDictionary?["c"].ToString()),
                 StockName = companyProfileDictionary?["name"].ToString(),
                 StockSymbol = companyProfileDictionary?["ticker"].ToString()
-            };
+            }; 
             return View(stockTrade);
         }
 
