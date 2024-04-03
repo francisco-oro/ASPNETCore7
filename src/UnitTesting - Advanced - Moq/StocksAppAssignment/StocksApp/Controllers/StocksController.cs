@@ -23,7 +23,7 @@ namespace StocksApp.Controllers
         [Route("[action]/{stock?}")]
         [Route("/")]
         [HttpGet]
-        public async Task<IActionResult> Explore(string? searchBy, string? stock, bool? showAll)
+        public async Task<IActionResult> Explore(string? searchBy, string? stock, bool showAll = false)
         {
             if (stock != null) ViewBag.stock = stock;
 
@@ -47,7 +47,11 @@ namespace StocksApp.Controllers
             List<Stock> stocks = new List<Stock>();
             if (stockResults != null)
             {
-                stockResults = stockResults.FindAll(temp => popularStocks != null && popularStocks.Contains(temp["displaySymbol"])); 
+                if (showAll == false)
+                {
+                    stockResults = stockResults.FindAll(temp => popularStocks != null && popularStocks.Contains(temp["displaySymbol"]));
+                }
+
                 foreach (var obj in stockResults)
                 {
                     stocks.Add(new Stock()

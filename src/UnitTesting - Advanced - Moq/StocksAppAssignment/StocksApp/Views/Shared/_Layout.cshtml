@@ -21,9 +21,11 @@
                         </h1>
                     </div>
 
-                    <div class="flex-1 pr" id="search-box-div">
-
-                        <input type="search" class="search-text" placeholder="Search Stocks" name="SearchText" />
+                    <div class="flex-2 pr" id="search-box-div">
+                        <form asp-controller="Stocks" method="get" asp-action="Explore">
+                            <input name="searchBy" class="search-text" placeholder="Search Stocks"/>
+                            <button class="button button-blue-back ml login-button" type="submit">Search</button>
+                        </form>
                         <i class="fa-solid fa-gear"></i>
 
                         <button class="button button-blue-back ml login-button">Login</button>
