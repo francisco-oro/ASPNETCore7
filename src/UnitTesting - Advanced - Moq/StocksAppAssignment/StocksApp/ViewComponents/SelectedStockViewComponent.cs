@@ -34,6 +34,7 @@ namespace StocksApp.ViewComponents
                 await _finnhubService.GetStockPriceQuote(stockSymbol);
             
             companyProfileDictionary.Add("price", stockPriceQuoteDictionary?["c"] ?? "Price is unavailable");
+            return View(companyProfileDictionary);
         }
     }
 }

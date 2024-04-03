@@ -20,13 +20,16 @@ namespace StocksApp.Controllers
             _tradingOptions = tradingOptions;
         }
 
-        [Route("[action]")]
+        [Route("[action]/{stock?}")]
         [Route("/")]
         [HttpGet]
-        public async Task<IActionResult> Explore(string? searchBy)
+        public async Task<IActionResult> Explore(string? searchBy, string? stock, bool? showAll)
         {
+            if (stock != null) ViewBag.stock = stock;
+
             List<Dictionary<string, string>>? stockResults = new List<Dictionary<string, string>>();
             List<string>? popularStocks = _tradingOptions.Value.Top25PopularStocks?.Split(",").ToList();
+
             if (string.IsNullOrEmpty(searchBy))
             {
                 stockResults = await _finnhubService.GetStocks();
@@ -41,7 +44,6 @@ namespace StocksApp.Controllers
                             .ToString() ?? string.Empty);
                 }
             }
-
             List<Stock> stocks = new List<Stock>();
             if (stockResults != null)
             {

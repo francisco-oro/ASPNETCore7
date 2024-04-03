@@ -46,7 +46,7 @@ namespace Services
                 return null;
             }
 
-            return null;
+            return companyProfile;
         }
 
         public async Task<List<Dictionary<string, string>>?> GetStocks()
