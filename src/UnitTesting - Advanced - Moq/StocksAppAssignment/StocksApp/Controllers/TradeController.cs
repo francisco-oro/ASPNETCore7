@@ -35,7 +35,7 @@ namespace StocksApp.Controllers
             }
             Dictionary<string, object>? companyProfileDictionary = 
                 await _finnhubService.GetCompanyProfile(_tradingOptions.Value.DefaultStockSymbol);
-            Dictionary<string, object>? stockPriceQuoteDictionary = 
+            Dictionary<string, object?>? stockPriceQuoteDictionary = 
                 await _finnhubService.GetStockPriceQuote(_tradingOptions.Value.DefaultStockSymbol);
 
             StockTrade stockTrade = new StockTrade()
@@ -114,7 +114,7 @@ namespace StocksApp.Controllers
                 return NotFound();
             }
 
-            Dictionary<string, object>? companyProfileDictionary =
+            Dictionary<string, object?>? companyProfileDictionary =
                 await _finnhubService.GetStockPriceQuote(stockSymbol);
 
             return Json(companyProfileDictionary);

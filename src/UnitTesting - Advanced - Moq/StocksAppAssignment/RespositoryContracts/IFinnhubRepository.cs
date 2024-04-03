@@ -20,7 +20,7 @@
             /// o - Open price of the day
             /// pc - Previous close price
             /// </returns>
-            Task<Dictionary<string, object>?> GetStockPriceQuote(string stockSymbol);
+            Task<Dictionary<string, object?>?> GetStockPriceQuote(string stockSymbol);
 
             /// <summary>
             /// Returns the essential information about a specific company

@@ -17,14 +17,14 @@ namespace Services
             _finnhubRespository = finnhubRespository;
         }
 
-        public async Task<Dictionary<string, object>?> GetStockPriceQuote(string? stockSymbol)
+        public async Task<Dictionary<string, object?>?> GetStockPriceQuote(string? stockSymbol)
         {
             if (string.IsNullOrEmpty(stockSymbol))
             {
                 return null;
             }
 
-            Dictionary<string, object>? priceQuote = await _finnhubRespository.GetStockPriceQuote(stockSymbol);
+            Dictionary<string, object?>? priceQuote = await _finnhubRespository.GetStockPriceQuote(stockSymbol);
             if (priceQuote == null)
             {
                 return null;

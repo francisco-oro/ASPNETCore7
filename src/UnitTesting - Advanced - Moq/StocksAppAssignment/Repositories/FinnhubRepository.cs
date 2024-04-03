@@ -14,7 +14,7 @@ namespace Repositories
             _configuration = configuration;
         }
 
-        public async Task<Dictionary<string, object>?> GetStockPriceQuote(string stockSymbol)
+        public async Task<Dictionary<string, object?>?> GetStockPriceQuote(string stockSymbol)
         {
             using (HttpClient httpClient = _httpClientFactory.CreateClient())
             {
@@ -33,7 +33,7 @@ namespace Repositories
                 StreamReader reader = new StreamReader(stream);
 
                 string response = reader.ReadToEnd();
-                Dictionary<string, object>? responseDictionary
+                Dictionary<string, object?>? responseDictionary
                     = JsonSerializer.Deserialize<Dictionary<string, object>>(response);
                 if (responseDictionary == null)
                 {
