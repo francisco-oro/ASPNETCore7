@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Security.Authentication;
+using System.Text.Json;
 using RepositoryContracts.ServiceContracts;
 using Microsoft.Extensions.Configuration;
 
@@ -27,6 +29,11 @@ namespace Repositories
                 };
 
                 HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+
+                if (httpResponseMessage.StatusCode.Equals(HttpStatusCode.Forbidden))
+                {
+                    throw new AuthenticationException("Not authorized to see this resource");
+                }
 
                 Stream stream = httpResponseMessage.Content.ReadAsStream();
 
@@ -61,6 +68,11 @@ namespace Repositories
                 };
 
                 HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+
+                if (httpResponseMessage.StatusCode.Equals(HttpStatusCode.Forbidden))
+                {
+                    throw new AuthenticationException("Not authorized to see this resource");
+                }
 
                 Stream stream = httpResponseMessage.Content.ReadAsStream();
 

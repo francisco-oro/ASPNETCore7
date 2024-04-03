@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using ServiceContracts;
 
@@ -25,16 +26,26 @@ namespace StocksApp.ViewComponents
                 return Content("");
             }
 
-            Dictionary<string, object>? companyProfileDictionary = await _finnhubService.GetCompanyProfile(stockSymbol);
-            if (companyProfileDictionary == null)
+            try
             {
-                return Content(""); 
+                Dictionary<string, object>? companyProfileDictionary =
+                    await _finnhubService.GetCompanyProfile(stockSymbol);
+                if (companyProfileDictionary == null)
+                {
+                    return Content("");
+                }
+
+                Dictionary<string, object?>? stockPriceQuoteDictionary =
+                    await _finnhubService.GetStockPriceQuote(stockSymbol);
+
+                companyProfileDictionary.Add("price", stockPriceQuoteDictionary?["c"] ?? "Price is unavailable");
+                return View(companyProfileDictionary);
             }
-            Dictionary<string, object?>? stockPriceQuoteDictionary =
-                await _finnhubService.GetStockPriceQuote(stockSymbol);
-            
-            companyProfileDictionary.Add("price", stockPriceQuoteDictionary?["c"] ?? "Price is unavailable");
-            return View(companyProfileDictionary);
+            catch (Exception ae)
+            {
+                return Content(ae.Message);
+            }
+
         }
     }
 }

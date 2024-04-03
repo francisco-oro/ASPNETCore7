@@ -26,44 +26,52 @@ namespace StocksApp.Controllers
         public async Task<IActionResult> Explore(string? searchBy, string? stock, bool showAll = false)
         {
             if (stock != null) ViewBag.stock = stock;
+            List<Stock> stocks = new List<Stock>();
 
-            List<Dictionary<string, string>>? stockResults = new List<Dictionary<string, string>>();
-            List<string>? popularStocks = _tradingOptions.Value.Top25PopularStocks?.Split(",").ToList();
 
             if (string.IsNullOrEmpty(searchBy))
             {
-                stockResults = await _finnhubService.GetStocks();
+                List<string>? popularStocks = _tradingOptions.Value.Top25PopularStocks?.Split(",").ToList();
+
+                var stockResults = await _finnhubService.GetStocks();
+                if (stockResults != null)
+                {
+                    if (showAll == false)
+                    {
+                        stockResults = stockResults.FindAll(temp => popularStocks != null && popularStocks.Contains(temp["displaySymbol"]));
+                    }
+
+                    foreach (var obj in stockResults)
+                    {
+                        stocks.Add(new Stock
+                        {
+                            StockName = obj["description"],
+                            StockSymbol = obj["displaySymbol"]
+                        });
+                    }
+
+                }
             }
+
             else
             {
                 Dictionary<string, object>? stocksFromSearchStocks = await _finnhubService.SearchStocks(searchBy);
                 if (stocksFromSearchStocks != null)
                 {
-                    stockResults =
-                        JsonSerializer.Deserialize<List<Dictionary<string, string>>?>(stocksFromSearchStocks["result"]
-                            .ToString() ?? string.Empty);
-                }
-            }
-            List<Stock> stocks = new List<Stock>();
-            if (stockResults != null)
-            {
-                if (showAll == false)
-                {
-                    stockResults = stockResults.FindAll(temp => popularStocks != null && popularStocks.Contains(temp["displaySymbol"]));
-                }
+                    JsonElement stocksFromSearchJsonElement = (JsonElement)stocksFromSearchStocks["result"];
+                    List<Dictionary<string, object>>? stocksFromSearchList =
+                        JsonSerializer.Deserialize<List<Dictionary<string, object>>>(stocksFromSearchJsonElement.GetRawText());
 
-                foreach (var obj in stockResults)
-                {
-                    stocks.Add(new Stock()
-                    {
-                        StockName = obj["description"],
-                        StockSymbol = obj["displaySymbol"]
-                    });
+                    if (stocksFromSearchList != null)
+                        foreach (Dictionary<string, object> stockItem in stocksFromSearchList)
+                        {
+                            stocks.Add(new Stock() { StockName = stockItem["description"].ToString(), StockSymbol = stockItem["symbol"].ToString() });
+                        }
                 }
-
             }
 
             return View(stocks);
+
         }
     }
 }

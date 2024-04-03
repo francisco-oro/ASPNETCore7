@@ -413,7 +413,7 @@ a.button-link:link, a.button-link:visited {
 }
 
 .pill {
-    background-color: #9e9e9eff;
+    background-color: rgba(158, 158, 255, 0.62);
     color: #ffffff;
     padding: 6px 12px;
     border-radius: 10px;
