@@ -53,7 +53,7 @@ namespace StocksApp.Controllers
                         var pager = new Pager(recsCount, pg, pageSize);
                         int recSkip = (pg -1 ) * pageSize;
 
-                        var data = stockResults.Skip(recSkip).Take(pager.PageSize).ToList();
+                        stockResults = stockResults.Skip(recSkip).Take(pager.PageSize).ToList();
                         ViewBag.Pager = pager;
                     }
 

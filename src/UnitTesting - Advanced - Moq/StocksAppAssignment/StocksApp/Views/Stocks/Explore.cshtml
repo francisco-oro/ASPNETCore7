@@ -75,7 +75,7 @@
                         @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
                         {
                             <li class="page-item @(pge == pager.CurrentPage ? "active" : "")">
-
+                                <a class="page-link" asp-controller="Stocks" asp-action="Explore" asp-route-showAll="true" asp-route-pg="@pge">@pge</a>
                             </li>
                         }
                     </ul>

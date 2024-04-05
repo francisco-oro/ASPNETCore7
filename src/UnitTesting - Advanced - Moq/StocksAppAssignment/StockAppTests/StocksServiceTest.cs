@@ -1,5 +1,10 @@
+using AutoFixture;
 using Entities;
+using EntityFrameworkCoreMock;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Moq;
+using RepositoryContracts;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using Services;
@@ -13,11 +18,32 @@ namespace StockAppTests
         private readonly IStocksService _stocksService;
         private readonly ITestOutputHelper _outputHelper;
 
+        private readonly Mock<IStocksRepository> _stocksRepositoryMock;
+        private readonly IStocksRepository _stocksRepository;
+
+        private readonly IFixture _fixture;
         //constructor
         public StocksServiceTest(ITestOutputHelper outputHelper)
         {
+            _fixture = new Fixture();
+            _stocksRepositoryMock = new Mock<IStocksRepository>();
+            _stocksRepository = _stocksRepositoryMock.Object;
+
+            var sellOrdersInitialData = new List<SellOrder>() { };
+            if (sellOrdersInitialData == null) throw new ArgumentNullException(nameof(sellOrdersInitialData));
+            var buyOrdersInitialData  = new List<BuyOrder>() { };
+            if (buyOrdersInitialData == null) throw new ArgumentNullException(nameof(buyOrdersInitialData));
+
+            DbContextMock<ApplicationDbContext> dbContextMock = new DbContextMock<ApplicationDbContext>(
+                new DbContextOptionsBuilder<ApplicationDbContext>().Options);
+
+            ApplicationDbContext  dbContext = dbContextMock.Object;
+            dbContextMock.CreateDbSetMock(temp => temp.BuyOrders, buyOrdersInitialData);
+            dbContextMock.CreateDbSetMock(temp => temp.SellOrders, sellOrdersInitialData);
+
+            _stocksService = new StocksService(null);
+
             _outputHelper = outputHelper;
-            _stocksService = new StocksService( new ApplicationDbContext( new DbContextOptionsBuilder<ApplicationDbContext>().Options));
         }
 
         // helper methods
@@ -165,12 +191,14 @@ namespace StockAppTests
                 StockName = "Microsoft",
                 StockSymbol = "MSFT"
             };
+            _stocksRepositoryMock.Setup(
+                    temp => temp.CreateBuyOrder(It.IsAny<BuyOrder>()))
+                .ReturnsAsync(buyOrderRequest.ToBuyOrder);
 
+            //Act
             BuyOrderResponse buyOrderResponse = await _stocksService.CreateBuyOrder(buyOrderRequest);
-            List<BuyOrderResponse> buyOrderResponses = await _stocksService.GetBuyOrders();
 
-            Assert.True(buyOrderResponse.BuyOrderID != Guid.Empty);
-            Assert.Contains(buyOrderResponse, buyOrderResponses);
+            buyOrderResponse.Should().Be(buyOrderRequest.ToBuyOrder().ToBuyOrderResponse());
         }
         #endregion
 
