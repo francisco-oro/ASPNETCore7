@@ -26,17 +26,13 @@ namespace StocksApp.Controllers
             _stocksService = stocksService;
         }
 
-        [Route("[action]")]
-        public async Task<IActionResult> Index()
+        [Route("[action]/{stockSymbol?}/")]
+        public async Task<IActionResult> Index(string stockSymbol = "MSFT")
         {
-            if (_tradingOptions.Value.DefaultStockSymbol == null)
-            {
-                _tradingOptions.Value.DefaultStockSymbol = "MSFT";
-            }
             Dictionary<string, object>? companyProfileDictionary = 
-                await _finnhubService.GetCompanyProfile(_tradingOptions.Value.DefaultStockSymbol);
+                await _finnhubService.GetCompanyProfile(stockSymbol);
             Dictionary<string, object?>? stockPriceQuoteDictionary = 
-                await _finnhubService.GetStockPriceQuote(_tradingOptions.Value.DefaultStockSymbol);
+                await _finnhubService.GetStockPriceQuote(stockSymbol);
 
             StockTrade stockTrade = new StockTrade()
             {
@@ -114,7 +110,7 @@ namespace StocksApp.Controllers
                 return NotFound();
             }
 
-            Dictionary<string, object?>? companyProfileDictionary =
+            Dictionary<string, object?>? companyProfileDictionary = 
                 await _finnhubService.GetStockPriceQuote(stockSymbol);
 
             return Json(companyProfileDictionary);

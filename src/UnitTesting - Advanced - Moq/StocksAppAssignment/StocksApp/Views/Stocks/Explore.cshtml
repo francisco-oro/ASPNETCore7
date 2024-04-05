@@ -2,6 +2,16 @@
 @{
     ViewBag.Title = "Explore";
     ViewBag.CurrentUrl = "~/Explore";
+
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage; 
+    }
 }
 
 
@@ -57,6 +67,20 @@
                     </li>
                 }
             </ul>
+            
+            <div class="container">
+                @if (pager.TotalPages > 0)
+                {
+                    <ul class="pagination justify-content-end">
+                        @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                        {
+                            <li class="page-item @(pge == pager.CurrentPage ? "active" : "")">
+
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
 
             @if (Model.Count == 0)
             {

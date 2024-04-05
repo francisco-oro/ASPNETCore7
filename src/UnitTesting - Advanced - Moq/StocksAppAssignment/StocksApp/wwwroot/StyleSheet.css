@@ -611,3 +611,8 @@ a.button-link:link, a.button-link:visited {
         flex-direction: row;
     }
 }
+
+
+.justify-content-end {
+    justify-content: end;
+}
