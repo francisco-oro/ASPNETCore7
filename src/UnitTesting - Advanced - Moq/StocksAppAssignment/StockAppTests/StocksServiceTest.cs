@@ -41,7 +41,7 @@ namespace StockAppTests
             dbContextMock.CreateDbSetMock(temp => temp.BuyOrders, buyOrdersInitialData);
             dbContextMock.CreateDbSetMock(temp => temp.SellOrders, sellOrdersInitialData);
 
-            _stocksService = new StocksService(null);
+            _stocksService = new StocksService(_stocksRepository);
 
             _outputHelper = outputHelper;
         }
@@ -183,22 +183,20 @@ namespace StockAppTests
         [Fact]
         public async void CreateBuyOrder_ValidInputValues()
         {
-            BuyOrderRequest? buyOrderRequest = new BuyOrderRequest()
-            {
-                DateAndTimeOfOrder = DateTime.Parse("2024-03-09"),
-                Price = 23.4,
-                Quantity = 4,
-                StockName = "Microsoft",
-                StockSymbol = "MSFT"
-            };
+            BuyOrderRequest? buyOrderRequest = _fixture.Create<BuyOrderRequest>();
+            BuyOrder buyOrder = buyOrderRequest.ToBuyOrder();
+            BuyOrderResponse buyOrderResponseExpected = buyOrder.ToBuyOrderResponse();
+
             _stocksRepositoryMock.Setup(
                     temp => temp.CreateBuyOrder(It.IsAny<BuyOrder>()))
-                .ReturnsAsync(buyOrderRequest.ToBuyOrder);
+                .ReturnsAsync(buyOrder);
 
             //Act
             BuyOrderResponse buyOrderResponse = await _stocksService.CreateBuyOrder(buyOrderRequest);
+            buyOrderResponseExpected.BuyOrderID = buyOrderResponse.BuyOrderID;
 
-            buyOrderResponse.Should().Be(buyOrderRequest.ToBuyOrder().ToBuyOrderResponse());
+            buyOrderResponse.BuyOrderID.Should().NotBe(Guid.Empty);
+            buyOrderResponse.Should().Be(buyOrderResponseExpected);
         }
         #endregion
 

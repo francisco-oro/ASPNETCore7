@@ -9,8 +9,8 @@ namespace Entities
 
         }
 
-        public DbSet<BuyOrder> BuyOrders { get; set; }
-        public DbSet<SellOrder> SellOrders { get; set; }
+        public virtual DbSet<BuyOrder> BuyOrders { get; set; }
+        public virtual DbSet<SellOrder> SellOrders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
