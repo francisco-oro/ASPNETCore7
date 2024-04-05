@@ -14,7 +14,7 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IFinnhubRespository, FinnhubRepository>();
 builder.Services.AddScoped<IStocksRepository, StocksRepository>();
-builder.Services.AddScoped<IFinnhubService,FinnhubService>();
+builder.Services.AddScoped<IFinnhubService, FinnhubService>();
 builder.Services.AddScoped<IStocksService, StocksService>();
 
 builder.Services.Configure<TradingOptions>(builder.Configuration.GetSection("TradingOptions"));
@@ -26,8 +26,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 var app = builder.Build();
 
-RotativaConfiguration.Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa");
+if (builder.Environment.IsEnvironment("Test").Equals(false))
+{
+    RotativaConfiguration.Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa");
+}
+
 app.UseStaticFiles();
 app.UseRouting();
 app.MapControllers();
 app.Run();
+
+// make the auto-generated Program accessible programmatically 
+public partial class Program
+{
+
+}
