@@ -29,7 +29,7 @@ namespace Services
             BuyOrder buyOrder = request.ToBuyOrder();
 
             buyOrder.BuyOrderID = Guid.NewGuid();
-            buyOrder = await _stocksRepository.CreateBuyOrder(buyOrder);
+            await _stocksRepository.CreateBuyOrder(buyOrder);
             return buyOrder.ToBuyOrderResponse();
         }
 
@@ -43,7 +43,8 @@ namespace Services
             ValidationHelper.ModelValidation(request);
 
             SellOrder sellOrder = request.ToSellOrder();
-            sellOrder = await _stocksRepository.CreateSellOrder(sellOrder);
+            sellOrder.SellOrderID = Guid.NewGuid();
+            await _stocksRepository.CreateSellOrder(sellOrder);
             return sellOrder.ToSellOrderResponse();
         }
 

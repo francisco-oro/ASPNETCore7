@@ -9,16 +9,15 @@ namespace StocksApp.Controllers
     [Route("[controller]")]
     public class StocksController : Controller
     {
-        private readonly IStocksService _stocksService;
         private readonly IFinnhubService _finnhubService;
         private readonly IOptions<TradingOptions> _tradingOptions;
 
-        public StocksController(IStocksService stocksService, IFinnhubService finnhubService, IOptions<TradingOptions> tradingOptions)
+        public StocksController(IFinnhubService finnhubService, IOptions<TradingOptions> tradingOptions)
         {
-            _stocksService = stocksService;
             _finnhubService = finnhubService;
             _tradingOptions = tradingOptions;
         }
+
 
         [Route("[action]/{stock?}")]
         [Route("/")]

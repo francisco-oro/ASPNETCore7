@@ -334,20 +334,20 @@ namespace StockAppTests
         [Fact]
         public async void CreateSellOrder_ValidSellOrder()
         {
-            SellOrderRequest sellOrderRequest = new SellOrderRequest()
-            {
-                DateAndTimeOfOrder = DateTime.Parse("2024-03-09"),
-                Price = 23.4,
-                Quantity = 4,
-                StockName = "Mirosoft",
-                StockSymbol = "MSFT"
-            };
+            SellOrderRequest? sellOrderRequest = _fixture.Create<SellOrderRequest>();
+            SellOrder sellOrder = sellOrderRequest.ToSellOrder();
+            SellOrderResponse sellOrderResponseExpected = sellOrder.ToSellOrderResponse();
 
+            _stocksRepositoryMock.Setup(
+                    temp => temp.CreateSellOrder(It.IsAny<SellOrder>()))
+                .ReturnsAsync(sellOrder);
+
+            //Act
             SellOrderResponse sellOrderResponse = await _stocksService.CreateSellOrder(sellOrderRequest);
-            List<SellOrderResponse> sellOrderResponses = await _stocksService.GetSellOrders();
+            sellOrderResponseExpected.SellOrderID = sellOrderResponse.SellOrderID;
 
-            Assert.True(sellOrderResponse.SellOrderID != Guid.Empty);
-            Assert.Contains(sellOrderResponse, sellOrderResponses);
+            sellOrderResponse.SellOrderID.Should().NotBe(Guid.Empty);
+            sellOrderResponse.Should().Be(sellOrderResponseExpected);
         }
 
         #endregion
@@ -358,6 +358,10 @@ namespace StockAppTests
         [Fact]
         public async void GetAllBuyOrders_EmptyList()
         {
+            //Arrange
+            _stocksRepositoryMock.Setup(
+                    temp => temp.GetBuyOrders())
+                .ReturnsAsync(new List<BuyOrder>());
             List<BuyOrderResponse> buyOrderResponsesFromGet = await _stocksService.GetBuyOrders();
 
             Assert.Empty(buyOrderResponsesFromGet);
@@ -367,35 +371,22 @@ namespace StockAppTests
         [Fact]
         public async void GetAllBuyOrders_AddFewBuyOrders()
         {
-            BuyOrderRequest? buyOrderRequest1 = new BuyOrderRequest()
+            List<BuyOrder> buyOrders = new List<BuyOrder>()
             {
-                DateAndTimeOfOrder = DateTime.Parse("2024-03-09"),
-                Price = 23.4,
-                Quantity = 4,
-                StockName = "Mirosoft",
-                StockSymbol = "MSFT"
+                _fixture.Create<BuyOrder>(),
+                _fixture.Create<BuyOrder>()
             };
 
-            BuyOrderRequest? buyOrderRequest2 = new BuyOrderRequest()
-            {
-                DateAndTimeOfOrder = DateTime.Parse("2024-03-09"),
-                Price = 32.1,
-                Quantity = 8,
-                StockName = "Apple",
-                StockSymbol = "AAPL"
-            };
+            _stocksRepositoryMock.Setup(
+                    temp => temp.GetBuyOrders())
+                .ReturnsAsync(buyOrders);
+            //Act
 
-            BuyOrderResponse buyOrderResponse1 = await _stocksService.CreateBuyOrder(buyOrderRequest1);
-            BuyOrderResponse buyOrderResponse2 = await _stocksService.CreateBuyOrder(buyOrderRequest2);
-            List<BuyOrderResponse> buyOrderResponsesFromAdd = new List<BuyOrderResponse>()
-                { buyOrderResponse1, buyOrderResponse2 }; 
+            List<BuyOrderResponse> buyOrderResponsesExpected  = buyOrders.Select(temp => temp.ToBuyOrderResponse()).ToList();
 
             List<BuyOrderResponse> buyOrderResponsesFromGet = await _stocksService.GetBuyOrders();
 
-            foreach (BuyOrderResponse buyOrderResponse in buyOrderResponsesFromAdd)
-            {
-                Assert.Contains(buyOrderResponse, buyOrderResponsesFromGet);
-            }
+            buyOrderResponsesFromGet.Should().BeEquivalentTo(buyOrderResponsesFromGet);
         }
         #endregion
 
@@ -405,6 +396,9 @@ namespace StockAppTests
         [Fact]
         public async void GetAllSellOrders_EmptyList()
         {
+            _stocksRepositoryMock.Setup(
+                    temp => temp.GetSellOrders())
+                .ReturnsAsync(new List<SellOrder>());
             List<SellOrderResponse> sellOrderResponsesFromGet = await _stocksService.GetSellOrders();
 
             Assert.Empty(sellOrderResponsesFromGet);
@@ -414,35 +408,20 @@ namespace StockAppTests
         [Fact]
         public async void GetAllSellOrders_AddFewSellOrders()
         {
-            SellOrderRequest? sellOrderRequest1 = new SellOrderRequest()
+            List<SellOrder> sellOrders = new List<SellOrder>()
             {
-                DateAndTimeOfOrder = DateTime.Parse("2024-03-09"),
-                Price = 23.4,
-                Quantity = 4,
-                StockName = "Mirosoft",
-                StockSymbol = "MSFT"
+                _fixture.Create<SellOrder>(),
+                _fixture.Create<SellOrder>()
             };
-
-            SellOrderRequest? sellOrderRequest2 = new SellOrderRequest()
-            {
-                DateAndTimeOfOrder = DateTime.Parse("2024-03-09"),
-                Price = 32.1,
-                Quantity = 8,
-                StockName = "Apple",
-                StockSymbol = "AAPL"
-            };
-
-            SellOrderResponse sellOrderResponse1 = await _stocksService.CreateSellOrder(sellOrderRequest1);
-            SellOrderResponse sellOrderResponse2 = await _stocksService.CreateSellOrder(sellOrderRequest2);
-            List<SellOrderResponse> sellOrderResponsesFromAdd = new List<SellOrderResponse>()
-                { sellOrderResponse1, sellOrderResponse2 };
+            _stocksRepositoryMock.Setup(
+                    temp => temp.GetSellOrders())
+                .ReturnsAsync(sellOrders);
+            List<SellOrderResponse> sellOrderResponsesExpected =
+                sellOrders.Select(temp => temp.ToSellOrderResponse()).ToList();
 
             List<SellOrderResponse> sellOrderResponsesFromGet = await _stocksService.GetSellOrders();
 
-            foreach (SellOrderResponse sellOrderResponse in sellOrderResponsesFromAdd)
-            {
-                Assert.Contains(sellOrderResponse, sellOrderResponsesFromGet);
-            }
+            sellOrderResponsesFromGet.Should().BeEquivalentTo(sellOrderResponsesExpected);
         }
         #endregion
     }
