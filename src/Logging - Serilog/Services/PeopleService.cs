@@ -16,6 +16,7 @@ using ServiceContracts.DTO;
 using ServiceContracts.Enums;
 using Services.Helpers;
 using Serilog;
+using SerilogTimings;
 
 
 namespace Services
@@ -62,7 +63,7 @@ namespace Services
         {
             _logger.LogInformation("GetAllPeople of PeopleService");
             // SELECT * from People
-            var people = await  _peopleRepository.GetAllPeople();
+            var people = await _peopleRepository.GetAllPeople();
 
             return people
                 .Select(temp => temp.ToPersonResponse()).ToList();
@@ -73,11 +74,11 @@ namespace Services
         {
             if (personID == null)
             {
-                return null; 
+                return null;
             }
 
             Person? person = await _peopleRepository.GetPersonByPersonID(personID.Value);
-            
+
             if (person == null)
             {
                 return null;
@@ -88,36 +89,41 @@ namespace Services
 
         public async Task<List<PersonResponse>> GetFilteredPeople(string searchBy, string? searchString)
         {
+            List<Person> people;
             _logger.LogInformation("GetFilteredPeople of PeopleService");
-            List<Person> people = searchBy switch
+            using (Operation.Time("Time for filtered people from Database"))
             {
-                nameof(PersonResponse.PersonName) =>
-                    await _peopleRepository.GetFilteredPeople(temp =>
-                        temp.PersonName.Contains(searchString)),
 
-                nameof(PersonResponse.Email) =>
-                    await _peopleRepository.GetFilteredPeople(temp =>
-                        temp.Email.Contains(searchString)),
+                people = searchBy switch
+                {
+                    nameof(PersonResponse.PersonName) =>
+                        await _peopleRepository.GetFilteredPeople(temp =>
+                            temp.PersonName.Contains(searchString)),
 
-                nameof(PersonResponse.DateOfBirth) =>
-                    await _peopleRepository.GetFilteredPeople(temp =>
-                        temp.DateOfBirth.Value.ToString("dd MMMM yyyy").Contains(
-                            searchString)),
+                    nameof(PersonResponse.Email) =>
+                        await _peopleRepository.GetFilteredPeople(temp =>
+                            temp.Email.Contains(searchString)),
 
-                nameof(PersonResponse.Gender) =>
-                    await _peopleRepository.GetFilteredPeople(temp =>
-                        temp.Gender.Contains(searchString)),
+                    nameof(PersonResponse.DateOfBirth) =>
+                        await _peopleRepository.GetFilteredPeople(temp =>
+                            temp.DateOfBirth.Value.ToString("dd MMMM yyyy").Contains(
+                                searchString)),
 
-                nameof(PersonResponse.CountryID) =>
-                    await _peopleRepository.GetFilteredPeople(temp =>
-                        temp.Country.CountryName.Contains(searchString)),
+                    nameof(PersonResponse.Gender) =>
+                        await _peopleRepository.GetFilteredPeople(temp =>
+                            temp.Gender.Contains(searchString)),
 
-                nameof(PersonResponse.Address) =>
-                    await _peopleRepository.GetFilteredPeople(temp =>
-                        temp.Address.Contains(searchString)),
-                
-                _ => await _peopleRepository.GetAllPeople()
-            };
+                    nameof(PersonResponse.CountryID) =>
+                        await _peopleRepository.GetFilteredPeople(temp =>
+                            temp.Country.CountryName.Contains(searchString)),
+
+                    nameof(PersonResponse.Address) =>
+                        await _peopleRepository.GetFilteredPeople(temp =>
+                            temp.Address.Contains(searchString)),
+
+                    _ => await _peopleRepository.GetAllPeople()
+                };
+            }
 
             _diagnosticContext.Set("People", people);
 
@@ -134,57 +140,57 @@ namespace Services
 
             List<PersonResponse> sortedPeople = (sortBy, sortOrder)
                 switch
-                {
-                    (nameof(PersonResponse.PersonName), SortOrderOptions.ASC) 
-                        => allPeople.OrderBy(temp => temp.PersonName, StringComparer.OrdinalIgnoreCase).ToList(),
+            {
+                (nameof(PersonResponse.PersonName), SortOrderOptions.ASC)
+                    => allPeople.OrderBy(temp => temp.PersonName, StringComparer.OrdinalIgnoreCase).ToList(),
 
-                    (nameof(PersonResponse.PersonName), SortOrderOptions.DESC) 
-                        => allPeople.OrderByDescending(temp => temp.PersonName, StringComparer.OrdinalIgnoreCase).ToList(),
+                (nameof(PersonResponse.PersonName), SortOrderOptions.DESC)
+                    => allPeople.OrderByDescending(temp => temp.PersonName, StringComparer.OrdinalIgnoreCase).ToList(),
 
-                    (nameof(PersonResponse.Email), SortOrderOptions.ASC)
-                        => allPeople.OrderBy(temp => temp.Email).ToList(),
+                (nameof(PersonResponse.Email), SortOrderOptions.ASC)
+                    => allPeople.OrderBy(temp => temp.Email).ToList(),
 
-                    (nameof(PersonResponse.Email), SortOrderOptions.DESC)
-                        => allPeople.OrderByDescending(temp => temp.Email).ToList(),
+                (nameof(PersonResponse.Email), SortOrderOptions.DESC)
+                    => allPeople.OrderByDescending(temp => temp.Email).ToList(),
 
-                    (nameof(PersonResponse.DateOfBirth), SortOrderOptions.ASC)
-                        => allPeople.OrderBy(temp => temp.DateOfBirth).ToList(),
+                (nameof(PersonResponse.DateOfBirth), SortOrderOptions.ASC)
+                    => allPeople.OrderBy(temp => temp.DateOfBirth).ToList(),
 
-                    (nameof(PersonResponse.DateOfBirth), SortOrderOptions.DESC)
-                        => allPeople.OrderByDescending(temp => temp.DateOfBirth).ToList(),
+                (nameof(PersonResponse.DateOfBirth), SortOrderOptions.DESC)
+                    => allPeople.OrderByDescending(temp => temp.DateOfBirth).ToList(),
 
-                    (nameof(PersonResponse.Age), SortOrderOptions.ASC)
-                        => allPeople.OrderBy(temp => temp.Age).ToList(),
+                (nameof(PersonResponse.Age), SortOrderOptions.ASC)
+                    => allPeople.OrderBy(temp => temp.Age).ToList(),
 
-                    (nameof(PersonResponse.Age), SortOrderOptions.DESC)
-                        => allPeople.OrderByDescending(temp => temp.Age).ToList(),
+                (nameof(PersonResponse.Age), SortOrderOptions.DESC)
+                    => allPeople.OrderByDescending(temp => temp.Age).ToList(),
 
-                    (nameof(PersonResponse.Gender), SortOrderOptions.ASC)
-                        => allPeople.OrderBy(temp => temp.Gender, StringComparer.OrdinalIgnoreCase).ToList(),
+                (nameof(PersonResponse.Gender), SortOrderOptions.ASC)
+                    => allPeople.OrderBy(temp => temp.Gender, StringComparer.OrdinalIgnoreCase).ToList(),
 
-                    (nameof(PersonResponse.Gender), SortOrderOptions.DESC)
-                        => allPeople.OrderByDescending(temp => temp.Gender, StringComparer.OrdinalIgnoreCase).ToList(),
+                (nameof(PersonResponse.Gender), SortOrderOptions.DESC)
+                    => allPeople.OrderByDescending(temp => temp.Gender, StringComparer.OrdinalIgnoreCase).ToList(),
 
-                    (nameof(PersonResponse.Country), SortOrderOptions.ASC)
-                        => allPeople.OrderBy(temp => temp.Country, StringComparer.OrdinalIgnoreCase).ToList(),
+                (nameof(PersonResponse.Country), SortOrderOptions.ASC)
+                    => allPeople.OrderBy(temp => temp.Country, StringComparer.OrdinalIgnoreCase).ToList(),
 
-                    (nameof(PersonResponse.Country), SortOrderOptions.DESC)
-                        => allPeople.OrderByDescending(temp => temp.Country, StringComparer.OrdinalIgnoreCase).ToList(),
+                (nameof(PersonResponse.Country), SortOrderOptions.DESC)
+                    => allPeople.OrderByDescending(temp => temp.Country, StringComparer.OrdinalIgnoreCase).ToList(),
 
-                    (nameof(PersonResponse.Address), SortOrderOptions.ASC)
-                        => allPeople.OrderBy(temp => temp.Address, StringComparer.OrdinalIgnoreCase).ToList(),
+                (nameof(PersonResponse.Address), SortOrderOptions.ASC)
+                    => allPeople.OrderBy(temp => temp.Address, StringComparer.OrdinalIgnoreCase).ToList(),
 
-                    (nameof(PersonResponse.Address), SortOrderOptions.DESC)
-                        => allPeople.OrderByDescending(temp => temp.Address, StringComparer.OrdinalIgnoreCase).ToList(),
+                (nameof(PersonResponse.Address), SortOrderOptions.DESC)
+                    => allPeople.OrderByDescending(temp => temp.Address, StringComparer.OrdinalIgnoreCase).ToList(),
 
-                    (nameof(PersonResponse.ReceiveNewsLetters), SortOrderOptions.ASC)
-                        => allPeople.OrderBy(temp => temp.ReceiveNewsLetters).ToList(),
+                (nameof(PersonResponse.ReceiveNewsLetters), SortOrderOptions.ASC)
+                    => allPeople.OrderBy(temp => temp.ReceiveNewsLetters).ToList(),
 
-                    (nameof(PersonResponse.ReceiveNewsLetters), SortOrderOptions.DESC)
-                        => allPeople.OrderByDescending(temp => temp.ReceiveNewsLetters).ToList(),
+                (nameof(PersonResponse.ReceiveNewsLetters), SortOrderOptions.DESC)
+                    => allPeople.OrderByDescending(temp => temp.ReceiveNewsLetters).ToList(),
 
-                    _ => allPeople
-                };
+                _ => allPeople
+            };
 
             return sortedPeople;
         }
@@ -230,10 +236,10 @@ namespace Services
             Person? person = await _peopleRepository.GetPersonByPersonID(personID.Value);
             if (person == null)
             {
-                return false; 
+                return false;
             }
 
-            await _peopleRepository.DeletePersonByPersonID(personID.Value); 
+            await _peopleRepository.DeletePersonByPersonID(personID.Value);
             return true;
         }
 
@@ -322,7 +328,7 @@ namespace Services
             }
 
             memoryStream.Position = 0;
-            return memoryStream; 
+            return memoryStream;
         }
     }
 }

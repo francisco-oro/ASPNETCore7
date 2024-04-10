@@ -38,6 +38,7 @@ namespace CRUDTests
 
             _countriesService = _countriesServiceMock.Object;
             _peopleService = _peoplesServiceMock.Object;
+             _logger = new Mock<ILogger<PeopleController>>().Object;
         }
 
         #region Index
@@ -46,8 +47,7 @@ namespace CRUDTests
         {
             //Arrange
             List<PersonResponse> personResponsesList = _fixture.Create<List<PersonResponse>>();
-
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService);
+            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
 
             _peoplesServiceMock
                 .Setup(temp => temp.GetFilteredPeople(It.IsAny<string>(), It.IsAny<string>()))
@@ -79,8 +79,8 @@ namespace CRUDTests
             PersonResponse personResponse = _fixture.Create<PersonResponse>();
 
             List<CountryResponse> countries = _fixture.Create<List<CountryResponse>>(); 
-
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService);
+            var loggerMock = new Mock<ILogger<PeopleController>>();
+            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, loggerMock.Object);
 
             _countriesServiceMock
                 .Setup(temp => temp.GetAllCountries())!
@@ -110,8 +110,7 @@ namespace CRUDTests
             PersonResponse personResponse = _fixture.Create<PersonResponse>();
 
             List<CountryResponse> countries = _fixture.Create<List<CountryResponse>>();
-
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService);
+            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
 
             _countriesServiceMock
                 .Setup(temp => temp.GetAllCountries())!
@@ -145,7 +144,7 @@ namespace CRUDTests
                 .Setup(temp => temp.GetPersonByPersonID(It.IsAny<Guid>()))
                 .ReturnsAsync(null as PersonResponse);
 
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService);
+            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
 
             //Act 
 
@@ -193,7 +192,7 @@ namespace CRUDTests
                 .Setup(temp => temp.GetPersonByPersonID(It.IsAny<Guid>()))
                 .ReturnsAsync(personUpdateRequest.ToPerson().ToPersonResponse);
 
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService);
+            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
 
             //Act 
             peopleController.ModelState.AddModelError(nameof(PersonUpdateRequest.Email), "Email is invalid");
@@ -217,7 +216,7 @@ namespace CRUDTests
                 .Setup(temp => temp.UpdatePerson(It.IsAny<PersonUpdateRequest>()))
                 .ReturnsAsync(personUpdateRequest.ToPerson().ToPersonResponse);
 
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService);
+            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
 
             //Act 
 
@@ -241,7 +240,7 @@ namespace CRUDTests
                 .Setup(temp => temp.GetPersonByPersonID(It.IsAny<Guid>()))
                 .ReturnsAsync(null as PersonResponse);
 
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService);
+            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
 
             //Act 
 
@@ -288,7 +287,7 @@ namespace CRUDTests
                 .Setup(temp => temp.DeletePerson(It.IsAny<Guid>()))
                 .ReturnsAsync(true);
 
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService);
+            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
 
             //Act 
 

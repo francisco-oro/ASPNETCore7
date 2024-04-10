@@ -4,8 +4,11 @@ using Entities;
 using EntityFrameworkCoreMock;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 using RepositoryContracts;
+using Serilog;
+using Serilog.Extensions.Hosting;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
@@ -45,9 +48,11 @@ namespace CRUDTests
             ApplicationDbContext dbContext = doContextMock.Object;
             doContextMock.CreateDbSetMock(temp => temp.Countries, countriesInitialData);
             doContextMock.CreateDbSetMock(temp => temp.People, peopleInitialData);
+            var diagnosticContextMock = new Mock<IDiagnosticContext>();
+            var loggerMock = new Mock<ILogger<PeopleService>>();
 
             _countriesService = new CountriesService(null);
-            _peopleService = new PeopleService(_peopleRepository);
+            _peopleService = new PeopleService(_peopleRepository, loggerMock.Object ,diagnosticContextMock.Object);
             _outputHelper = testOutputHelper;
         }
 
