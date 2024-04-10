@@ -1,20 +1,22 @@
 using Entities;
+using Microsoft.AspNetCore.HttpLogging;
 using ServiceContracts;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using RepositoryContracts;
 using Rotativa.AspNetCore;
 using Services;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog(
+    (HostBuilderContext context, IServiceProvider Services, LoggerConfiguration loggerConfiguration) =>
+    {
+        loggerConfiguration
+            .ReadFrom.Configuration(context.Configuration) // Read configuration settings from built-in IConfiguration
+            .ReadFrom.Services(Services); // Read out current app services and make them available to serilog
+    });
 
-//Logging
-builder.Host.ConfigureLogging(loggingProvider =>
-{
-    loggingProvider.ClearProviders();
-    loggingProvider.AddConsole();
-    loggingProvider.AddDebug();
-});
 builder.Services.AddControllersWithViews();
 
 //add services into IoC container
@@ -22,6 +24,12 @@ builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IPeopleRepository, PeopleRepository>();
 builder.Services.AddScoped<ICountriesService, CountriesService>();
 builder.Services.AddScoped<IPeopleService, PeopleService>();
+builder.Services.AddHttpLogging(options =>
+{
+    options.LoggingFields =
+        HttpLoggingFields.RequestProperties |
+        HttpLoggingFields.ResponsePropertiesAndHeaders;
+});
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -30,16 +38,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 var app = builder.Build();
 
+
+// Crete application pipeline
 if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
 
-app.Logger.LogDebug("debug-message");
-app.Logger.LogInformation("information-message");
-app.Logger.LogWarning("warning-message");
-app.Logger.LogError("error-message");
-app.Logger.LogCritical("critical-message");
+app.UseHttpLogging();
+
+//app.Logger.LogDebug("debug-message");
+//app.Logger.LogInformation("information-message");
+//app.Logger.LogWarning("warning-message");
+//app.Logger.LogError("error-message");
+//app.Logger.LogCritical("critical-message");
 
 if (builder.Environment.IsEnvironment("Test") == false)
 {
