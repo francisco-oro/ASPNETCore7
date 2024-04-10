@@ -15,6 +15,8 @@ using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
 using Services.Helpers;
+using Serilog;
+
 
 namespace Services
 {
@@ -23,12 +25,14 @@ namespace Services
         //private fields
         private readonly IPeopleRepository _peopleRepository;
         private readonly ILogger<PeopleService> _logger;
+        private readonly IDiagnosticContext _diagnosticContext;
         //constructor 
 
-        public PeopleService(IPeopleRepository peopleRepository, ILogger<PeopleService> logger)
+        public PeopleService(IPeopleRepository peopleRepository, ILogger<PeopleService> logger, IDiagnosticContext diagnosticContext)
         {
             _peopleRepository = peopleRepository;
             _logger = logger;
+            _diagnosticContext = diagnosticContext;
         }
 
         public async Task<PersonResponse> AddPerson(PersonAddRequest? personAddRequest)
@@ -114,6 +118,8 @@ namespace Services
                 
                 _ => await _peopleRepository.GetAllPeople()
             };
+
+            _diagnosticContext.Set("People", people);
 
             return people.Select(temp => temp.ToPersonResponse()).ToList();
         }

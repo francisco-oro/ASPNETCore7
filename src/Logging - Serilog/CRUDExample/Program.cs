@@ -38,6 +38,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 var app = builder.Build();
 
+app.UseSerilogRequestLogging();
 
 // Crete application pipeline
 if (builder.Environment.IsDevelopment())
