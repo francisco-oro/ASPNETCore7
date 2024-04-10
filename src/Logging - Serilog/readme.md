@@ -379,7 +379,13 @@ Diagnostic context allows you to add additional enrichment properties to the con
 
 # Serilog Interview Questions
 ## Explain how logging works in Asp.Net Core?
-
+Logging is the process of recording events in software as they happen in real-time, along with other information such as the infrastructure details, time taken to execute, etc.
+Logging is an essential part of any software application. Having logs is crucial, especially when things go wrong. 
+Logs help you understand the failures of performance bottlenecks and fix the problems
 ## What is Serilog and why to use it?
-
+Serilog is a logging library for .NET and C# that allows for more detailed and structured logging than the default .NET logging library 
+- It is designed to handle large volumes of data efficiently
+- Serilog provides diagnostic logging to files, to the console, and elsewhere. 
+- It is easy to set up, has a clean API, and is portable between recent .NET platforms
 ## What is IDiagnosticContext in Serilog and how to use it?
+The `DiagnosticContext` provides additional enrichment properties that can be used later in the context
