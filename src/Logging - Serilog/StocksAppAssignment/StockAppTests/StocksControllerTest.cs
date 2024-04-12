@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using RepositoryContracts;
@@ -22,6 +23,7 @@ namespace StockAppTests
         private readonly IFinnhubService _finnhubService; 
 
         private readonly Mock<IFinnhubService> _finnhubServiceMock;
+        private readonly ILogger<StocksController> _logger;
 
         private readonly Fixture _fixture;
         private readonly IOptions<TradingOptions> _options;
@@ -36,7 +38,7 @@ namespace StockAppTests
                 Top25PopularStocks = "AAPL,MSFT,AMZN,TSLA,GOOGL,GOOG,NVDA,BRK.B,META,UNH,JNJ,JPM,V,PG,XOM,HD,CVX,MA,BAC,ABBV,PFE,AVGO,COST,DIS,KO",
                 DefaultStockSymbol = "US"
             });
-
+            _logger = new Mock<ILogger<StocksController>>().Object;
         }
 
         #region Explore
@@ -54,7 +56,7 @@ namespace StockAppTests
                     temp => temp.GetStocks())
                 .ReturnsAsync(stocksDictionary);
 
-            StocksController stocksController = new StocksController(_finnhubService, _options);
+            StocksController stocksController = new StocksController(_finnhubService, _options, _logger);
 
             //Act
             IActionResult result = await stocksController.Explore(searchBy: null, stock: null, showAll: false);

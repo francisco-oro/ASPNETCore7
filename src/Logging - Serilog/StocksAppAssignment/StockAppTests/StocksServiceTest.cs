@@ -206,13 +206,13 @@ namespace StockAppTests
 
         // 1. When you supply SellOrderRequest as null, it should throw ArgumentNullException.
         [Fact]
-        public void CreateSellOrder_NullSellOrder()
+        public async Task CreateSellOrder_NullSellOrder()
         {
             // Arrange
             SellOrderRequest? sellOrderRequest = null;
 
 
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
             {
                 await _stocksService.CreateSellOrder(sellOrderRequest);
             });
@@ -220,7 +220,7 @@ namespace StockAppTests
 
         // 2. When you supply sellOrderQuantity as 0 (as per the specification, minimum is 1), it should throw ArgumentException.
         [Fact]
-        public void CreateSellOrder_SellOrderQuantityIsLowerThanMinimumValue()
+        public async Task CreateSellOrder_SellOrderQuantityIsLowerThanMinimumValue()
         {
             SellOrderRequest sellOrderRequest = new SellOrderRequest()
             {
@@ -231,7 +231,7 @@ namespace StockAppTests
                 StockSymbol = "MSFT"
             };
 
-            Assert.ThrowsAsync<ArgumentException>(async () =>
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await _stocksService.CreateSellOrder(sellOrderRequest);
             });
@@ -239,7 +239,7 @@ namespace StockAppTests
 
         // 3. When you supply sellOrderQuantity as 100001 (as per the specification, maximum is 100000), it should throw ArgumentException.
         [Fact]
-        public void CreateSellOrder_SellOrderQuantityIsGreaterThanMaximumValue()
+        public async Task CreateSellOrder_SellOrderQuantityIsGreaterThanMaximumValue()
         {
             SellOrderRequest sellOrderRequest = new SellOrderRequest()
             {
@@ -250,7 +250,7 @@ namespace StockAppTests
                 StockSymbol = "MSFT"
             };
 
-            Assert.ThrowsAsync<ArgumentException>(async () =>
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await _stocksService.CreateSellOrder(sellOrderRequest);
             });
@@ -258,7 +258,7 @@ namespace StockAppTests
 
         // 4. When you supply sellOrderPrice as 0 (as per the specification, minimum is 1), it should throw ArgumentException.
         [Fact]
-        public void CreateSellOrder_SellOrderPriceIsLowerThanMinimumValue()
+        public async Task CreateSellOrder_SellOrderPriceIsLowerThanMinimumValue()
         {
             SellOrderRequest sellOrderRequest = new SellOrderRequest()
             {
@@ -269,7 +269,7 @@ namespace StockAppTests
                 StockSymbol = "MSFT"
             };
 
-            Assert.ThrowsAsync<ArgumentException>(async () =>
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await _stocksService.CreateSellOrder(sellOrderRequest);
             });
@@ -277,7 +277,7 @@ namespace StockAppTests
 
         // 5. When you supply sellOrderPrice as 10001 (as per the specification, maximum is 10000), it should throw ArgumentException.
         [Fact]
-        public void CreateSellOrder_SellOrderPriceISGreaterThanMaximumValue()
+        public async Task CreateSellOrder_SellOrderPriceISGreaterThanMaximumValue()
         {
             SellOrderRequest sellOrderRequest = new SellOrderRequest()
             {
@@ -288,7 +288,7 @@ namespace StockAppTests
                 StockSymbol = null
             };
 
-            Assert.ThrowsAsync<ArgumentException>(async () =>
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await _stocksService.CreateSellOrder(sellOrderRequest);
             });
@@ -296,7 +296,7 @@ namespace StockAppTests
 
         // 6. When you supply stock symbol=null (as per the specification, stock symbol can't be null), it should throw ArgumentException.
         [Fact]
-        public void CreateSellOrder_NullStockSymbol()
+        public async Task CreateSellOrder_NullStockSymbol()
         {
             SellOrderRequest sellOrderRequest = new SellOrderRequest()
             {
@@ -307,7 +307,7 @@ namespace StockAppTests
                 StockSymbol = null
             };
 
-            Assert.ThrowsAsync<ArgumentException>(async () =>
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await _stocksService.CreateSellOrder(sellOrderRequest);
             });
@@ -315,7 +315,7 @@ namespace StockAppTests
 
         // 7. When you supply dateAndTimeOfOrder as "1999-12-31" (YYYY-MM-DD) - (as per the specification, it should be equal or newer date than 2000-01-01), it should throw ArgumentException.
         [Fact]
-        public void CreateSellOrder_DateAndTimeOlderThanMinimumDate()
+        public async Task CreateSellOrder_DateAndTimeOlderThanMinimumDate()
         {
             SellOrderRequest sellOrderRequest = new SellOrderRequest()
             {
@@ -326,7 +326,7 @@ namespace StockAppTests
                 StockSymbol = "MSFT"
             };
 
-            Assert.ThrowsAsync<ArgumentException>(async () =>
+            await Assert.ThrowsAsync<ArgumentException>(async () =>
             {
                 await _stocksService.CreateSellOrder(sellOrderRequest);
             });
