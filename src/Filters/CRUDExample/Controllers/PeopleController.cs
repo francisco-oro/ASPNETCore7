@@ -1,4 +1,5 @@
-﻿using CRUDExample.Filters.ActionFilters;
+﻿using CRUDExample.Filters;
+using CRUDExample.Filters.ActionFilters;
 using CRUDExample.Filters.AuthorizationFilter;
 using CRUDExample.Filters.ExceptionFilters;
 using CRUDExample.Filters.ResourceFilters;
@@ -16,6 +17,7 @@ namespace CRUDExample.Controllers
     [Route("[controller]")]
     [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Controller", "My-Value-From-Controller", 3 }, Order = 3 )]
     [TypeFilter(typeof(HandleExceptionFilter))]
+    [TypeFilter(typeof(PersonAlwaysRunResultFilter))]
     public class PeopleController : Controller
     {
         //private fields
@@ -33,9 +35,10 @@ namespace CRUDExample.Controllers
         //Urls: people/index
         [Route("[action]")]
         [Route("/")]
-        [TypeFilter(typeof(PeopleListActionFilter), Order = 4)]
+        [ServiceFilter(typeof(PeopleListActionFilter), Order = 4)]
         [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Action", "My-Value-From-Action", 1}, Order = 1)]
         [TypeFilter(typeof(PeopleListResultFilter))]
+        [SkipFilter]
         public async Task<IActionResult> Index(string searchBy, string? searchString, string sortBy = nameof(PersonResponse.PersonName), [FromQuery] SortOrderOptions sortOrder = SortOrderOptions.ASC)
         {
             _logger.LogInformation("Index action method of PeopleController");
@@ -102,7 +105,6 @@ namespace CRUDExample.Controllers
         [Route("[action]/{personID}")]
         [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
         [TypeFilter(typeof(TokenAuthorizationFilter))]
-        [TypeFilter(typeof(PersonAlwaysRunResultFilter))]
         public async Task<IActionResult> Edit(PersonUpdateRequest personRequest)
         {
             PersonResponse? personResponse = await _peopleService.GetPersonByPersonID(personRequest.PersonID);

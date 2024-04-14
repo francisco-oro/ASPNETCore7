@@ -43,6 +43,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddTransient<PeopleListActionFilter>();
+
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
