@@ -15,7 +15,8 @@ using ServiceContracts.Enums;
 namespace CRUDExample.Controllers
 {
     [Route("[controller]")]
-    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Controller", "My-Value-From-Controller", 3 }, Order = 3 )]
+    //[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Controller", "My-Value-From-Controller", 3 }, Order = 3 )]
+    [ResponseHeaderFilterFactory("My-Key-From-Controller", "My-Value-From-Controller", 3)]
     [TypeFilter(typeof(HandleExceptionFilter))]
     [TypeFilter(typeof(PersonAlwaysRunResultFilter))]
     public class PeopleController : Controller
@@ -37,7 +38,7 @@ namespace CRUDExample.Controllers
         [Route("/")]
         [ServiceFilter(typeof(PeopleListActionFilter), Order = 4)]
         [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Action", "My-Value-From-Action", 1}, Order = 1)]
-        [ResponseHeaderActionFilter("My-Key-From-Action", "My-Value-From-Action", 1)]
+        [ResponseHeaderFilterFactory("My-Key-From-Action", "My-Value-From-Action", 1)]
         [TypeFilter(typeof(PeopleListResultFilter))]
         [SkipFilter]
         public async Task<IActionResult> Index(string searchBy, string? searchString, string sortBy = nameof(PersonResponse.PersonName), [FromQuery] SortOrderOptions sortOrder = SortOrderOptions.ASC)
@@ -56,7 +57,7 @@ namespace CRUDExample.Controllers
         // Executes when the user clicks on "Create Person" button 
         [Route("[action]")]
         [HttpGet]
-        [ResponseHeaderActionFilter("my-key", "my-value", 4)]
+        [ResponseHeaderFilterFactory("my-key", "my-value", 4)]
         public async Task<IActionResult> Create()
         {
             List<CountryResponse?> countries = await _countriesService.GetAllCountries();
