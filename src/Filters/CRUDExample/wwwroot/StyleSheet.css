@@ -507,3 +507,15 @@ a.button-link:link, a.button-link:visited {
 a.link-hover:hover {
     background-color: #e5e5e5; 
 }
+
+.search-dropdown {
+    padding: 8px 12px;
+    font-size: 130%;
+    border-radius: 20px 0px 0px 20px;
+    border-top: 2px solid #cacaca;
+    border-bottom: 2px solid #cacaca;
+    border-left: 2px solid #cacaca;
+    border-right-style: none;
+    margin-right: 0px;
+    transition: box-shadow 0.2s;
+}
