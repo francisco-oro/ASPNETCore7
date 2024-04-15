@@ -1,41 +1,44 @@
-using CRUDExample.Filters.ActionFilters;
-using Entities;
-using Microsoft.AspNetCore.HttpLogging;
 using ServiceContracts;
-using Microsoft.EntityFrameworkCore;
-using Repositories;
-using RepositoryContracts;
-using Rotativa.AspNetCore;
 using Services;
+using Microsoft.EntityFrameworkCore;
+using Entities;
+using RepositoryContracts;
+using Repositories;
 using Serilog;
+using CRUDExample.Filters.ActionFilters;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.UseSerilog(
-    (HostBuilderContext context, IServiceProvider Services, LoggerConfiguration loggerConfiguration) =>
-    {
-        loggerConfiguration
-            .ReadFrom.Configuration(context.Configuration) // Read configuration settings from built-in IConfiguration
-            .ReadFrom.Services(Services); // Read out current app services and make them available to serilog
-    });
 
-// it adds controllers and views as services
+//Serilog
+builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, LoggerConfiguration loggerConfiguration) => {
+
+    loggerConfiguration
+    .ReadFrom.Configuration(context.Configuration) //read configuration settings from built-in IConfiguration
+    .ReadFrom.Services(services); //read out current app's services and make them available to serilog
+});
+
+builder.Services.AddTransient<ResponseHeaderActionFilter>();
+//it adds controllers and views as services
 builder.Services.AddControllersWithViews(options =>
 {
     //options.Filters.Add<ResponseHeaderActionFilter>(5);
-    options.Filters.Add(new ResponseHeaderActionFilter("My-Key-From-Global", "My-Value-From-Global", 2));
+
+    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
+
+    options.Filters.Add(new ResponseHeaderActionFilter(logger)
+    {
+        Key = "My-Key-From-Global",
+        Value = "My-Value-From-Global",
+        Order = 2
+    });
 });
 
 //add services into IoC container
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IPeopleRepository, PeopleRepository>();
+
 builder.Services.AddScoped<ICountriesService, CountriesService>();
 builder.Services.AddScoped<IPeopleService, PeopleService>();
-builder.Services.AddHttpLogging(options =>
-{
-    options.LoggingFields =
-        HttpLoggingFields.RequestProperties |
-        HttpLoggingFields.ResponsePropertiesAndHeaders;
-});
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -44,11 +47,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddTransient<PeopleListActionFilter>();
 
+builder.Services.AddHttpLogging(options =>
+{
+    options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestProperties | Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponsePropertiesAndHeaders;
+});
+
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
 
-// Crete application pipeline
+//create application pipeline
 if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -56,16 +64,8 @@ if (builder.Environment.IsDevelopment())
 
 app.UseHttpLogging();
 
-//app.Logger.LogDebug("debug-message");
-//app.Logger.LogInformation("information-message");
-//app.Logger.LogWarning("warning-message");
-//app.Logger.LogError("error-message");
-//app.Logger.LogCritical("critical-message");
-
 if (builder.Environment.IsEnvironment("Test") == false)
-{
-    RotativaConfiguration.Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa");
-}
+    Rotativa.AspNetCore.RotativaConfiguration.Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa");
 
 app.UseStaticFiles();
 app.UseRouting();
@@ -73,7 +73,4 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program //make the auto-generated Program accessible programatically 
-{
-
-}
+public partial class Program { } //make the auto-generated Program accessible programmatically
