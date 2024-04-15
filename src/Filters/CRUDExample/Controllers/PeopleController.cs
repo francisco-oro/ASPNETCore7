@@ -37,7 +37,7 @@ namespace CRUDExample.Controllers
         [Route("[action]")]
         [Route("/")]
         [ServiceFilter(typeof(PeopleListActionFilter), Order = 4)]
-        [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Action", "My-Value-From-Action", 1}, Order = 1)]
+        //[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Action", "My-Value-From-Action", 1}, Order = 1)]
         [ResponseHeaderFilterFactory("My-Key-From-Action", "My-Value-From-Action", 1)]
         [TypeFilter(typeof(PeopleListResultFilter))]
         [SkipFilter]
@@ -57,7 +57,7 @@ namespace CRUDExample.Controllers
         // Executes when the user clicks on "Create Person" button 
         [Route("[action]")]
         [HttpGet]
-        [ResponseHeaderFilterFactory("my-key", "my-value", 4)]
+        //[ResponseHeaderFilterFactory("my-key", "my-value", 4)]
         public async Task<IActionResult> Create()
         {
             List<CountryResponse?> countries = await _countriesService.GetAllCountries();

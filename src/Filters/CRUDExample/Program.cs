@@ -21,7 +21,7 @@ builder.Services.AddTransient<ResponseHeaderActionFilter>();
 //it adds controllers and views as services
 builder.Services.AddControllersWithViews(options =>
 {
-    //options.Filters.Add<ResponseHeaderActionFilter>(5);
+    //////options.Filters.Add<ResponseHeaderActionFilter>(5);
 
     var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
 
