@@ -492,3 +492,18 @@ a.link-hover:hover
         flex-direction: row;
     }
 }
+
+a.button-link:link, a.button-link:visited {
+    color: #ffffff;
+    padding: 8px 12px;
+    border: 8px solid #cacaca;
+    border-radius: 8px;
+    outline: 3px solid #ffffff;
+    font-size: 105%;
+    text-decoration: none;
+    display: inline-block
+}
+
+a.link-hover:hover {
+    background-color: #e5e5e5; 
+}
