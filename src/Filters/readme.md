@@ -744,68 +744,68 @@ public IActionResult ActionMethod()
 - Filter class SHOULD be registered (added) to the IoC container, much like any other service.
 
 - Filter classes CAN inject services using both constructor injection or method injection.
+  
 
 
 
 
+### Filter attribtute classes
+### IActionFilter [vs] ActionFilterAttribute
 
-Filter attribtute classes
-IActionFilter [vs] ActionFilterAttribute
+### [versus]
 
-[versus]
-
-Action filter that implements 'IActionFilter'
-
+### Action filter that implements 'IActionFilter'
+```c#
 public class FilterClassName : IActionFilter, IOrderedFilter
 {
   //supports constructor DI
 }
+```
 
-
-Action filter that inherits 'ActionFilterAttribute'
-
+### Action filter that inherits 'ActionFilterAttribute'
+```c#
 public class FilterClassName : ActionFilterAttribute
 {
   //doesn't support constructor DI
 }
+```
 
+### Filter interfaces:
 
-Filter interfaces:
+- IAuthorizationFilter
 
-IAuthorizationFilter
+- IResourceFilter
 
-IResourceFilter
+- IActionFilter
 
-IActionFilter
+- IExceptionFilter
 
-IExceptionFilter
+- IResultFilter
 
-IResultFilter
+- IAsyncAuthorizationFilter
 
-IAsyncAuthorizationFilter
+- IAsyncResourceFilter
 
-IAsyncResourceFilter
+- IAsyncActionFilter
 
-IAsyncActionFilter
+- IAsyncExceptionFilter
 
-IAsyncExceptionFilter
-
-IAsyncResultFilter
-
-
-
-Filter attributes:
-
-ActionFilterAttribute
-
-ExceptionFilterAttribute
-
-ResultFilterAttribute
+- IAsyncResultFilter
 
 
 
-Action filter that implements 'IActionFilter'
+### Filter attributes:
 
+- ActionFilterAttribute
+
+- ExceptionFilterAttribute
+
+- ResultFilterAttribute
+
+
+
+### Action filter that implements 'IActionFilter'
+```c#
 public class FilterClassName : IActionFilter, IOrderedFilter
 {
   public int Order { get; set; }
@@ -826,12 +826,12 @@ public class FilterClassName : IActionFilter, IOrderedFilter
 
 [TypeFilter(typeof(FilterClassName),
 Arguments = new object[] { arg1, … })]
+```
 
 
 
-
-Action filter that inherits 'ActionFilterAttribute'
-
+### Action filter that inherits 'ActionFilterAttribute'
+```c#
 public class FilterClassName : ActionFilterAttribute
 {
   public FilterClassName(type arg)
@@ -848,13 +848,13 @@ public class FilterClassName : ActionFilterAttribute
 }
 [FilterClassName(arg1, … )]
 
+```
 
 
 
-
-Internal definitions of IActionFilter and ActionFilterAttribute
-IActionFilter
-
+## Internal definitions of IActionFilter and ActionFilterAttribute
+### IActionFilter
+```c#
 namespace Microsoft.AspNetCore.Mvc.Filters
 {
   public interface IActionFilter : IFilterMetadata
@@ -863,10 +863,10 @@ namespace Microsoft.AspNetCore.Mvc.Filters
     void OnActionExecuted(ActionExecutedContext context);
   }
 }
+```
 
-
-ActionFilterAttribute
-
+### ActionFilterAttribute
+```c#
 namespace Microsoft.AspNetCore.Mvc.Filters
 {
   public class ActionFilterAttribute : Attribute, IActionFilter, IAsyncActionFilter, IOrderedFilter, IResultFilter, IAsyncResultFilter
@@ -880,50 +880,50 @@ namespace Microsoft.AspNetCore.Mvc.Filters
     public int Order { get; set; }
   }
 }
+```
+
+
+
+## Filter interface [vs] FilterAttribute class
+### Filter interface [such as IActionFilter, IResultFilter etc.]
+
+- Filter class MUST implement all methods - both "Executing" and "Executed" methods.
+
+- Filter class CAN have DI with either constructor injection or method injection.
+
+- Doesn't implement "Attribute" class.
+
+- Filter should be applied to controller or action methods by using [ServiceFilter] or [TypeFilter] attributes; otherwise can be applied as global filter in the Program.cs.
+
+- Eg: [TypeFilter(typeof(FilterClassName))] //lengthy
+
+- Filter class can receive arguments only through constructor parameters; but only with [TypeFilter] attribute; not with [ServiceFilter] attribute.
+
+
+
+### FilterAttribute class [such as ActionFilterAttribute etc.]
+
+- Filter class MAY override desired (either or both methods - "Executing" and "Executed") methods.
+
+- Filter class CAN'T have DI with neither constructor injection nor method injection.
+
+- FilterAttribute class [such as ActionFilterAttribute etc.]
+
+- Filter can be applied to controller or action methods by directly using the filter class name itself (without using [ServiceFilter] or [TypeFilter] attributes); otherwise can be applied as global filter in the Program.cs.
+
+- Eg: [FilterClassName] //simple
+
+- Filter class can receive arguments either through constructor parameters or filter class's properties.
 
 
 
 
-Filter interface [vs] FilterAttribute class
-Filter interface [such as IActionFilter, IResultFilter etc.]
-
-Filter class MUST implement all methods - both "Executing" and "Executed" methods.
-
-Filter class CAN have DI with either constructor injection or method injection.
-
-Doesn't implement "Attribute" class.
-
-Filter should be applied to controller or action methods by using [ServiceFilter] or [TypeFilter] attributes; otherwise can be applied as global filter in the Program.cs.
-
-Eg: [TypeFilter(typeof(FilterClassName))] //lengthy
-
-Filter class can receive arguments only through constructor parameters; but only with [TypeFilter] attribute; not with [ServiceFilter] attribute.
 
 
 
-FilterAttribute class [such as ActionFilterAttribute etc.]
-
-Filter class MAY override desired (either or both methods - "Executing" and "Executed") methods.
-
-Filter class CAN'T have DI with neither constructor injection nor method injection.
-
-FilterAttribute class [such as ActionFilterAttribute etc.]
-
-Filter can be applied to controller or action methods by directly using the filter class name itself (without using [ServiceFilter] or [TypeFilter] attributes); otherwise can be applied as global filter in the Program.cs.
-
-Eg: [FilterClassName] //simple
-
-Filter class can receive arguments either through constructor parameters or filter class's properties.
-
-
-
-
-
-
-
-IFilterFactory
-Filter factory that inherits 'IFilterFactory'
-
+## IFilterFactory
+### Filter factory that inherits 'IFilterFactory'
+```c#
 public class FilterClassNameAttribute : Attribute,
 IFilterFactory
 {
@@ -943,13 +943,13 @@ IFilterFactory
   }
 }
 [FilterClassName(arg1, arg2, … )]
+```
 
 
 
 
-
-Action filter that inherits 'ActionFilterAttribute'
-
+### Action filter that inherits 'ActionFilterAttribute'
+```c#
 public class FilterClassName : ActionFilterAttribute
 {
   public FilterClassName(type arg1, type arg2)
@@ -965,13 +965,12 @@ public class FilterClassName : ActionFilterAttribute
   }
 }
 [FilterClassName(arg1, arg2, … )]
+```
 
 
 
-
-
-IFilterFactory
-
+### IFilterFactory
+```c#
 namespace Microsoft.AspNetCore.Mvc.Filters
 {
   public interface IFilterFactory : IFilterMetadata
@@ -980,27 +979,27 @@ namespace Microsoft.AspNetCore.Mvc.Filters
      bool IsReusable { get; }
   }
 }
+```
 
 
 
+### FilterAttribute class [such as ActionFilterAttribute etc.]
 
-FilterAttribute class [such as ActionFilterAttribute etc.]
+- Filter CAN be applied as an attribute to the controller or action method. Eg: [FilterClassName]
 
-Filter CAN be applied as an attribute to the controller or action method. Eg: [FilterClassName]
+- Filter class CAN'T have DI with neither constructor injection nor method injection.
 
-Filter class CAN'T have DI with neither constructor injection nor method injection.
-
-Filter class CAN receive arguments either through constructor parameters or filter class's properties.
-
+- Filter class CAN receive arguments either through constructor parameters or filter class's properties.
 
 
-IFilterFactory
 
-Filter CAN be applied as an attribute to the controller or action method. Eg: [FilterClassName]
+### IFilterFactory
 
-Filter class CAN have DI with either constructor injection or method injection.
+- Filter CAN be applied as an attribute to the controller or action method. Eg: [FilterClassName]
 
-Filter class CAN receive arguments only through filter class's properties, if it is instantiated through ServiceProvider (using DI).
+- Filter class CAN have DI with either constructor injection or method injection.
+
+- Filter class CAN receive arguments only through filter class's properties, if it is instantiated through ServiceProvider (using DI).
 
 
 
@@ -1010,9 +1009,11 @@ Alternatively, if you don't need to inject services using DI in the filter class
 
 
 
-Filters [vs] Middleware
+## Filters [vs] Middleware
 
-Middleware
+![filters_vs_middleware](assets/filters_vs_middleware.png)
+
+### Middleware
 
 Middleware pipeline is a superset of Filter pipeline, which contains the full-set of all middlewares added to the ApplicationBuilder in the application's startup code (Program.cs).
 
@@ -1022,7 +1023,7 @@ Middleware handles application-level functionality such as Logging, HTTPS redire
 
 
 
-Filter
+### Filter
 
 Filter pipeline is a subset of Middleware pipeline which executes under "EndPoint Middleware".
 
@@ -1030,10 +1031,33 @@ In addition, filter pipeline executes for requests that reach "EndPoint Middlewa
 
 Filters handle MVC-specific functionality such as manipulating or accessing ViewData, ViewBag, ModleState, Action result, Action parameters etc.
 
-Middleware Pipeline
+### Middleware Pipeline
 
+![middleware_pipeline](assets/middleware_pipeline.png)
 
+# Interview Questions 
 
+## Explain different types of filters
+- Authorization Filter: Determines whether the user is authorized or not to access the action method
 
+## Explain request processing pipeline [or] filter pipeline in asp.net core?
+- Filter pipeline is a subset of Middleware pipeline
 
+- It executes under "Endpoint Middleware"
 
+- It contains a series of methods to be executed programmatically. These methods handle MVC-specific functionality regarding manipulating ViewData, ViewBag, ModelState, Action Result and Action Parameters.
+## How cookies work in asp.net core?
+- ASP.NET Core uses cookies to mantain session state; the cookie that contains the session ID is sent within each request to the client. 
+
+- You can read a cookie from the Request.Cookies collection
+```
+c#string cookie = Request.Cookies["Key"] 
+```
+## How do you short circuit the request in an action filter?
+- By assigning any type of IActionResult to context.Result field
+- By not calling next() ActionExecuteDelegate
+## How do you use dependency injection in action filter?
+- By implementing the IActionFilter interface. 
+## How do you override order of filters?
+
+## How will you add global filters?
