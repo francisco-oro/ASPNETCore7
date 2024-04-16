@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using CRUDExample.Filters.ActionFilters;
+﻿using CRUDExample.Filters.ActionFilters;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
@@ -11,7 +10,7 @@ namespace CRUDExample.StartupExtensions
 {
     public static class ConfigureServicesExtension
     {
-        public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<ResponseHeaderActionFilter>();
             //it adds controllers and views as services
@@ -28,7 +27,7 @@ namespace CRUDExample.StartupExtensions
                     Order = 2
                 });
             });
-
+             
             //add services into IoC container
             services.AddScoped<ICountriesRepository, CountriesRepository>();
             services.AddScoped<IPeopleRepository, PeopleRepository>();
@@ -48,6 +47,7 @@ namespace CRUDExample.StartupExtensions
                 options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestProperties | Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponsePropertiesAndHeaders;
             });
 
+            return services;
         }
     }
 }

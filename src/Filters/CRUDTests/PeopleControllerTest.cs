@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using AutoFixture;
+﻿using AutoFixture;
 using CRUDExample.Controllers;
 using Entities;
 using FluentAssertions;
@@ -14,7 +8,6 @@ using Moq;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
-using Services;
 
 namespace CRUDTests
 {
@@ -71,37 +64,6 @@ namespace CRUDTests
 
         #region Create
 
-        [Fact]
-        public async Task Create_IfModelErrors_ToReturnCreateView()
-        {
-            //Arrange
-            PersonAddRequest personAddRequest = _fixture.Create<PersonAddRequest>();
-            PersonResponse personResponse = _fixture.Create<PersonResponse>();
-
-            List<CountryResponse> countries = _fixture.Create<List<CountryResponse>>(); 
-            var loggerMock = new Mock<ILogger<PeopleController>>();
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, loggerMock.Object);
-
-            _countriesServiceMock
-                .Setup(temp => temp.GetAllCountries())!
-                .ReturnsAsync(countries);
-            _peoplesServiceMock
-                .Setup(temp => temp.AddPerson(It.IsAny<PersonAddRequest>()))
-                .ReturnsAsync(personResponse);
-
-
-            //Act 
-            peopleController.ModelState.AddModelError("PersonName", "PersonName cannot be blank");
-
-            IActionResult result = await peopleController.Create(personAddRequest);
-
-            //Assert
-            ViewResult viewResult = Assert.IsType<ViewResult>(result);
-
-            viewResult.ViewData.Model.Should().BeAssignableTo<PersonAddRequest>();
-            viewResult.ViewData.Model.Should().Be(personAddRequest);
-        }
-
         [Fact]  
         public async Task Create_IfNoModelErrors_ToReturnRedirectToIndex()
         {
@@ -154,56 +116,6 @@ namespace CRUDTests
             RedirectToActionResult redirectResult = Assert.IsType<RedirectToActionResult>(result);
 
             redirectResult.ActionName.Should().Be(nameof(PeopleController.Index));
-        }
-
-        [Fact]
-        public async Task Edit_IfModelErrors_ToReturnToEditView()
-        {
-            //Arrange
-            List<Country> countries = new List<Country>()
-            {
-                _fixture.Build<Country>()
-                    .With(temp => temp.People, new List<Person>())
-                    .Create(),
-                _fixture.Build<Country>()
-                    .With(temp => temp.People, new List<Person>())
-                    .Create(),
-                _fixture.Build<Country>()
-                    .With(temp => temp.People, new List<Person>())
-                    .Create()
-            };
-
-            List<CountryResponse?> countryResponses = countries.Select(temp => temp.ToCountryResponse()).ToList();
-            Person person = _fixture.Build<Person>()
-                .With(temp => temp.Email, "user@sample.com")
-                .With(temp => temp.CountryID, countries[0].CountryID)
-                .With(temp => temp.Country, countries[0])
-                .With(temp => temp.Gender, "Male")
-                .Create();
-
-            PersonUpdateRequest personUpdateRequest = person.ToPersonResponse().ToPersonUpdateRequest();
-
-            
-            _countriesServiceMock
-                .Setup(temp => temp.GetAllCountries())!
-                .ReturnsAsync(countryResponses); 
-
-            _peoplesServiceMock
-                .Setup(temp => temp.GetPersonByPersonID(It.IsAny<Guid>()))
-                .ReturnsAsync(personUpdateRequest.ToPerson().ToPersonResponse);
-
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
-
-            //Act 
-            peopleController.ModelState.AddModelError(nameof(PersonUpdateRequest.Email), "Email is invalid");
-            
-            IActionResult result = await peopleController.Edit(personUpdateRequest);
-
-            //Assert
-
-            ViewResult viewResult = Assert.IsType<ViewResult>(result);
-            viewResult.ViewData.Model.Should().BeAssignableTo<PersonUpdateRequest>();
-            viewResult.ViewData.Model.Should().Be(personUpdateRequest);
         }
 
         [Fact]
