@@ -119,22 +119,24 @@ builder.Services.AddControllersWithViews(options => {
 
 ## Custom Order of Filters
 
+![custom_order_of_filters](assets/custom_order_of_filters.png)
 
 
 
 
 
-IOrderedFilter
-Example
+## IOrderedFilter
+### Example
+
+![iorderedfilter](assets/iorderedfilter.png)
 
 
 
 
 
-
-IOrderedFilter
-Action filter with IOrderedFilter
-
+## IOrderedFilter
+### Action filter with IOrderedFilter
+```c#
 public class FilterClassName : IActionFilter, IOrderedFilter
 {
   public int Order { get; set; } //Defines sequence of execution
@@ -155,12 +157,12 @@ public class FilterClassName : IActionFilter, IOrderedFilter
   }
 }
 
+```
 
 
-
-Async Filters
-Asynchronous Action Filter
-
+## Async Filters
+### Asynchronous Action Filter
+```c#
 public class FilterClassName : IAsyncActionFilter, IOrderedFilter
 {
   public int Order { get; set; } //Defines sequence of execution
@@ -177,42 +179,43 @@ public class FilterClassName : IAsyncActionFilter, IOrderedFilter
     //TO DO: after logic here
   }
 }
+```
 
 
 
+## Short-circuiting Filters
+### Action Filters
 
-Short-circuiting Filters
-Action Filters
-
-When it runs
+### When it runs
 
 Runs immediately before and after an action method executes.
 
 
 
-'OnActionExecuting' method
+### 'OnActionExecuting' method
 
-It can access the action method parameters, read them & do necessary manipulations on them.
+- It can access the action method parameters, read them & do necessary manipulations on them.
 
-It can validate action method parameters.
+- It can validate action method parameters.
 
-It can short-circuit the action (prevent action method from execution) and return a different IActionResult.
-
-
-
-'OnActionExecuted' method
-
-It can manipulate the ViewData.
-
-It can change the result returned from the action method.
-
-It can throw exceptions to either return the exception to the exception filter (if exists); or return the error response to the browser.
+- It can short-circuit the action (prevent action method from execution) and return a different IActionResult.
 
 
 
+### 'OnActionExecuted' method
+
+- It can manipulate the ViewData.
+
+- It can change the result returned from the action method.
+
+- It can throw exceptions to either return the exception to the exception filter (if exists); or return the error response to the browser.
 
 
-Short-Circuiting Action Filter
+
+
+
+## Short-Circuiting Action Filter
+```c#
 public class FilterClassName : IAsyncActionFilter, IOrderedFilter
 {
  public int Order { get; set; } //Defines sequence of execution
@@ -229,46 +232,47 @@ public class FilterClassName : IAsyncActionFilter, IOrderedFilter
   //Not calling next(). So it leads remaining filters & action method short-circuited.
  }
 }
+```
+
+
+## Short-Circuiting (exit) the filters
 
 
 
-
-Short-Circuiting (exit) the filters
-
+![short-cirucuiting_the_filters](assets/short-cirucuiting_the_filters.png)
 
 
+## Result Filter
+
+![result_filter](assets/result_filter.png)
 
 
-Result Filter
+### When it runs
 
+- Runs immediately before and after an IActionResult executes.
 
-
-When it runs
-
-Runs immediately before and after an IActionResult executes.
-
-It can access the IActionResult returned by the action method.
+- It can access the IActionResult returned by the action method.
 
 
 
-'OnResultExecuting' method
+### 'OnResultExecuting' method
 
-It can continue executing the IActionResult normally, by not assigning "Result" property of the context.
+- It can continue executing the IActionResult normally, by not assigning "Result" property of the context.
 
-It can short-circuit the action (prevent IActionResult from execution) and return a different IActionResult.
-
-
-
-'OnResultExecuted' method
-
-It can manipulate the last-moment changes in the response, such as adding necessary response headers.
-
-It should not throw exceptions because, exceptions raised in result filters would not be caught by the exception filter.
+- It can short-circuit the action (prevent IActionResult from execution) and return a different IActionResult.
 
 
 
-Synchronous Result Filter
+### 'OnResultExecuted' method
 
+- It can manipulate the last-moment changes in the response, such as adding necessary response headers.
+
+- It should not throw exceptions because, exceptions raised in result filters would not be caught by the exception filter.
+
+
+
+#### Synchronous Result Filter
+```c#
 public class FilterClassName : IResultFilter, IOrderedFilter
 {
   public int Order { get; set; } //Defines sequence of execution
@@ -286,10 +290,10 @@ public class FilterClassName : IResultFilter, IOrderedFilter
     //TO DO: after logic here
   }
 }
+```
 
-
-Asynchronous Result Filter
-
+#### Asynchronous Result Filter
+```c#
 public class FilterClassName : IAsyncResultFilter, IOrderedFilter
 {
   public int Order { get; set; } //Defines sequence of execution
@@ -306,40 +310,41 @@ public class FilterClassName : IAsyncResultFilter, IOrderedFilter
   //TO DO: after logic here
   }
 }
+```
 
 
 
+## Resource Filter
+![resource_filter](assets/resource_filter.png)
 
-Resource Filter
 
 
-
-When it runs
+### When it runs
 
 Runs immediately after Authorize Filter and after Result Filter executes.
 
 
 
-'OnResourceExecuting' method
+### 'OnResourceExecuting' method
 
-It can do some work before model binding. Eg: Adding metrics to an action method.
+- It can do some work before model binding. Eg: Adding metrics to an action method.
 
-It can change the way how model binding works (invoking a custom model binder explicitly).
+- It can change the way how model binding works (invoking a custom model binder explicitly).
 
-It can short-circuit the action (prevent IActionResult from execution) and return a different IActionResult.
+- It can short-circuit the action (prevent IActionResult from execution) and return a different IActionResult.
 
-Eg: Short-circuit if an unsupported content type is requested.
+- Eg: Short-circuit if an unsupported content type is requested.
 
 
 
-'OnResourceExecuted' method
+### 'OnResourceExecuted' method
 
 It can read the response body and store it in cache.
 
 
 
-Synchronous Resource Filter
-
+### Synchronous Resource Filter
+```c#
 public class FilterClassName : IResourceFilter, IOrderedFilter
 {
   public int Order { get; set; } //Defines sequence of execution
@@ -359,10 +364,10 @@ public class FilterClassName : IResourceFilter, IOrderedFilter
     //TO DO: after logic here
   }
 }
+```
 
-
-Asynchronous Resource Filter
-
+### Asynchronous Resource Filter
+```c#
 public class FilterClassName : IAsyncResourceFilter, IOrderedFilter
 {
   public int Order { get; set; } //Defines sequence of execution
@@ -379,32 +384,33 @@ public class FilterClassName : IAsyncResourceFilter, IOrderedFilter
     //TO DO: after logic here
   }
 }
+```
 
 
 
+## Authorization Filter
 
-Authorization Filter
+![authorization_filter](assets/authorization_filter.png)
 
 
-
-Authorization Filters
+### Authorization Filters
 
 Runs before any other filters in the filter pipeline.
 
 
 
-'OnAuthorize' method
+### 'OnAuthorize' method
 
-Determines whether the user is authorized for the request.
+- Determines whether the user is authorized for the request.
 
-Short-circuits the pipeline if the request is NOT authorized.
+- Short-circuits the pipeline if the request is NOT authorized.
 
-Don't throw exceptions in OnAuthorize method, as they will not be handled by exception filters.
+- Don't throw exceptions in OnAuthorize method, as they will not be handled by exception filters.
 
 
 
-Synchronous Authorization Filter
-
+### Synchronous Authorization Filter
+```c#
 public class FilterClassName : IAuthorizationFilter
 {
   public void OnAuthorization(AuthorizationFilterContext context)
@@ -412,10 +418,10 @@ public class FilterClassName : IAuthorizationFilter
     //TO DO: authorization logic here
   }
 }
+```
 
-
-Asynchronous Authorization Filter
-
+### Asynchronous Authorization Filter
+```c#
 public class FilterClassName : IAsyncAuthorizationFilter
 {
   public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
@@ -424,31 +430,32 @@ public class FilterClassName : IAsyncAuthorizationFilter
   }
 }
 
+```
 
 
-
-Exception Filter
-
+## Exception Filter
 
 
-When it runs
+![exception_filter](assets/exception_filter.png)
+
+### When it runs
 
 Runs when an exception is raised during the filter pipeline.
 
 
 
-'OnException method
+### 'OnException method
 
-Handles unhandled exceptions that occur in controller creation, model binding, action filters or action methods.
+- Handles unhandled exceptions that occur in controller creation, model binding, action filters or action methods.
 
-Doesn't handle the unhandled exceptions that occur in authorization filters, resource filters, result filters or IActionResult execution.
+- Doesn't handle the unhandled exceptions that occur in authorization filters, resource filters, result filters or IActionResult execution.
 
-Recommended to be used only when you want a different error handling and generate different result for specific controllers; otherwise, ErrorHandlingMiddleware is recommended over Exception Filters.
+- Recommended to be used only when you want a different error handling and generate different result for specific controllers; otherwise, ErrorHandlingMiddleware is recommended over Exception Filters.
 
 
 
-Synchronous Exception Filter
-
+### Synchronous Exception Filter
+```c#
 public class FilterClassName : IAsyncExceptionFilter
 {
   public async Task OnExceptionAsync(ExceptionFilterContext context)
@@ -460,10 +467,10 @@ public class FilterClassName : IAsyncExceptionFilter
     return Task.CompletedTask;
   }
 }
+```
 
-
-Asynchronous Exception Filter
-
+### Asynchronous Exception Filter
+```c#
 public class FilterClassName : IAsyncExceptionFilter
 {
   public async Task OnExceptionAsync(ExceptionFilterContext context)
@@ -475,98 +482,111 @@ public class FilterClassName : IAsyncExceptionFilter
     return Task.CompletedTask;
   }
 }
+```
+
+
+
+### Impact of Short-Circuiting
+### Short-circuiting Authorization Filter
+
+![short-circuiting_authorization_filter](assets/short-circuiting_authorization_filter.png)
+
+
+
+### Short-circuiting Resource Filter
+
+![short-circuiting_resource_filter](assets/short-circuiting_resource_filter.png)
+
+
+
+### Short-circuiting Action Filter
+
+
+![short-circuiting_action_filter](assets/short-circuiting_action_filter.png)
+
+
+### Short-circuiting Exception Filter
+
+
+![short-circuiting_exception_filter](assets/short-circuiting_exception_filter.png)
+
+
+### Short-circuiting Result Filter
+
+
+![short-circuiting_result_filter](assets/short-circuiting_result_filter.png)
+
+
+### Short-circuiting the filters
+
+![short-circuiting_the_filters_1](assets/short-circuiting_the_filters_1.png)
+![short-circuiting_the_filters_2](assets/short-circuiting_the_filters_2.png)
+![short-circuiting_the_filters_3](assets/short-circuiting_the_filters_3.png)
 
 
 
 
-Impact of Short-Circuiting
-Short-circuiting Authorization Filter
-
-
-
-
-Short-circuiting Resource Filter
-
-
-
-
-Short-circuiting Action Filter
-
-
-
-
-Short-circuiting Exception Filter
-
-
-
-
-Short-circuiting Result Filter
-
-
-
-
-Short-circuiting the filters
 
 
 
 
 
+## AlwaysRun Result Filter
+### Short-circuiting Authorization Filter
+
+![short-circuiting_authorization_filter_1](assets/short-circuiting_authorization_filter_1.png)
+
+
+
+### Short-circuiting Resource Filter
+
+![short-circuiting_resource_filter_1](assets/short-circuiting_resource_filter_1.png)
+
+
+
+### Short-circuiting Action Filter
+
+![short-circuiting_action_filter_1](assets/short-circuiting_action_filter_1.png)
+
+
+
+### Short-circuiting Exception Filter
+
+![short-circuiting_exception_filter_1](assets/short-circuiting_exception_filter_1.png)
+
+
+
+### Short-circuiting Result Filter
+![short-circuiting_result_filter_1](assets/short-circuiting_result_filter_1.png)
 
 
 
 
-
-AlwaysRun Result Filter
-Short-circuiting Authorization Filter
-
-
-
-
-Short-circuiting Resource Filter
-
-
-
-
-Short-circuiting Action Filter
-
-
-
-
-Short-circuiting Exception Filter
-
-
-
-
-Short-circuiting Result Filter
-
-
-
-
-When AlwaysRunResultFilter runs
+### When AlwaysRunResultFilter runs
 
 Runs immediately before and after result filters.
 
 
 
-Result filters:
+### Result filters:
 
 Doesn't execute when authorization filter, resource filter or exception filter short-circuits.
 
 
 
-AlwaysRunResult filter:
+### AlwaysRunResult filter:
 
 Execute always even when authorization filter, resource filter or exception filter short-circuits.
 
 
 
-'OnResultExecuting' method
+### 'OnResultExecuting' method
 
 Same as Result filter
 
 
 
-'OnResultExecuted' method
+### 'OnResultExecuted' method
 
 Same as Result filter
 
@@ -574,8 +594,8 @@ Same as Result filter
 
 
 
-Synchronous Always Run Result Filter
-
+### Synchronous Always Run Result Filter
+```c#
 public class FilterClassName : IAlwaysRunResultFilter
 {
   public void OnResultExecuting(ResultExecutingContext context)
@@ -587,12 +607,12 @@ public class FilterClassName : IAlwaysRunResultFilter
     //TO DO: after logic here
   }
 }
+```
 
 
 
-
-Asynchronous Always Run Result Filter
-
+### Asynchronous Always Run Result Filter
+```c#
 public class FilterClassName : IAsyncAlwaysRunResultFilter
 {
   public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
@@ -602,9 +622,10 @@ public class FilterClassName : IAsyncAlwaysRunResultFilter
    //TO DO: after logic here
   }
 }
+```
 
-
-Filter Overrides
+## Filter Overrides
+```c#
 [TypeFilter(typeof(FilterClassName))] //filter applied at controller level
 public class ControllerName : Controller
 {
@@ -615,25 +636,28 @@ public class ControllerName : Controller
   {
   }
 }
+```
 
-
-Attribute to be applied to desired action method
-
+### Attribute to be applied to desired action method
+```c#
 public class SkipFilterAttribute : Attribute, IFilterMetadata
 {
 }
+```
 
+### Action method
 
-Action method
-
+```c#
 [SkipFilter]
 public IActionResult ActionMethod()
 {
 }
 
+```
 
-Filter that respects 'SkipFilterAttribute'
+### Filter that respects 'SkipFilterAttribute'
 
+```c#
 public class FilterClassName : IActionFilter //or any other filter interface
 {
   public void OnActionExecuting(ActionExecutingContext context)
@@ -651,6 +675,7 @@ public class FilterClassName : IActionFilter //or any other filter interface
     //TO DO: after logic here
   }
 }
+```
 It skips execution of code of a filter, for specific action methods.
 
 
@@ -659,66 +684,66 @@ It skips execution of code of a filter, for specific action methods.
 
 
 
-[ServiceFilter]
-Common purpose
+## [ServiceFilter]
+### Common purpose
 
 Both are used to apply a filter a controller or action method.
 
 
 
-Type Filter Attribute
-
+### Type Filter Attribute
+```c#
 //can supply arguments to filter
 [TypeFilter(typeof(FilterClassName), Arguments = new object[] { arg1, arg2 })]
 public IActionResult ActionMethod()
 {
   …
 }
+```
 
-
-Service Filter Attribute
-
+### Service Filter Attribute
+```c#
 //can't supply arguments to filter
 [ServiceFilter(typeof(FilterClassName))]
 public IActionResult ActionMethod()
 {
   …
 }
+```
 
 
 
+### Type Filter
 
-Type Filter
+- Can supply arguments to the filter.
 
-Can supply arguments to the filter.
+- Filter instances are created by using Microsoft.Extensions.DependencyInjection. ObjectFactory.
 
-Filter instances are created by using Microsoft.Extensions.DependencyInjection. ObjectFactory.
+- They're NOT created using DI (Dependency Injection).
 
-They're NOT created using DI (Dependency Injection).
+- The lifetime of filter instances is by default transient (a new filter instance gets created every time when it is invoked).
 
-The lifetime of filter instances is by default transient (a new filter instance gets created every time when it is invoked).
+- But optionally, you can re-use the same instance of filter class across multiple requests, by setting a property called TypeFilterAttribute.IsReusable to 'true'.
 
-But optionally, you can re-use the same instance of filter class across multiple requests, by setting a property called TypeFilterAttribute.IsReusable to 'true'.
+- Filter classes NEED NOT be registered (added) to the IoC container.
 
-Filter classes NEED NOT be registered (added) to the IoC container.
-
-Filter classes CAN inject services using both constructor injection or method injection.
-
+- Filter classes CAN inject services using both constructor injection or method injection.
 
 
-Service Filter
 
-Can't supply arguments to the filter.
+### Service Filter
 
-Filter instances are created by using ServiceProvider (using DI).
+- Can't supply arguments to the filter.
 
-The lifetime of filter instances is the actual lifetime of the filter class added in the IoC container.
+- Filter instances are created by using ServiceProvider (using DI).
 
-Eg: If the filter class is added to the IoC container with AddScoped() method, then its instances are scoped.
+- The lifetime of filter instances is the actual lifetime of the filter class added in the IoC container.
 
-Filter class SHOULD be registered (added) to the IoC container, much like any other service.
+- Eg: If the filter class is added to the IoC container with AddScoped() method, then its instances are scoped.
 
-Filter classes CAN inject services using both constructor injection or method injection.
+- Filter class SHOULD be registered (added) to the IoC container, much like any other service.
+
+- Filter classes CAN inject services using both constructor injection or method injection.
 
 
 
