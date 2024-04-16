@@ -1,0 +1,34 @@
+[
+  {
+    "SellOrderID": "EE78A812-FBF9-495E-849C-F289CE661EE4",
+    "StockSymbol": "GGP",
+    "StockName": "GGP Inc.",
+    "DateAndTimeOfOrder": "2023-10-22",
+    "Quantity": 45,
+    "Price": 25.73
+  },
+  {
+    "SellOrderID": "6A68F8E7-8457-41BC-92DD-89880FB0D788",
+    "StockSymbol": "PEO",
+    "StockName": "Adams Natural  Resources Fund, Inc.",
+    "DateAndTimeOfOrder": "2023-09-25",
+    "Quantity": 15,
+    "Price": 15.08
+  },
+  {
+    "SellOrderID": "9723BD32-86A1-4974-9A4C-5C209DAD3579",
+    "StockSymbol": "SGU",
+    "StockName": "Star Gas Partners, L.P.",
+    "DateAndTimeOfOrder": "2024-02-03",
+    "Quantity": 792,
+    "Price": 64.70
+  },
+  {
+    "SellOrderID": "33EBA596-71D8-421D-99D0-F31AF0BBE439",
+    "StockSymbol": "BXE",
+    "StockName": "Bellatrix Exploration Ltd",
+    "DateAndTimeOfOrder": "2023-07-06",
+    "Quantity": 235,
+    "Price": 3.65
+  }
+]
