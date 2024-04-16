@@ -25,6 +25,7 @@ if (builder.Environment.IsDevelopment())
 }
 else
 {
+    app.UseExceptionHandler("/Error");
     app.UseExceptionHandlingMiddleware();
 }
 
