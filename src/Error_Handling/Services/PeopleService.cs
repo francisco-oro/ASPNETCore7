@@ -1,13 +1,9 @@
-﻿
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Globalization;
-using System.Reflection;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Entities;
-using Microsoft.EntityFrameworkCore;
+using Exceptions;
 using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
 using RepositoryContracts;
@@ -210,7 +206,7 @@ namespace Services
 
             if (matchingPerson == null)
             {
-                throw new ArgumentException("Given person doesn't exist");
+                throw new InvalidPersonIDException("Given person doesn't exist");
             }
 
             //Update all details

@@ -1,3 +1,4 @@
+using CRUDExample.Middleware;
 using Serilog;
 using CRUDExample.StartupExtensions;
 
@@ -22,7 +23,12 @@ if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+else
+{
+    app.UseExceptionHandlingMiddleware();
+}
 
+app.UseSerilogRequestLogging();
 app.UseHttpLogging();
 
 if (builder.Environment.IsEnvironment("Test") == false)
