@@ -1,11 +1,23 @@
 ﻿@model PersonUpdateRequest
 @{
-    ViewBag.Title = "Create Person";
+    ViewBag.Title = "Edit Person";
 }
-<a asp-controller="People" asp-action="Index" class="link-hover">Back to people list</a>
-<h2>Update Person</h2>
 
-<div class="center-box">
+<div class="flex">
+    <div class="flex-1">
+        <span class="text-grey">Contacts</span>
+        <i class="fa-solid fa-caret-right"></i>
+        <span class="text-grey">People</span>
+        <i class="fa-solid fa-caret-right"></i>
+        <span class="text-grey">Edit</span>
+    </div>
+</div>
+
+
+
+<div class="form-container">
+    <a asp-controller="People" asp-action="Index" class="link-hover">Back to people list</a>
+    <h2 class="text-large">Update Person</h2>
     <form asp-controller="People" asp-action="Edit" method="post">
         <input type="hidden" asp-for="PersonID"/>
 

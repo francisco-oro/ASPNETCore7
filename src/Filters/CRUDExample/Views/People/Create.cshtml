@@ -2,10 +2,23 @@
 @{
     ViewBag.Title = "Create Person";
 }
-<a asp-controller="People" asp-action="Index" class="link-hover">Back to people list</a>
-<h2>Create Person</h2>
 
-<div class="center-box">
+<div class="flex">
+    <div class="flex-1">
+        <span class="text-grey">Contacts</span>
+        <i class="fa-solid fa-caret-right"></i>
+        <span class="text-grey">People</span>
+        <i class="fa-solid fa-caret-right"></i>
+        <span class="text-grey">Create</span>
+
+    </div>
+</div>
+
+
+
+<div class="form-container">
+    <a asp-controller="People" asp-action="Index" class="link-hover">Back to people list</a>
+    <h2 class="text-large">Create Person</h2>
     <form asp-controller="People" asp-action="Create" method="post">
         @* PersonName *@
         <div class="form-field flex">
@@ -17,7 +30,7 @@
                 <span asp-validation-for="PersonName" class="text-red"></span>
             </div>
         </div>
-        
+
         @* Email *@
         <div class="form-field flex">
             <div class="flex-1">
@@ -29,7 +42,7 @@
 
             </div>
         </div>
-        
+
         @* DateOfBirth *@
         <div class="form-field flex">
             <div class="flex-1">
@@ -41,7 +54,7 @@
 
             </div>
         </div>
-        
+
         @* Gender *@
         <div class="form-field flex">
             <div class="flex-1">
@@ -60,7 +73,7 @@
 
             </div>
         </div>
-        
+
         @* Country *@
         <div class="form-field flex">
             <div class="w-25">
@@ -74,7 +87,7 @@
 
             </div>
         </div>
-        
+
         @* Address *@
         <div class="form-field flex">
             <div class="w-25">
@@ -86,26 +99,26 @@
 
             </div>
         </div>
-        
+
         @* ReceiveNewsLetters *@
         <div class="form-field flex">
             <div class="w-25">
             </div>
             <div class="flex-1">
-                <input asp-for="ReceiveNewsLetters" type="checkbox"  value="true"/>
+                <input asp-for="ReceiveNewsLetters" type="checkbox" value="true"/>
                 <label asp-for="ReceiveNewsLetters" class="form-label">Receive News Letters</label>
                 <span asp-validation-for="ReceiveNewsLetters" class="text-red"></span>
 
             </div>
         </div>
-        
+
         @* Submit *@
         <div class="form-field flex">
             <div class="w-25">
             </div>
             <div class="flex-1">
                 <button class="button button-green-back">Create</button>
-                
+
                 <div asp-validation-summary="All" class="text-red"></div>
                 @if (ViewBag.Errors != null)
                 {
@@ -123,7 +136,7 @@
 </div>
 
 @section scripts{
-@*     <script asp-fallback-test="window.jQuery" asp-fallback-src="/jquery.min.js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script asp-fallback-test="window.jQuery" asp-fallback-src="/jquery.min.js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script asp-fallback-test="window.jQuery.validator" asp-fallback-src="/jquery.validate.min.js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script asp-fallback-test="window.jQuery.validator.unobstrusive" asp-fallback-src="/jquery.validate.unobtrusive.min.js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js" integrity="sha512-xq+Vm8jC94ynOikewaQXMEkJIOBp7iArs3IhFWSWdRT3Pq8wFz46p+ZDFAR7kHnSFf+zUv52B3prRYnbDRdgog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> *@
+    <script asp-fallback-test="window.jQuery.validator.unobstrusive" asp-fallback-src="/jquery.validate.unobtrusive.min.js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js" integrity="sha512-xq+Vm8jC94ynOikewaQXMEkJIOBp7iArs3IhFWSWdRT3Pq8wFz46p+ZDFAR7kHnSFf+zUv52B3prRYnbDRdgog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 }

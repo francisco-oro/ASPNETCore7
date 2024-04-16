@@ -519,3 +519,18 @@ a.link-hover:hover {
     margin-right: 0px;
     transition: box-shadow 0.2s;
 }
+
+.form-container {
+    background-color: #ffffff;
+    border-radius: 15px;
+    margin: auto;
+    width: 90%;
+    padding: 20px;
+}
+
+.text-large {
+    font-size: 2.5em;
+    margin-top: 30px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-bottom: 10px;
+}
