@@ -10,6 +10,7 @@ using ServiceContracts;
 using ServiceContracts.DTO;
 using StocksApp.Models;
 using System.Text.Json;
+using StocksApp.Filters.ActionFilters;
 
 namespace StocksApp.Controllers
 {
@@ -30,7 +31,7 @@ namespace StocksApp.Controllers
         }
 
         [Route("[action]/{stockSymbol?}/")]
-        public async Task<IActionResult> Index(string stockSymbol = "MSFT")
+        public async Task<IActionResult> Index(string? stockSymbol = "MSFT")
         {
             _logger.LogDebug($"Index action method from trade controller. stockSymbol = {stockSymbol}");
             Dictionary<string, object>? companyProfileDictionary = 
@@ -49,35 +50,27 @@ namespace StocksApp.Controllers
 
         [Route("[action]")]
         [HttpPost]
-        public async Task<IActionResult> BuyOrder(BuyOrderRequest buyOrderRequest)
+        [TypeFilter(typeof(CreateOrderActionFilter))]
+        public async Task<IActionResult> BuyOrder(BuyOrderRequest orderRequest)
         {
-            _logger.LogDebug($"BuyOrder action method from trade controller. buyOrderRequest = {buyOrderRequest.StockName}: {buyOrderRequest.Quantity}");
+            _logger.LogDebug($"BuyOrder action method from trade controller. orderRequest = {orderRequest.StockName}: {orderRequest.Quantity}");
 
-            buyOrderRequest.DateAndTimeOfOrder = DateTime.Now;
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return View("Index");
-            }
+            orderRequest.DateAndTimeOfOrder = DateTime.Now;
 
-            await _stocksService.CreateBuyOrder(buyOrderRequest);
+            await _stocksService.CreateBuyOrder(orderRequest);
             return RedirectToAction(nameof(Orders));
         }
 
         [Route("[action]")]
         [HttpPost]
-        public async Task<IActionResult> SellOrder(SellOrderRequest sellOrderRequest)
+        [TypeFilter(typeof(CreateOrderActionFilter))]
+        public async Task<IActionResult> SellOrder(SellOrderRequest orderRequest)
         {
-            _logger.LogDebug($"SellOrder action method from trade controller. sellOrderRequest = {sellOrderRequest.StockName}: {sellOrderRequest.Quantity}");
+            _logger.LogDebug($"SellOrder action method from trade controller. orderRequest = {orderRequest.StockName}: {orderRequest.Quantity}");
 
-            sellOrderRequest.DateAndTimeOfOrder = DateTime.Now;
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return View("Index");
-            }
+            orderRequest.DateAndTimeOfOrder = DateTime.Now;
 
-            await _stocksService.CreateSellOrder(sellOrderRequest);
+            await _stocksService.CreateSellOrder(orderRequest);
             return RedirectToAction(nameof(Orders));
         }
 

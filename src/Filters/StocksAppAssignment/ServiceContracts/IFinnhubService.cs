@@ -34,7 +34,7 @@
         /// marketCapitalization - Market Capitalization
         /// name - Company name. 
         /// </returns>
-        Task<Dictionary<string, object>?> GetCompanyProfile(string stockSymbol);
+        Task<Dictionary<string, object>?> GetCompanyProfile(string? stockSymbol);
 
         /// <summary>
         /// Returns a list of supported stocks 
