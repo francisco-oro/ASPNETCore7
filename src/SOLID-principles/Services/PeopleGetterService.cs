@@ -9,55 +9,29 @@ using OfficeOpenXml;
 using RepositoryContracts;
 using ServiceContracts;
 using ServiceContracts.DTO;
-using ServiceContracts.Enums;
-using Services.Helpers;
 using Serilog;
 using SerilogTimings;
 
 
 namespace Services
 {
-    public class PeopleService : IPeopleService
+    public class PeopleGetterService : IPeopleGetterService
     {
         //private fields
         private readonly IPeopleRepository _peopleRepository;
-        private readonly ILogger<PeopleService> _logger;
+        private readonly ILogger<PeopleGetterService> _logger;
         private readonly IDiagnosticContext _diagnosticContext;
         //constructor 
 
-        public PeopleService(IPeopleRepository peopleRepository, ILogger<PeopleService> logger, IDiagnosticContext diagnosticContext)
+        public PeopleGetterService(IPeopleRepository peopleRepository, ILogger<PeopleGetterService> logger, IDiagnosticContext diagnosticContext)
         {
             _peopleRepository = peopleRepository;
             _logger = logger;
             _diagnosticContext = diagnosticContext;
         }
-
-        public async Task<PersonResponse> AddPerson(PersonAddRequest? personAddRequest)
-        {
-            //check if PersonAddRequest is not null
-            if (personAddRequest == null)
-            {
-                throw new ArgumentNullException(nameof(personAddRequest));
-            }
-
-            //Model validations
-            ValidationHelper.ModelValidation(personAddRequest);
-
-            // convert personAddRequest into Person type 
-            Person person = personAddRequest.ToPerson();
-
-            //generate personID
-            person.PersonID = Guid.NewGuid();
-
-            //add person object to people list
-            await _peopleRepository.AddPerson(person);
-            // Convert the Person object into PersonResponse type
-            return person.ToPersonResponse();
-        }
-
         public async Task<List<PersonResponse>> GetAllPeople()
         {
-            _logger.LogInformation("GetAllPeople of PeopleService");
+            _logger.LogInformation("GetAllPeople of PeopleGetterService");
             // SELECT * from People
             var people = await _peopleRepository.GetAllPeople();
 
@@ -86,7 +60,7 @@ namespace Services
         public async Task<List<PersonResponse>> GetFilteredPeople(string searchBy, string? searchString)
         {
             List<Person> people;
-            _logger.LogInformation("GetFilteredPeople of PeopleService");
+            _logger.LogInformation("GetFilteredPeople of PeopleGetterService");
             using (Operation.Time("Time for filtered people from Database"))
             {
 
@@ -124,119 +98,6 @@ namespace Services
             _diagnosticContext.Set("People", people);
 
             return people.Select(temp => temp.ToPersonResponse()).ToList();
-        }
-
-        public async Task<List<PersonResponse>> GetSortedPeople(List<PersonResponse> allPeople, string sortBy, SortOrderOptions sortOrder)
-        {
-            _logger.LogInformation("GetSortedPeople of PeopleService");
-            if (string.IsNullOrEmpty(sortBy))
-            {
-                return allPeople;
-            }
-
-            List<PersonResponse> sortedPeople = (sortBy, sortOrder)
-                switch
-            {
-                (nameof(PersonResponse.PersonName), SortOrderOptions.ASC)
-                    => allPeople.OrderBy(temp => temp.PersonName, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.PersonName), SortOrderOptions.DESC)
-                    => allPeople.OrderByDescending(temp => temp.PersonName, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.Email), SortOrderOptions.ASC)
-                    => allPeople.OrderBy(temp => temp.Email).ToList(),
-
-                (nameof(PersonResponse.Email), SortOrderOptions.DESC)
-                    => allPeople.OrderByDescending(temp => temp.Email).ToList(),
-
-                (nameof(PersonResponse.DateOfBirth), SortOrderOptions.ASC)
-                    => allPeople.OrderBy(temp => temp.DateOfBirth).ToList(),
-
-                (nameof(PersonResponse.DateOfBirth), SortOrderOptions.DESC)
-                    => allPeople.OrderByDescending(temp => temp.DateOfBirth).ToList(),
-
-                (nameof(PersonResponse.Age), SortOrderOptions.ASC)
-                    => allPeople.OrderBy(temp => temp.Age).ToList(),
-
-                (nameof(PersonResponse.Age), SortOrderOptions.DESC)
-                    => allPeople.OrderByDescending(temp => temp.Age).ToList(),
-
-                (nameof(PersonResponse.Gender), SortOrderOptions.ASC)
-                    => allPeople.OrderBy(temp => temp.Gender, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.Gender), SortOrderOptions.DESC)
-                    => allPeople.OrderByDescending(temp => temp.Gender, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.Country), SortOrderOptions.ASC)
-                    => allPeople.OrderBy(temp => temp.Country, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.Country), SortOrderOptions.DESC)
-                    => allPeople.OrderByDescending(temp => temp.Country, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.Address), SortOrderOptions.ASC)
-                    => allPeople.OrderBy(temp => temp.Address, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.Address), SortOrderOptions.DESC)
-                    => allPeople.OrderByDescending(temp => temp.Address, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.ReceiveNewsLetters), SortOrderOptions.ASC)
-                    => allPeople.OrderBy(temp => temp.ReceiveNewsLetters).ToList(),
-
-                (nameof(PersonResponse.ReceiveNewsLetters), SortOrderOptions.DESC)
-                    => allPeople.OrderByDescending(temp => temp.ReceiveNewsLetters).ToList(),
-
-                _ => allPeople
-            };
-
-            return sortedPeople;
-        }
-
-        public async Task<PersonResponse> UpdatePerson(PersonUpdateRequest? personUpdateRequest)
-        {
-            if (personUpdateRequest == null)
-            {
-                throw new ArgumentNullException(nameof(Person));
-            }
-
-            //validation 
-            ValidationHelper.ModelValidation(personUpdateRequest);
-
-            //get matching person object to update
-            Person? matchingPerson = await _peopleRepository.GetPersonByPersonID(personUpdateRequest.PersonID);
-
-            if (matchingPerson == null)
-            {
-                throw new InvalidPersonIDException("Given person doesn't exist");
-            }
-
-            //Update all details
-            matchingPerson.PersonName = personUpdateRequest.PersonName;
-            matchingPerson.Email = personUpdateRequest.Email;
-            matchingPerson.DateOfBirth = personUpdateRequest.DateOfBirth;
-            matchingPerson.Gender = personUpdateRequest.Gender.ToString();
-            matchingPerson.CountryID = personUpdateRequest.CountryID;
-            matchingPerson.Address = personUpdateRequest.Address;
-            matchingPerson.ReceiveNewsLetters = personUpdateRequest.ReceiveNewsLetters;
-
-            await _peopleRepository.UpdatePerson(matchingPerson); //UPDATE
-            return matchingPerson.ToPersonResponse();
-        }
-
-        public async Task<bool> DeletePerson(Guid? personID)
-        {
-            if (personID == null)
-            {
-                throw new ArgumentNullException(nameof(personID));
-            }
-
-            Person? person = await _peopleRepository.GetPersonByPersonID(personID.Value);
-            if (person == null)
-            {
-                return false;
-            }
-
-            await _peopleRepository.DeletePersonByPersonID(personID.Value);
-            return true;
         }
 
         public async Task<MemoryStream> GetPeopleCSV()

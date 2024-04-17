@@ -49,10 +49,10 @@ namespace CRUDTests
             doContextMock.CreateDbSetMock(temp => temp.Countries, countriesInitialData);
             doContextMock.CreateDbSetMock(temp => temp.People, peopleInitialData);
             var diagnosticContextMock = new Mock<IDiagnosticContext>();
-            var loggerMock = new Mock<ILogger<PeopleService>>();
+            var loggerMock = new Mock<ILogger<PeopleDeleterService>>();
 
             _countriesService = new CountriesService(null);
-            _peopleService = new PeopleService(_peopleRepository, loggerMock.Object ,diagnosticContextMock.Object);
+            _peopleService = new PeopleDeleterService(_peopleRepository, loggerMock.Object ,diagnosticContextMock.Object);
             _outputHelper = testOutputHelper;
         }
 

@@ -33,7 +33,7 @@ namespace CRUDExample.StartupExtensions
             services.AddScoped<IPeopleRepository, PeopleRepository>();
 
             services.AddScoped<ICountriesService, CountriesService>();
-            services.AddScoped<IPeopleService, PeopleService>();
+            services.AddScoped<IPeopleService, PeopleDeleterService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
