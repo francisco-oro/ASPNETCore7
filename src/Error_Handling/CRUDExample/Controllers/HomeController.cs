@@ -9,7 +9,12 @@ namespace CRUDExample.Controllers
         public IActionResult Error()
         {
             IExceptionHandlerPathFeature? exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            if (exceptionHandlerPathFeature != null)
+            {
+                ViewBag.ErrorMessage = exceptionHandlerPathFeature.Error.Message;
+            }
             return View(); //Views/Shared/Error 
         }
     }
 }
+ 
