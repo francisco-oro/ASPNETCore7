@@ -27,7 +27,7 @@ namespace CRUDTests
         private readonly IPeopleSorterService _peopleSorterService;
         private readonly IPeopleUpdaterService _peopleUpdaterService;
         private readonly IPeopleAdderService _peopleAdderService;
-        private readonly ICountriesService _countriesService;
+        private readonly ICountriesAdderService _countriesAdderService;
 
         private readonly Mock<IPeopleRepository> _peopleRepositoryMock;
         private readonly IPeopleRepository _peopleRepository;
@@ -60,7 +60,7 @@ namespace CRUDTests
             var peopleUpdaterMock = new Mock<ILogger<PeopleUpdaterService>>();
             var peopleAdderMock = new Mock<ILogger<PeopleAdderService>>();
 
-            _countriesService = new CountriesService(null);
+            _countriesAdderService = new CountriesAdderService(null);
             _peopleGetterService = new PeopleGetterService(_peopleRepository, peopleGetterMock.Object, diagnosticContextMock.Object);
             _peopleDeleterService = new PeopleDeleterService(_peopleRepository, peopleDeleterMock.Object, diagnosticContextMock.Object);
             _peopleSorterService = new PeopleSorterService(_peopleRepository, peopleSorterMock.Object, diagnosticContextMock.Object);
@@ -76,8 +76,8 @@ namespace CRUDTests
             CountryAddRequest countryAddRequest1 = _fixture.Create<CountryAddRequest>();
             CountryAddRequest countryAddRequest2 = _fixture.Create<CountryAddRequest>();
 
-            CountryResponse? countryResponse1 = await _countriesService.AddCountry(countryAddRequest1);
-            CountryResponse? countryResponse2 = await _countriesService.AddCountry(countryAddRequest2);
+            CountryResponse? countryResponse1 = await _countriesAdderService.AddCountry(countryAddRequest1);
+            CountryResponse? countryResponse2 = await _countriesAdderService.AddCountry(countryAddRequest2);
             return (countryResponse1, countryResponse2);
         }
 

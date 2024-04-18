@@ -18,14 +18,14 @@ namespace CRUDTests
         private readonly IPeopleSorterService _peopleSorterService;
         private readonly IPeopleUpdaterService _peopleUpdaterService;
         private readonly IPeopleAdderService _peopleAdderService;
-        private readonly ICountriesService _countriesService;
+        private readonly ICountriesGetterService _countriesService;
 
         private readonly Mock<IPeopleGetterService> _peopleGetterServiceMock;
         private readonly Mock<IPeopleDeleterService> _peopleDeleterServiceMock;
         private readonly Mock<IPeopleSorterService> _peopleSorterServiceMock;
         private readonly Mock<IPeopleUpdaterService> _peopleUpdaterServiceMock;
         private readonly Mock<IPeopleAdderService> _peopleAdderServiceMock;
-        private readonly Mock<ICountriesService> _countriesServiceMock;
+        private readonly Mock<ICountriesGetterService> _countriesServiceMock;
 
         private readonly Fixture _fixture;
 
@@ -34,7 +34,7 @@ namespace CRUDTests
         {
             _fixture = new Fixture();
 
-            _countriesServiceMock = new Mock<ICountriesService>();
+            _countriesServiceMock = new Mock<ICountriesGetterService>();
             _peopleGetterServiceMock = new Mock<IPeopleGetterService>();
             _peopleAdderServiceMock = new Mock<IPeopleAdderService>();
             _peopleDeleterServiceMock = new Mock<IPeopleDeleterService>();
@@ -42,7 +42,11 @@ namespace CRUDTests
             _peopleUpdaterServiceMock = new Mock<IPeopleUpdaterService>();
 
             _countriesService = _countriesServiceMock.Object;
-            _peopleService = _peoplesServiceMock.Object;
+            _peopleGetterService = _peopleGetterServiceMock.Object;
+            _peopleAdderService = _peopleAdderServiceMock.Object;
+            _peopleDeleterService = _peopleDeleterServiceMock.Object;
+            _peopleSorterService = _peopleSorterServiceMock.Object;
+            _peopleUpdaterService = _peopleUpdaterServiceMock.Object;
              _logger = new Mock<ILogger<PeopleController>>().Object;
         }
 
@@ -52,13 +56,14 @@ namespace CRUDTests
         {
             //Arrange
             List<PersonResponse> personResponsesList = _fixture.Create<List<PersonResponse>>();
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
+            PeopleController peopleController = new PeopleController(_peopleGetterService, _peopleDeleterService,
+                _peopleSorterService, _peopleUpdaterService, _peopleAdderService, _countriesService, _logger);
 
-            _peoplesServiceMock
+            _peopleGetterServiceMock
                 .Setup(temp => temp.GetFilteredPeople(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(personResponsesList);
 
-            _peoplesServiceMock
+            _peopleSorterServiceMock
                 .Setup(temp => temp.GetSortedPeople(It.IsAny<List<PersonResponse>>() , It.IsAny<string>(), It.IsAny<SortOrderOptions>()))
                 .ReturnsAsync(personResponsesList);
 
@@ -84,12 +89,13 @@ namespace CRUDTests
             PersonResponse personResponse = _fixture.Create<PersonResponse>();
 
             List<CountryResponse> countries = _fixture.Create<List<CountryResponse>>();
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
+            PeopleController peopleController = new PeopleController(_peopleGetterService, _peopleDeleterService,
+                _peopleSorterService, _peopleUpdaterService, _peopleAdderService, _countriesService, _logger);
 
             _countriesServiceMock
                 .Setup(temp => temp.GetAllCountries())!
                 .ReturnsAsync(countries);
-            _peoplesServiceMock
+            _peopleAdderServiceMock
                 .Setup(temp => temp.AddPerson(It.IsAny<PersonAddRequest>()))
                 .ReturnsAsync(personResponse);
 
@@ -114,12 +120,12 @@ namespace CRUDTests
             //Arrange
             PersonUpdateRequest personUpdateRequest = _fixture.Create<PersonUpdateRequest>();
 
-            _peoplesServiceMock
+            _peopleGetterServiceMock
                 .Setup(temp => temp.GetPersonByPersonID(It.IsAny<Guid>()))
                 .ReturnsAsync(null as PersonResponse);
 
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
-
+            PeopleController peopleController = new PeopleController(_peopleGetterService, _peopleDeleterService,
+                _peopleSorterService, _peopleUpdaterService, _peopleAdderService, _countriesService, _logger); 
             //Act 
 
             IActionResult result = await peopleController.Edit(personUpdateRequest);
@@ -136,12 +142,12 @@ namespace CRUDTests
             //Arrange
             PersonUpdateRequest personUpdateRequest = _fixture.Create<PersonUpdateRequest>();
 
-            _peoplesServiceMock
+            _peopleUpdaterServiceMock
                 .Setup(temp => temp.UpdatePerson(It.IsAny<PersonUpdateRequest>()))
                 .ReturnsAsync(personUpdateRequest.ToPerson().ToPersonResponse);
 
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
-
+            PeopleController peopleController = new PeopleController(_peopleGetterService, _peopleDeleterService,
+                _peopleSorterService, _peopleUpdaterService, _peopleAdderService, _countriesService, _logger);
             //Act 
 
             IActionResult result = await peopleController.Edit(personUpdateRequest);
@@ -160,12 +166,12 @@ namespace CRUDTests
         {
             //Arrange
 
-            _peoplesServiceMock
+            _peopleGetterServiceMock
                 .Setup(temp => temp.GetPersonByPersonID(It.IsAny<Guid>()))
                 .ReturnsAsync(null as PersonResponse);
 
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
-
+            PeopleController peopleController = new PeopleController(_peopleGetterService, _peopleDeleterService,
+                _peopleSorterService, _peopleUpdaterService, _peopleAdderService, _countriesService, _logger);
             //Act 
 
             IActionResult result = await peopleController.Delete(Guid.NewGuid());
@@ -204,15 +210,15 @@ namespace CRUDTests
 
             PersonUpdateRequest personUpdateRequest = person.ToPersonResponse().ToPersonUpdateRequest();
 
-            _peoplesServiceMock
+            _peopleGetterServiceMock
                 .Setup(temp => temp.GetPersonByPersonID(It.IsAny<Guid>()))
                 .ReturnsAsync(person.ToPersonResponse);
-            _peoplesServiceMock
+            _peopleDeleterServiceMock
                 .Setup(temp => temp.DeletePerson(It.IsAny<Guid>()))
                 .ReturnsAsync(true);
 
-            PeopleController peopleController = new PeopleController(_peopleService, _countriesService, _logger);
-
+            PeopleController peopleController = new PeopleController(_peopleGetterService, _peopleDeleterService,
+                _peopleSorterService, _peopleUpdaterService, _peopleAdderService, _countriesService, _logger);
             //Act 
 
             IActionResult result = await peopleController.Delete(personUpdateRequest);

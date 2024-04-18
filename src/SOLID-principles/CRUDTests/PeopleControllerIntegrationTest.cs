@@ -27,7 +27,7 @@ namespace CRUDTests
             //Arrange
 
             //Act
-            HttpResponseMessage response = await _client.GetAsync("/People/Index");
+            HttpResponseMessage response = await _client.GetAsync("/People/Index"); 
 
             //Assert
             response.Should().BeSuccessful(); //2xx

@@ -32,8 +32,14 @@ namespace CRUDExample.StartupExtensions
             services.AddScoped<ICountriesRepository, CountriesRepository>();
             services.AddScoped<IPeopleRepository, PeopleRepository>();
 
-            services.AddScoped<ICountriesService, CountriesService>();
-            services.AddScoped<IPeopleService, PeopleDeleterService>();
+            services.AddScoped<ICountriesGetterService, CountriesGetterService>();
+            services.AddScoped<ICountriesUploaderService, CountriesUploaderService>();
+            services.AddScoped<ICountriesAdderService, CountriesAdderService>();
+            services.AddScoped<IPeopleDeleterService, PeopleDeleterService>();
+            services.AddScoped<IPeopleGetterService, PeopleGetterService>();
+            services.AddScoped<IPeopleAdderService, PeopleAdderService>();
+            services.AddScoped<IPeopleSorterService, PeopleSorterService>();
+            services.AddScoped<IPeopleUpdaterService, PeopleUpdaterService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {

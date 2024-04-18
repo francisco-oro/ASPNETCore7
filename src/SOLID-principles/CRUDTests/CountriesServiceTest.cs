@@ -14,7 +14,7 @@ namespace CRUDTests
 {
     public class CountriesServiceTest
     {
-        private readonly ICountriesService _countriesService;
+        private readonly ICountriesGetterService _countriesService;
 
         private readonly Mock<ICountriesRepository> _countriesRepositoryMock;
         private readonly ICountriesRepository _countriesRepository;
@@ -36,7 +36,7 @@ namespace CRUDTests
             ApplicationDbContext dbContext = dbContextMock.Object;
             dbContextMock.CreateDbSetMock(temp => temp.Countries, countriesInitialData);
 
-            _countriesService = new CountriesService(_countriesRepository);
+            _countriesService = new CountriesUploaderService(_countriesRepository);
         }
 
         #region AddCountry

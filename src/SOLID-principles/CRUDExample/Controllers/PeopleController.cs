@@ -26,10 +26,10 @@ namespace CRUDExample.Controllers
         private readonly IPeopleSorterService _peopleSorterService;
         private readonly IPeopleUpdaterService _peopleUpdaterService;
         private readonly IPeopleAdderService _peopleAdderService;
-        private readonly ICountriesService _countriesService;
+        private readonly ICountriesGetterService _countriesService;
         private readonly ILogger<PeopleController> _logger;
         // constructor
-        public PeopleController(IPeopleGetterService peopleGetterService, IPeopleDeleterService peopleDeleterService, IPeopleSorterService peopleSorterService, IPeopleUpdaterService peopleUpdaterService, IPeopleAdderService peopleAdderService, ICountriesService countriesService, ILogger<PeopleController> logger)
+        public PeopleController(IPeopleGetterService peopleGetterService, IPeopleDeleterService peopleDeleterService, IPeopleSorterService peopleSorterService, IPeopleUpdaterService peopleUpdaterService, IPeopleAdderService peopleAdderService, ICountriesGetterService countriesService, ILogger<PeopleController> logger)
         {
             _peopleGetterService = peopleGetterService;
             _peopleDeleterService = peopleDeleterService;
