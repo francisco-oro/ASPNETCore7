@@ -64,102 +64,108 @@ public class MyService
 }
 ```
 
-Dependency Problem
+### Dependency Problem
 
-Higher-level modules depend on lower-level modules.
+- Higher-level modules depend on lower-level modules.
 
-Means, both are tightly-coupled.
+- Means, both are tightly-coupled.
 
-The developer of higher-level module SHOULD WAIT until the completion of development of lower-level module.
+- The developer of higher-level module SHOULD WAIT until the completion of development of lower-level module.
 
-Requires much code changes in to interchange an alternative lower-level module.
+- Requires much code changes in to interchange an alternative lower-level module.
 
-Any changes made in the lower-level module effects changes in the higher-level module.
+- Any changes made in the lower-level module effects changes in the higher-level module.
 
-Difficult to test a single module without effecting / testing the other module.
-
-
-
-Dependency Inversion Principle
-
-Dependency Inversion Principle (DIP) is a design principle (guideline), which is a solution for the dependency problem.
-
-"The higher-level modules (clients) SHOULD NOT depend on low-level modules (dependencies).
-
-Both should depend on abstractions (interfaces or abstract class)."
-
-"Abstractions should not depend on details (both client and dependency).
-
-Details (both client and dependency) should depend on abstractions."
+- Difficult to test a single module without effecting / testing the other module.
 
 
 
+### Dependency Inversion Principle
+
+- Dependency Inversion Principle (DIP) is a design principle (guideline), which is a solution for the dependency problem.
+
+- "The higher-level modules (clients) SHOULD NOT depend on low-level modules (dependencies).
+
+- Both should depend on abstractions (interfaces or abstract class)."
+
+- "Abstractions should not depend on details (both client and dependency).
+
+- Details (both client and dependency) should depend on abstractions."
+
+
+![dependency_inversion_principle](assets/dependency_inversion_principle.png)
 
 
 
-Dependency Injection
+### Dependency Injection
+
+![dependency_injection](assets/dependency_injection.png)
+
+
+
+### Constructor Injection
+
+![constructor_injection](assets/constructor_injection.png)
+
+
+
+### Method Injection
+
+![method_injection](assets/method_injection.png)
 
 
 
 
-Constructor Injection
 
 
 
+## Single Responsibility Principle (SRP)
 
-Method Injection
-
-
-
+![single_responsability_principle](assets/single_responsability_principle.png)
 
 
+- A class should have one-and-only reason to change.
 
+- A class should implement only one functionality.
 
+- Avoid multiple / tightly coupled functionalities in a single class.
 
-Single Responsibility Principle (SRP)
+- Eg: A class that performs validation should only involve in validation.
 
+- But it should not read configuration settings from a configuration file.
 
-
-A class should have one-and-only reason to change.
-
-A class should implement only one functionality.
-
-Avoid multiple / tightly coupled functionalities in a single class.
-
-Eg: A class that performs validation should only involve in validation.
-
-But it should not read configuration settings from a configuration file.
-
-But instead, it call a method of another class that reads configuration settings.
+- But instead, it call a method of another class that reads configuration settings.
 
 
 
-Interfaces
+### Interfaces
 
-Create alternative implementation of the class by implementing the same interface.
+- Create alternative implementation of the class by implementing the same interface.
 
-Benefit: Makes the class independent of other classes, in terms of its purpose / functionality.
+- Benefit: Makes the class independent of other classes, in terms of its purpose / functionality.
 
-So that, the classes become easier to design, write, debug, maintain and test.
+- So that, the classes become easier to design, write, debug, maintain and test.
 
 
 
 Eg:
 
 
+![interfaces](assets/interfaces.png)
 
 
 
 
-Interface Segregation Principle (ISP)
+## Interface Segregation Principle (ISP)
+![interface_segregation_principle](assets/interface_segregation_principle.png)
 
-No client class should be forced to depend on methods it doesn't use.
+- No client class should be forced to depend on methods it doesn't use.
 
-We should prefer to make many smaller interfaces rather than one single big interface.
+- We should prefer to make many smaller interfaces rather than one single big interface.
 
-The client classes may choose one or more interfaces to implement.
+- The client classes may choose one or more interfaces to implement.
 
-Benefit: Makes it easy to create alternative implementation for a specific functionality, rather than recreating entire class.
+- Benefit: Makes it easy to create alternative implementation for a specific functionality, rather than recreating entire class.
 
 
 
@@ -169,16 +175,17 @@ Assume, a class has two methods: GetPersons() and AddPerson().
 
 Instead of creating both methods in a single interface, create them as two different interfaces: IPersonGetter, IPersonAdder
 
-interface IPersonsGetter (methods to get persons data)
+- interface IPersonsGetter (methods to get persons data)
 
-interface IPersonsAdder(methods to create person)
-
-
+- interface IPersonsAdder(methods to create person)
 
 
 
-Open/Closed Principle (OCP)
 
+
+## Open/Closed Principle (OCP)
+
+![open_closed_principle](assets/open_closed_principle.png)
 
 
 A class is closed for modifications; but open for extension.
@@ -200,18 +207,18 @@ Instead of modifying existing GetPersons() method, you need to create an alterna
 Benefit: Not modifying existing code of a class doesn't introduce new bugs; and keeps the existing unit tests stay relavant and needs no changes.
 
 
-
+```c#
 class PersonGetter : IPersonGetter (GetPersons() method retrieves list of persons)
 class SortedPersonGetter : IPersonGetter (GetPersons() method retrieves sorted list of persons)
+```
 
-
-Interfaces
+### Interfaces
 
 Create alternative implementation of the class by implementing the same interface.
 
 
 
-Inheritance
+### Inheritance
 
 Create a child class of the existing class and override the required methods that needs changes.
 
@@ -221,9 +228,9 @@ Create a child class of the existing class and override the required methods tha
 
 
 
-Liskov Substitution Principle (LSP)
-Parent Class
-
+## Liskov Substitution Principle (LSP)
+### Parent Class
+```c#
 public class ParentClass
 {
   public virtual int Calculate(int? a, int? b)
@@ -232,10 +239,10 @@ public class ParentClass
     //return sum of 'a' and 'b'
   }
 }
+```
 
-
-Child Class
-
+### Child Class
+```c#
 public class ChildClass : ParentClass
 {
   public override int Calculate(int? a, int b)
@@ -245,8 +252,9 @@ public class ChildClass : ParentClass
     //return product of 'a' and 'b'
   }
 }
-[Violates LSP]
+```
 
+[Violates LSP]
 
 
 
@@ -257,7 +265,7 @@ The child classes that override methods of base class, should provide same behav
 
 
 
-Using object of parent class
+### Using object of parent class
 
 ParentClass variable = new ParentClass();
 
@@ -265,7 +273,7 @@ variable.Method(); //executes ParentClass.Method
 
 
 
-Using object of child class
+### Using object of child class
 
 ParentClass variable = new ChildClass();
 
@@ -291,3 +299,39 @@ The child class's method should not implement stricter rules than base class's i
 
 Benefit: Prevents code to break - if by mistake or wantedly, someone has replaced the derived class with its base class (or even vice versa), as its behavior doesn't change.
 
+# Interview Questions
+
+## What does SOLID stand for? What are its principles?
+`SOLID` is an acronym for the following set of principles: 
+- Single Responsability Principle: A software moudle should have one-and-only reason to change
+- Open/Closed Principle: Classes are closed to modifications; but open for extension 
+- Liskov Substitution Principle: Subtypes must be substitable for their parent types
+- Interface Segregation Principle: No client class should be forced to depend on methods it does not use 
+- Dependency Inversion Principle: Higher-level modules should not depend on lower-level modules
+## What is Bad Design?
+`Bad design` is reached when the developer violates one or more of the SOLID principles in the existing solution
+## Describe the Single Responsibility Principle (SRP).
+> A software moudle should have one-and-only reason to change
+Each shold solve only one specific requirement. Eg.
+- A class for validation
+- A class to invoke the Configuration
+If the `Configuration` is needed in the `Validation` class, then the `Validation class` should invoke the methods of the `Configuration` class instead
+## Describe the Open Close Principle (OCP).
+- Open/Closed Principle: Classes are closed to modifications; but open for extension 
+When a change is required in the solution, the developer must provide an alternative implementation of the existing class
+instead of modyifing the current class implementation. This is accomplished in two ways: 
+- By adding a new class that implements the same interface, but with the new changes. 
+- By using inheritance and `overriding` the parent-class methods to match the new changes.
+> Beware! You may violate the `Liskov Substitution Principle` by using the second way. 
+
+## Explain Liskov Substitution Principle (LSP).
+- Liskov Substitution Principle: Subtypes must be substitable for their parent types
+If a child-class overrides a method of the parent-class, then two requirements must be satisfied:
+- The child-class should not throw any Exception other than the ones defined in the parent-class method 
+- The return value for both child-class and parent-class methods should be the same if the same arguments are provided to them. 
+## Explain DIP (Dependency Inversion Principle)
+- Dependency Inversion Principle: Higher-level modules should not depend on lower-level modules
+Both lower-level and Higher-level classes should depend on abstractions. Abstractions should not depend on them. 
+
+## Explain Interface Segregation Principle
+- Interface Segregation Principle: No client class should be forced to depend on methods it does not use 
