@@ -19,7 +19,10 @@ namespace StocksApp.StartupExceptions
 
             services.AddScoped<IFinnhubRespository, FinnhubRepository>();
             services.AddScoped<IStocksRepository, StocksRepository>();
-            services.AddScoped<IFinnhubService, FinnhubService>();
+            services.AddScoped<IFinnhubSearchStocksService, FinnhubSearchStocksService>();
+            services.AddScoped<IFinnhubStockPriceQuoteService, FinnhubStockPriceQuoteService>();
+            services.AddScoped<IFinnhubStocksService, FinnhubStocksService>();
+            services.AddScoped<IFinnhubCompanyProfileService, FinnhubCompanyProfileService>();
             services.AddScoped<IStocksService, StocksService>();
 
             services.Configure<TradingOptions>(configuration.GetSection("TradingOptions"));

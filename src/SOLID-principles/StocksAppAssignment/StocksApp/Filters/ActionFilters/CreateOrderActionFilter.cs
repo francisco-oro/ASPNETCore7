@@ -10,13 +10,15 @@ namespace StocksApp.Filters.ActionFilters
     {
         private readonly IStocksService _stocksService;
         private readonly ILogger<CreateOrderActionFilter> _logger;
-        private readonly IFinnhubService _finnhubService;
+        private readonly IFinnhubStockPriceQuoteService _finnhubStockPriceQuoteService;
+        private readonly IFinnhubCompanyProfileService _finnhubCompanyProfileService;
 
-        public CreateOrderActionFilter(IStocksService stocksService, ILogger<CreateOrderActionFilter> logger, IFinnhubService finnhubService)
+        public CreateOrderActionFilter(IStocksService stocksService, ILogger<CreateOrderActionFilter> logger, IFinnhubStockPriceQuoteService finnhubStockPriceQuoteService, IFinnhubCompanyProfileService finnhubCompanyProfileService)
         {
             _stocksService = stocksService;
             _logger = logger;
-            _finnhubService = finnhubService;
+            _finnhubStockPriceQuoteService = finnhubStockPriceQuoteService;
+            _finnhubCompanyProfileService = finnhubCompanyProfileService;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -42,9 +44,9 @@ namespace StocksApp.Filters.ActionFilters
                     tradeController.ViewBag.Errors = tradeController.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
 
                     Dictionary<string, object>? companyProfileDictionary =
-                        await _finnhubService.GetCompanyProfile(stockSymbol);
+                        await _finnhubCompanyProfileService.GetCompanyProfile(stockSymbol);
                     Dictionary<string, object?>? stockPriceQuoteDictionary =
-                        await _finnhubService.GetStockPriceQuote(stockSymbol);
+                        await _finnhubStockPriceQuoteService.GetStockPriceQuote(stockSymbol);
 
                     StockTrade stockTrade = new StockTrade()
                     {

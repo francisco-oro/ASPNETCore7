@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using RepositoryContracts;
 using ServiceContracts;
 using StocksApp;
 using StocksApp.Controllers;
@@ -20,9 +14,12 @@ namespace StockAppTests
 {
     public class StocksControllerTest
     {
-        private readonly IFinnhubService _finnhubService; 
+        private readonly IFinnhubStocksService _finnhubStocksService; 
+        private readonly IFinnhubSearchStocksService _finnhubSearchStocksService;
 
-        private readonly Mock<IFinnhubService> _finnhubServiceMock;
+        private readonly Mock<IFinnhubStocksService> _finnhubStocksServiceMock;
+        private readonly Mock<IFinnhubSearchStocksService> _finnhubSearchStocksServiceMock;
+
         private readonly ILogger<StocksController> _logger;
 
         private readonly Fixture _fixture;
@@ -30,7 +27,7 @@ namespace StockAppTests
         public StocksControllerTest()
         {
             _fixture = new Fixture();
-            _finnhubServiceMock = new Mock<IFinnhubService>();
+            _finnhubServiceMock = new Mock<IFinnhubCompanyProfileService>();
             _finnhubService = _finnhubServiceMock.Object;
 
             _options = Options.Create(new TradingOptions()

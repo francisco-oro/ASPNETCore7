@@ -17,14 +17,16 @@ namespace StocksApp.Controllers
     [Route("[controller]")]
     public class TradeController : Controller
     {
-        private readonly IFinnhubService _finnhubService;
+        private readonly IFinnhubCompanyProfileService _finnhubCompanyProfileService;
+        private readonly IFinnhubStockPriceQuoteService _finnhubStockPriceQuoteService;
         private readonly IOptions<TradingOptions> _tradingOptions;
         private readonly IStocksService _stocksService;
         private readonly ILogger<TradeController> _logger;
 
-        public TradeController(IFinnhubService finnhubService, IOptions<TradingOptions> tradingOptions, IStocksService stocksService, ILogger<TradeController> logger)
+        public TradeController(IFinnhubCompanyProfileService finnhubCompanyProfileService, IFinnhubStockPriceQuoteService finnhubStockPriceQuoteService, IOptions<TradingOptions> tradingOptions, IStocksService stocksService, ILogger<TradeController> logger)
         {
-            _finnhubService = finnhubService;
+            _finnhubCompanyProfileService = finnhubCompanyProfileService;
+            _finnhubStockPriceQuoteService = finnhubStockPriceQuoteService;
             _tradingOptions = tradingOptions;
             _stocksService = stocksService;
             _logger = logger;
@@ -35,9 +37,9 @@ namespace StocksApp.Controllers
         {
             _logger.LogDebug($"Index action method from trade controller. stockSymbol = {stockSymbol}");
             Dictionary<string, object>? companyProfileDictionary = 
-                await _finnhubService.GetCompanyProfile(stockSymbol);
+                await _finnhubCompanyProfileService.GetCompanyProfile(stockSymbol);
             Dictionary<string, object?>? stockPriceQuoteDictionary = 
-                await _finnhubService.GetStockPriceQuote(stockSymbol);
+                await _finnhubStockPriceQuoteService.GetStockPriceQuote(stockSymbol);
 
             StockTrade stockTrade = new StockTrade()
             {
@@ -117,7 +119,7 @@ namespace StocksApp.Controllers
             }
 
             Dictionary<string, object?>? companyProfileDictionary = 
-                await _finnhubService.GetStockPriceQuote(stockSymbol);
+                await _finnhubStockPriceQuoteService.GetStockPriceQuote(stockSymbol);
 
             return Json(companyProfileDictionary);
         }

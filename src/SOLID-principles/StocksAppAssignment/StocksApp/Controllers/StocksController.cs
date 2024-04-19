@@ -9,13 +9,15 @@ namespace StocksApp.Controllers
     [Route("[controller]")]
     public class StocksController : Controller
     {
-        private readonly IFinnhubService _finnhubService;
+        private readonly IFinnhubStocksService _finnhubStocksService;
+        private readonly IFinnhubSearchStocksService _finnhubSearchStocksService;
         private readonly IOptions<TradingOptions> _tradingOptions;
         private readonly ILogger<StocksController> _logger;
 
-        public StocksController(IFinnhubService finnhubService, IOptions<TradingOptions> tradingOptions, ILogger<StocksController> logger)
+        public StocksController(IFinnhubStocksService finnhubStocksService, IFinnhubSearchStocksService finnhubSearchStocksService, IOptions<TradingOptions> tradingOptions, ILogger<StocksController> logger)
         {
-            _finnhubService = finnhubService;
+            _finnhubStocksService = finnhubStocksService;
+            _finnhubSearchStocksService = finnhubSearchStocksService;
             _tradingOptions = tradingOptions;
             _logger = logger;
         }
@@ -34,7 +36,7 @@ namespace StocksApp.Controllers
                 _logger.LogDebug("Explore Action Method with searchBy");
                 List<string>? popularStocks = _tradingOptions.Value.Top25PopularStocks?.Split(",").ToList();
 
-                var stockResults = await _finnhubService.GetStocks();
+                var stockResults = await _finnhubStocksService.GetStocks();
                 if (stockResults != null)
                 {
                     if (showAll == false)
@@ -74,7 +76,7 @@ namespace StocksApp.Controllers
             {
                 _logger.LogDebug("Explore Action Method without searchBy");
 
-                Dictionary<string, object>? stocksFromSearchStocks = await _finnhubService.SearchStocks(searchBy);
+                Dictionary<string, object>? stocksFromSearchStocks = await _finnhubSearchStocksService.SearchStocks(searchBy);
                 if (stocksFromSearchStocks != null)
                 {
                     JsonElement stocksFromSearchJsonElement = (JsonElement)stocksFromSearchStocks["result"];

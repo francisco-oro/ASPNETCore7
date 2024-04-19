@@ -10,13 +10,15 @@ namespace StocksApp.ViewComponents
     {
         private readonly IOptions<TradingOptions> _tradingOptions;
         private readonly IStocksService _stocksService;
-        private readonly IFinnhubService _finnhubService;
+        private readonly IFinnhubStockPriceQuoteService _finnhubStockPriceQuoteService;
+        private readonly IFinnhubCompanyProfileService _finnhubCompanyProfileService;
 
-        public SelectedStockViewComponent(IOptions<TradingOptions> tradingOptions, IStocksService stocksService, IFinnhubService finnhubService)
+        public SelectedStockViewComponent(IOptions<TradingOptions> tradingOptions, IStocksService stocksService, IFinnhubStockPriceQuoteService finnhubStockPriceQuoteService, IFinnhubCompanyProfileService finnhubCompanyProfileService)
         {
             _tradingOptions = tradingOptions;
             _stocksService = stocksService;
-            _finnhubService = finnhubService;
+            _finnhubStockPriceQuoteService = finnhubStockPriceQuoteService;
+            _finnhubCompanyProfileService = finnhubCompanyProfileService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(string? stockSymbol)
@@ -29,14 +31,14 @@ namespace StocksApp.ViewComponents
             try
             {
                 Dictionary<string, object>? companyProfileDictionary =
-                    await _finnhubService.GetCompanyProfile(stockSymbol);
+                    await _finnhubCompanyProfileService.GetCompanyProfile(stockSymbol);
                 if (companyProfileDictionary == null)
                 {
                     return Content("");
                 }
 
                 Dictionary<string, object?>? stockPriceQuoteDictionary =
-                    await _finnhubService.GetStockPriceQuote(stockSymbol);
+                    await _finnhubStockPriceQuoteService.GetStockPriceQuote(stockSymbol);
 
                 companyProfileDictionary.Add("price", stockPriceQuoteDictionary?["c"] ?? "Price is unavailable");
                 return View(companyProfileDictionary);
