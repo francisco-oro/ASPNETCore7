@@ -163,7 +163,10 @@ namespace Services
                 }
                 int row = 2;
                 List<PersonResponse> people = await GetAllPeople();
-
+                if (people.Count == 0)
+                {
+                    throw new InvalidOperationException("No people data");
+                }
                 foreach (PersonResponse personResponse in people)
                 {
                     worksheet.Cells[row, 1].Value = personResponse.PersonName;

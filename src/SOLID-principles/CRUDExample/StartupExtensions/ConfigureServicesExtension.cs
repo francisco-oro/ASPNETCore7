@@ -36,7 +36,7 @@ namespace CRUDExample.StartupExtensions
             services.AddScoped<ICountriesUploaderService, CountriesUploaderService>();
             services.AddScoped<ICountriesAdderService, CountriesAdderService>();
             services.AddScoped<IPeopleDeleterService, PeopleDeleterService>();
-            services.AddScoped<IPeopleGetterService, PeopleGetterServiceChild>();
+            services.AddScoped<IPeopleGetterService, PeopleGetterServiceWithFewExcelFields>();
             services.AddScoped<PeopleGetterService, PeopleGetterService>();
             services.AddScoped<IPeopleAdderService, PeopleAdderService>();
             services.AddScoped<IPeopleSorterService, PeopleSorterService>();
