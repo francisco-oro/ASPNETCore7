@@ -29,7 +29,7 @@ namespace Services
             _logger = logger;
             _diagnosticContext = diagnosticContext;
         }
-        public async Task<List<PersonResponse>> GetAllPeople()
+        public virtual async Task<List<PersonResponse>> GetAllPeople()
         {
             _logger.LogInformation("GetAllPeople of PeopleGetterService");
             // SELECT * from People
@@ -40,7 +40,7 @@ namespace Services
 
         }
 
-        public async Task<PersonResponse?> GetPersonByPersonID(Guid? personID)
+        public virtual async Task<PersonResponse?> GetPersonByPersonID(Guid? personID)
         {
             if (personID == null)
             {
@@ -57,7 +57,7 @@ namespace Services
             return person.ToPersonResponse();
         }
 
-        public async Task<List<PersonResponse>> GetFilteredPeople(string searchBy, string? searchString)
+        public virtual async Task<List<PersonResponse>> GetFilteredPeople(string searchBy, string? searchString)
         {
             List<Person> people;
             _logger.LogInformation("GetFilteredPeople of PeopleGetterService");
@@ -100,7 +100,7 @@ namespace Services
             return people.Select(temp => temp.ToPersonResponse()).ToList();
         }
 
-        public async Task<MemoryStream> GetPeopleCSV()
+        public virtual async Task<MemoryStream> GetPeopleCSV()
         {
             MemoryStream memoryStream = new MemoryStream();
             StreamWriter streamWriter = new StreamWriter(memoryStream);
@@ -140,7 +140,7 @@ namespace Services
             return memoryStream;
         }
 
-        public async Task<MemoryStream> GetPeopleExcel()
+        public virtual async Task<MemoryStream> GetPeopleExcel()
         {
             MemoryStream memoryStream = new MemoryStream();
             using (ExcelPackage package = new ExcelPackage(memoryStream))
