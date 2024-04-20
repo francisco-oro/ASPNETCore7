@@ -1,5 +1,4 @@
 ﻿using System;
-using ServiceContracts.Enums;
 
 namespace ContactsManager.Core.ServiceContracts
 {

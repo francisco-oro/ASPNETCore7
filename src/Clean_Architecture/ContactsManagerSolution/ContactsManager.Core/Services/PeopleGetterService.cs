@@ -6,15 +6,13 @@ using ContactsManager.Core.DTO;
 using ContactsManager.Core.ServiceContracts;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Entities;
-using Exceptions;
 using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
 using Serilog;
 using SerilogTimings;
 
 
-namespace Services
+namespace ContactsManager.Core.Services
 {
     public class PeopleGetterService : IPeopleGetterService
     {

@@ -1,6 +1,6 @@
-﻿using ServiceContracts.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using ContactsManager.Core.Domain.Entities;
+using ContactsManager.Core.Enums;
 
 namespace ContactsManager.Core.DTO
 {

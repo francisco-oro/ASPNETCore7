@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
-using RepositoryContracts;
-using ServiceContracts;
-using ServiceContracts.DTO;
-using ServiceContracts.Enums;
+﻿using ContactsManager.Core.Domain.RepositoryContracts;
+using ContactsManager.Core.DTO;
+using ContactsManager.Core.Enums;
+using ContactsManager.Core.ServiceContracts;
+using Microsoft.Extensions.Logging;
 using Serilog;
 
 
-namespace Services
+namespace ContactsManager.Core.Services
 {
     public class PeopleSorterService : IPeopleSorterService
     {

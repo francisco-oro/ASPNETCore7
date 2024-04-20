@@ -1,10 +1,9 @@
 ﻿using OfficeOpenXml;
-using ServiceContracts;
-using ServiceContracts.DTO;
 using System.Drawing;
-using SerializableAttribute = System.SerializableAttribute;
+using ContactsManager.Core.DTO;
+using ContactsManager.Core.ServiceContracts;
 
-namespace Services
+namespace ContactsManager.Core.Services
 {
     public class PeopleGetterServiceWithFewExcelFields : IPeopleGetterService
     {
