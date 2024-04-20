@@ -1,12 +1,13 @@
-﻿using CRUDExample.Filters.ActionFilters;
-using Entities;
+﻿using ContactsManager.Core.Domain.RepositoryContracts;
+using ContactsManager.Core.ServiceContracts;
+using ContactsManager.Core.Services;
+using ContactsManager.Infrastructure.DbContext;
+using ContactsManager.Infrastructure.Repositories;
+using ContactsManager.UI.Filters.ActionFilters;
+using CRUDExample.Filters.ActionFilters;
 using Microsoft.EntityFrameworkCore;
-using Repositories;
-using RepositoryContracts;
-using ServiceContracts;
-using Services;
 
-namespace CRUDExample.StartupExtensions
+namespace ContactsManager.UI.StartupExtensions
 {
     public static class ConfigureServicesExtension
     {

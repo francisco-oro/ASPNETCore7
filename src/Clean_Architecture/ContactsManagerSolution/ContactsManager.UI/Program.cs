@@ -1,6 +1,6 @@
+using ContactsManager.UI.StartupExtensions;
 using CRUDExample.Middleware;
 using Serilog;
-using CRUDExample.StartupExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

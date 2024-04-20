@@ -1,4 +1,8 @@
-﻿using CRUDExample.Filters;
+﻿using ContactsManager.Core.DTO;
+using ContactsManager.Core.Enums;
+using ContactsManager.Core.ServiceContracts;
+using ContactsManager.UI.Filters.ActionFilters;
+using CRUDExample.Filters;
 using CRUDExample.Filters.ActionFilters;
 using CRUDExample.Filters.AuthorizationFilter;
 using CRUDExample.Filters.ResourceFilters;
@@ -7,11 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Rotativa.AspNetCore;
 using Rotativa.AspNetCore.Options;
-using ServiceContracts;
-using ServiceContracts.DTO;
-using ServiceContracts.Enums;
 
-namespace CRUDExample.Controllers
+namespace ContactsManager.UI.Controllers
 {
     [Route("[controller]")]
     //[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Controller", "My-Value-From-Controller", 3 }, Order = 3 )]
