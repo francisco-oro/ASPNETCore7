@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using StocksApp.Core.ServiceContracts;
-using StocksApp.Models;
+using StocksApp.UI.Models;
 
 namespace StocksApp.UI.Controllers
 {

@@ -6,7 +6,7 @@ using StocksApp.Core.Services;
 using StocksApp.Infrastructure.DbContext;
 using StocksApp.Infrastructure.Repositories;
 
-namespace StocksApp.UI.StartupExceptions
+namespace StocksApp.UI.StartupExtensions
 {
     public static class ConfigureServicesExtension
     {

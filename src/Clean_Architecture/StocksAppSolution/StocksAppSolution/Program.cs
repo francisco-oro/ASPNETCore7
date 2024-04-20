@@ -1,6 +1,6 @@
 using Rotativa.AspNetCore;
 using StocksApp.UI.MiddleWare;
-using StocksApp.UI.StartupExceptions;
+using StocksApp.UI.StartupExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

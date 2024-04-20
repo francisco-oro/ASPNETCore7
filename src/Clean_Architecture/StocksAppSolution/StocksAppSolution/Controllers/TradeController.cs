@@ -1,12 +1,11 @@
-﻿using System.Reflection.Metadata;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Rotativa.AspNetCore;
 using Rotativa.AspNetCore.Options;
-using StocksApp.Models;
 using StocksApp.Core.DTO;
 using StocksApp.Core.ServiceContracts;
-using StocksApp.Filters.ActionFilters;
+using StocksApp.UI.Filters.ActionFilters;
+using StocksApp.UI.Models;
 
 namespace StocksApp.UI.Controllers
 {

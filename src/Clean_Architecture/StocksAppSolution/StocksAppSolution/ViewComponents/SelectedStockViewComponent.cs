@@ -1,9 +1,8 @@
-﻿using System.Security.Authentication;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using StocksApp.Core.ServiceContracts;
 
-namespace StocksApp.ViewComponents
+namespace StocksApp.UI.ViewComponents
 {
     [ViewComponent]
     public class SelectedStockViewComponent : ViewComponent
