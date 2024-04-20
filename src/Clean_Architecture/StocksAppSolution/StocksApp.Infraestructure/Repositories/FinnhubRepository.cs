@@ -1,10 +1,10 @@
 ﻿using System.Net;
 using System.Security.Authentication;
 using System.Text.Json;
-using RepositoryContracts.ServiceContracts;
 using Microsoft.Extensions.Configuration;
+using StocksApp.Core.Domain.RepositoryContracts.ServiceContracts;
 
-namespace Repositories
+namespace StocksApp.Infrastructure.Repositories
 {
     public class FinnhubRepository : IFinnhubRespository
     {

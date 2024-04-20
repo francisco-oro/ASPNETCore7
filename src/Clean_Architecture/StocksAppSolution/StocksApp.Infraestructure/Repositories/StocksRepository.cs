@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Entities;
-using Microsoft.EntityFrameworkCore;
-using RepositoryContracts;
+﻿using Microsoft.EntityFrameworkCore;
+using StocksApp.Core.Domain.Entities;
+using StocksApp.Core.Domain.RepositoryContracts;
+using StocksApp.Infrastructure.DbContext;
 
-namespace Repositories
+namespace StocksApp.Infrastructure.Repositories
 {
 
     public class StocksRepository : IStocksRepository
