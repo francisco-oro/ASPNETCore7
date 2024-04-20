@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Fizzler.Systems.HtmlAgilityPack;
+﻿using Fizzler.Systems.HtmlAgilityPack;
 using FluentAssertions;
 using HtmlAgilityPack;
 
 namespace StockAppTests
 {
-    public class TradeControllerIntegrationTest : IClassFixture<CustomWebApplicationFactory>
+     public class TradeControllerIntegrationTest : IClassFixture<CustomWebApplicationFactory>
     {
         private readonly HttpClient _httpClient;
 

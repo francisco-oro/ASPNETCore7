@@ -27,8 +27,11 @@ namespace StockAppTests
         public StocksControllerTest()
         {
             _fixture = new Fixture();
-            _finnhubServiceMock = new Mock<IFinnhubCompanyProfileService>();
-            _finnhubService = _finnhubServiceMock.Object;
+            _finnhubSearchStocksServiceMock = new Mock<IFinnhubSearchStocksService>();
+            _finnhubStocksServiceMock = new Mock<IFinnhubStocksService>();
+
+            _finnhubSearchStocksService = _finnhubSearchStocksServiceMock.Object;
+            _finnhubStocksService = _finnhubStocksServiceMock.Object;
 
             _options = Options.Create(new TradingOptions()
             {
@@ -49,11 +52,11 @@ namespace StockAppTests
             List<Dictionary<string, string>>? stocksDictionary =
                 JsonSerializer.Deserialize<List<Dictionary<string, string>>?>(stockSymbolsJson);
  
-            _finnhubServiceMock.Setup(
+            _finnhubStocksServiceMock.Setup(
                     temp => temp.GetStocks())
                 .ReturnsAsync(stocksDictionary);
 
-            StocksController stocksController = new StocksController(_finnhubService, _options, _logger);
+            StocksController stocksController = new StocksController(_finnhubStocksService, _finnhubSearchStocksService,_options, _logger);
 
             //Act
             IActionResult result = await stocksController.Explore(searchBy: null, stock: null, showAll: false);
