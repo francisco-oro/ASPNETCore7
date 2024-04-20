@@ -1,5 +1,4 @@
-﻿using ContactsManager.IntegrationTests;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
 
