@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ContactsManager.IntegrationTests;
 using FluentAssertions;
-using Fizzler;
 using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
 
-namespace CRUDTests
+namespace ContactsManager.IntegrationTests
 {
     public class PeopleControllerIntegrationTest : IClassFixture<CustomWebApplicationFactory>
     {

@@ -1,22 +1,23 @@
 ﻿using System.Linq.Expressions;
 using AutoFixture;
-using Entities;
+using ContactsManager.Core.Domain.Entities;
+using ContactsManager.Core.Domain.RepositoryContracts;
+using ContactsManager.Core.DTO;
+using ContactsManager.Core.Enums;
+using ContactsManager.Core.ServiceContracts;
+using ContactsManager.Core.Services;
+using ContactsManager.Infrastructure.DbContext;
 using EntityFrameworkCoreMock;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
-using RepositoryContracts;
 using Serilog;
 using Serilog.Extensions.Hosting;
-using ServiceContracts;
-using ServiceContracts.DTO;
-using ServiceContracts.Enums;
-using Services;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CRUDTests
+namespace ContactsManager.ServiceTests
 {
     public class PersonServiceTest
     {
