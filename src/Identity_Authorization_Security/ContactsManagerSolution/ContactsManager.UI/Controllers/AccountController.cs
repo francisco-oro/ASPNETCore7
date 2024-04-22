@@ -9,10 +9,11 @@ namespace ContactsManager.UI.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-
-        public AccountController(UserManager<ApplicationUser> userManager)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -37,11 +38,20 @@ namespace ContactsManager.UI.Controllers
                 PersonName = registerDto.PersonName
             };
 
-            IdentityResult identityResult = await _userManager.CreateAsync(user);
+            IdentityResult identityResult = await _userManager.CreateAsync(user, registerDto.Password);
+            if (identityResult.Succeeded)
+            {
+                //Sign in 
+                await _signInManager.SignInAsync(user, isPersistent: true);
+                return RedirectToAction(nameof(PeopleController.Index), "People");
+            }
 
+            foreach (IdentityError identityResultError in identityResult.Errors)
+            {
+                ModelState.AddModelError("Register", identityResultError.Description);
+            }
+            return View(registerDto);
 
-            //TODO: Store user registration details into Identity database
-            return RedirectToAction(nameof(PeopleController.Index), "People");
         }
     }
 }
