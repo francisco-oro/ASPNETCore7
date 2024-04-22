@@ -12,18 +12,93 @@
 <div class="form-container">
     Already Registered? <a asp-action="Login" asp-controller="Account" class="link-hover">Login</a>
     <h2 class="text-large">Register</h2>
-    
+
     <form asp-controller="Account" asp-action="Register" method="post">
-        
+
         @* PersonName *@
         <div class="form-field flex">
             <div class="w-25">
                 <label asp-for="PersonName" class="form-input">Name</label>
             </div>
             <div class="flex-1">
-                <input asp-for="PersonName" class="form-input"/>
+                <input asp-for="PersonName" class="form-input" />
                 <span asp-validation-for="PersonName" class="text-red"></span>
+            </div>
+        </div>
+
+        @* Email *@
+        <div class="form-field flex">
+            <div class="w-25">
+                <label asp-for="Email" class="form-input">Email</label>
+            </div>
+            <div class="flex-1">
+                <input asp-for="Email" class="form-input" />
+                <span asp-validation-for="Email" class="text-red"></span>
+            </div>
+        </div>
+
+        @* Password *@
+        <div class="form-field flex">
+            <div class="w-25">
+                <label asp-for="Password" class="form-input">Password</label>
+            </div>
+            <div class="flex-1">
+                <input asp-for="Password" class="form-input" />
+                <span asp-validation-for="Password" class="text-red"></span>
+            </div>
+        </div>
+
+        @* ConfirmPassword *@
+        <div class="form-field flex">
+            <div class="w-25">
+                <label asp-for="ConfirmPassword" class="form-input">Confirm Password</label>
+            </div>
+            <div class="flex-1">
+                <input asp-for="ConfirmPassword" class="form-input" />
+                <span asp-validation-for="ConfirmPassword" class="text-red"></span>
+            </div>
+        </div>
+
+        @* PhoneNumber *@
+        <div class="form-field flex">
+            <div class="w-25">
+                <label asp-for="Phone" class="form-input">Phone</label>
+            </div>
+            <div class="flex-1">
+                <input asp-for="Phone" class="form-input" />
+                <span asp-validation-for="Phone" class="text-red"></span>
+            </div>
+        </div>
+
+        @* Register button *@
+        <div class="form-field flex">
+            <div class="w-25">
+            </div>
+            <div class="flex-1">
+                <button class="button button-green-back" type="submit">Register</button>
+
+                <div asp-validation-summary="All" class="text-red"></div>
+
+                @if (ViewBag.Errors != null)
+                {
+                    <div class="text-red ml">
+                        <ul>
+                            @foreach (string error in ViewBag.Errors)
+                            {
+                                <li class="ml">@error</li>
+                            }
+                        </ul>
+
+                    </div>
+                }
             </div>
         </div>
     </form>
 </div>
+
+
+@section scripts {
+    <script asp-fallback-test="window.jQuery" asp-fallback-src="/jquery.min.js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script asp-fallback-test="window.jQuery.validator" asp-fallback-src="/jquery.validate.min.js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script asp-fallback-test="window.jQuery.validator.unobstrusive" asp-fallback-src="/jquery.validate.unobtrusive.min.js" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js" integrity="sha512-xq+Vm8jC94ynOikewaQXMEkJIOBp7iArs3IhFWSWdRT3Pq8wFz46p+ZDFAR7kHnSFf+zUv52B3prRYnbDRdgog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+}

@@ -1,10 +1,12 @@
-﻿using ContactsManager.Core.Domain.RepositoryContracts;
+﻿using ContactsManager.Core.Domain.IdentityEntities;
+using ContactsManager.Core.Domain.RepositoryContracts;
 using ContactsManager.Core.ServiceContracts;
 using ContactsManager.Core.Services;
 using ContactsManager.Infrastructure.DbContext;
 using ContactsManager.Infrastructure.Repositories;
 using ContactsManager.UI.Filters.ActionFilters;
 using CRUDExample.Filters.ActionFilters;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ContactsManager.UI.StartupExtensions
@@ -50,6 +52,13 @@ namespace ContactsManager.UI.StartupExtensions
             });
 
             services.AddTransient<PeopleListActionFilter>();
+
+            // Enable Identity in this project
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
+                .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
+
 
             services.AddHttpLogging(options =>
             {
