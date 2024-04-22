@@ -45,8 +45,11 @@ app.MapControllers(); //Execute the filter pipeline (action + filters)
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
-        name: "default")
-});
+        name: "default",
+        pattern: "{controller}/{action}/{id?}");
+}); 
+
+//Eg: people/edit/1
 app.Run();
 
 public partial class Program { } //make the auto-generated Program accessible programmatically

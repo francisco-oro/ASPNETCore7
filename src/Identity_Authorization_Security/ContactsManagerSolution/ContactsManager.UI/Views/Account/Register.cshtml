@@ -70,6 +70,20 @@
                 <span asp-validation-for="Phone" class="text-red"></span>
             </div>
         </div>
+        
+        @* User Type *@
+        <div class="form-field flex">
+            <div class="w-25">
+                <label asp-for="UserType" class="form-input">User Type</label>
+            </div>
+            <div class="flex-1">
+                <input type="radio" id="User" asp-for="UserType" value="User"/>
+                <label for="User" checked>User</label>
+                <input type="radio" id="Admin" asp-for="UserType" value="Admin"/>
+                <label for="Admin">Admin</label>
+
+            </div>
+        </div>
 
         @* Register button *@
         <div class="form-field flex">
