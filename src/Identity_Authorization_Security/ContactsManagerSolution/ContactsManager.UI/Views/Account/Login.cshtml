@@ -1,7 +1,7 @@
 ﻿@model LoginDTO
 @{
     ViewBag.Title = "Login";
-    ViewBag.CurrentUr = "~/Account/Login";
+    ViewBag.CurrentUrl = "~/Account/Login";
 }
 
 <div class="text-grey">
@@ -12,9 +12,9 @@
 
 <div class="form-container">
     Not registered yet? <a asp-action="Register" asp-controller="Account" class="link-hover">Register</a>
-    <h2 class="text-large">Register</h2>
+    <h2 class="text-large">Login</h2>
 
-    <form asp-controller="Account" asp-action="Login" method="post">
+    <form asp-controller="Account" asp-action="Login" asp-route-ReturnUrl="@Context.Request.Query["ReturnUrl"]" method="post">
 
         @* Email *@
         <div class="form-field flex">

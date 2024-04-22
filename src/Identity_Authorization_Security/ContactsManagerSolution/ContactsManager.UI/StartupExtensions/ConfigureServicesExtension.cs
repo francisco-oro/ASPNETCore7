@@ -5,6 +5,7 @@ using ContactsManager.Core.Services;
 using ContactsManager.Infrastructure.DbContext;
 using ContactsManager.Infrastructure.Repositories;
 using ContactsManager.UI.Filters.ActionFilters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -45,13 +46,12 @@ namespace ContactsManager.UI.StartupExtensions
             services.AddScoped<IPeopleSorterService, PeopleSorterService>();
             services.AddScoped<IPeopleUpdaterService, PeopleUpdaterService>();
 
-
+            services.AddTransient<PeopleListActionFilter>();
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddTransient<PeopleListActionFilter>();
 
             // Enable Identity in this project
             services.AddIdentity<ApplicationUser, ApplicationRole>((options) =>
@@ -68,6 +68,15 @@ namespace ContactsManager.UI.StartupExtensions
                 .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
                 .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
 
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build(); //enforces authorization policy (user must be authenticated) for all the action methods
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+            });
 
             services.AddHttpLogging(options =>
             {
