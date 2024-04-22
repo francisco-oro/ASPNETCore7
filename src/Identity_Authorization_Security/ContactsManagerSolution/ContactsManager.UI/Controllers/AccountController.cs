@@ -21,7 +21,7 @@ namespace ContactsManager.UI.Controllers
         {
             return View();
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDTO registerDto)
         {
@@ -42,7 +42,7 @@ namespace ContactsManager.UI.Controllers
             if (identityResult.Succeeded)
             {
                 //Sign in 
-                await _signInManager.SignInAsync(user, isPersistent: true);
+                await _signInManager.SignInAsync(user, isPersistent: false);
                 return RedirectToAction(nameof(PeopleController.Index), "People");
             }
 

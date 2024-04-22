@@ -19,17 +19,31 @@
                             </i>
                         </h1>
                     </div>
-                    
-                    <div class="flex-1 pr" id="search-box-div">
 
+                    <div class="flex-1 pr" id="search-box-div">
                     </div>
                     <div class="flex-1 pr">
                         <div class="navbar account-links">
                             <ul>
-                                <li>
-                                    <a asp-controller="Account" asp-action="Register">Register</a>
-                                    <a asp-controller="Account" asp-action="Login">Login</a>
-                                </li>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <li>
+                                        <i class="fa-solid fa-user"></i>
+                                        @User.Identity?.Name
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Account" asp-action="Logout">Logout</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a asp-controller="Account" asp-action="Register">Register</a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Account" asp-action="Login">Login</a>
+                                    </li>
+                                }
                             </ul>
                         </div>
                     </div>
