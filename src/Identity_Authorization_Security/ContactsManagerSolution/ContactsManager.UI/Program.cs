@@ -42,6 +42,11 @@ app.UseAuthentication(); //Reading Identity cookie
 app.UseAuthorization(); //Validates access permissions of the user
 app.MapControllers(); //Execute the filter pipeline (action + filters)
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default")
+});
 app.Run();
 
 public partial class Program { } //make the auto-generated Program accessible programmatically
