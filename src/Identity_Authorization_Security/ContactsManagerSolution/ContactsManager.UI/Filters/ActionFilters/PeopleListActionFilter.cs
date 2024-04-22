@@ -1,7 +1,6 @@
 ﻿using ContactsManager.Core.DTO;
 using ContactsManager.Core.Enums;
 using ContactsManager.UI.Controllers;
-using CRUDExample.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ContactsManager.UI.Filters.ActionFilters

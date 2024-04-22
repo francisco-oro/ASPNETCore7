@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CRUDExample.Filters.ExceptionFilters
+namespace ContactsManager.UI.Filters.ExceptionFilters
 {
     public class HandleExceptionFilter : IExceptionFilter
     {

@@ -5,7 +5,6 @@ using ContactsManager.Core.Services;
 using ContactsManager.Infrastructure.DbContext;
 using ContactsManager.Infrastructure.Repositories;
 using ContactsManager.UI.Filters.ActionFilters;
-using CRUDExample.Filters.ActionFilters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

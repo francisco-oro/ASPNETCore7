@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CRUDExample.Filters.ResourceFilters
+namespace ContactsManager.UI.Filters.ResourceFilters
 {
     public class TokenResultFilter : IResultFilter
     {

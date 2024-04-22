@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CRUDExample.Filters.ResultFilters
+namespace ContactsManager.UI.Filters.ResultFilters
 {
     public class PeopleListResultFilter : IAsyncResultFilter
     {

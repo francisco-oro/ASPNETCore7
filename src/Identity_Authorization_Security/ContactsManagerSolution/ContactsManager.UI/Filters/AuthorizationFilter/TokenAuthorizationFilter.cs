@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CRUDExample.Filters.AuthorizationFilter
+namespace ContactsManager.UI.Filters.AuthorizationFilter
 {
     public class TokenAuthorizationFilter : IAuthorizationFilter
     {

@@ -1,12 +1,11 @@
 ﻿using ContactsManager.Core.DTO;
 using ContactsManager.Core.Enums;
 using ContactsManager.Core.ServiceContracts;
+using ContactsManager.UI.Filters;
 using ContactsManager.UI.Filters.ActionFilters;
-using CRUDExample.Filters;
-using CRUDExample.Filters.ActionFilters;
-using CRUDExample.Filters.AuthorizationFilter;
-using CRUDExample.Filters.ResourceFilters;
-using CRUDExample.Filters.ResultFilters;
+using ContactsManager.UI.Filters.AuthorizationFilter;
+using ContactsManager.UI.Filters.ResourceFilters;
+using ContactsManager.UI.Filters.ResultFilters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Rotativa.AspNetCore;

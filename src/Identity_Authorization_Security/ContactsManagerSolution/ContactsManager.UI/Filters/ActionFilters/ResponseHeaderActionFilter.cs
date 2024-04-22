@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CRUDExample.Filters.ActionFilters
+namespace ContactsManager.UI.Filters.ActionFilters
 {
     public class ResponseHeaderFilterFactoryAttribute : Attribute, IFilterFactory
     {
