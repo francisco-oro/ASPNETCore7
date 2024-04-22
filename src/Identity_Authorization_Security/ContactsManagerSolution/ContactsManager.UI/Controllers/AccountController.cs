@@ -53,5 +53,38 @@ namespace ContactsManager.UI.Controllers
             return View(registerDto);
 
         }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginDTO loginDto)
+        {
+            //Check for validation errors
+            if (ModelState.IsValid == false)
+            {
+                ViewBag.Errors = ModelState.Values.SelectMany(temp => temp.Errors).Select(temp => temp.ErrorMessage);
+                return View(loginDto);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(loginDto.Email, loginDto.Password, isPersistent: true, lockoutOnFailure: false);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(PeopleController.Index), "People");
+            }
+
+            ModelState.AddModelError("Login", "Invalid email or password");
+            return View(loginDto);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(PeopleController.Index), "People");
+        }
     }
 }
