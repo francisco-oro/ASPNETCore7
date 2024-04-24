@@ -29,7 +29,7 @@ namespace ContactsManager.UI.Controllers
         
         [HttpPost]
         [Authorize("NotAuthenticated")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterDTO registerDto)
         {
             //Check for validation errors
