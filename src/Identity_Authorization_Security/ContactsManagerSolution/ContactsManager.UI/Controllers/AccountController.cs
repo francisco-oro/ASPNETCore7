@@ -29,6 +29,7 @@ namespace ContactsManager.UI.Controllers
         
         [HttpPost]
         [Authorize("NotAuthenticated")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterDTO registerDto)
         {
             //Check for validation errors
@@ -60,8 +61,12 @@ namespace ContactsManager.UI.Controllers
                 }
                 else
                 {
-                    //Add the new user into 'User' role
-                    await _userManager.AddToRoleAsync(user, UserTypeOptions.User.ToString());
+                    //Create 'User' role
+                    if (await _roleManager.FindByNameAsync(UserTypeOptions.User.ToString()) is null)
+                    {
+                        ApplicationRole applicationRole = new ApplicationRole() { Name = UserTypeOptions.User.ToString() };
+                        await _roleManager.CreateAsync(applicationRole);
+                    }
                 }
                 //Sign in 
                 await _signInManager.SignInAsync(user, isPersistent: false);
@@ -125,6 +130,7 @@ namespace ContactsManager.UI.Controllers
             return RedirectToAction(nameof(PeopleController.Index), "People");
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> IsEmailAlreadyRegistered(string email)
         {
             ApplicationUser user = await _userManager.FindByEmailAsync(email);
