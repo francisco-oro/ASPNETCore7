@@ -290,15 +290,28 @@ By using this method, you can easily customize ASP.NET Core Identity to meet spe
 ## How can you handle user registration and password management in ASP.NET Core Identity?
 `user registration` and `password management` are both handled by the `UserManager` class  
 ## How can you implement role-based authorization in ASP.NET Core Identity?
-
+You can implement role-based authorization by implementing an `Authorization Policy` and providing its name in the `Authorize` attribute.
 ## What are some common security considerations when using ASP.NET Core Identity?
-
+- It's recommended to use `Anti-Forgering` tokens to prevent malicious websites from making requests to your server
+- It's recommended to enable the Hypertext Transfer Protocol Secure a.k.a HTTPS
 ## What are different managers in ASP.NET Core?
-
+- `Signing manager` Is responsible for the users' sign-in and sign-out functionality
+- `User manager` is responsible for creating, updating and deleting users. 
+- `Role manager` is responsible for creating, updating and deleting roles. 
 ## What architecture is used in ASP.NET Core Identity (with store and managers)?
-
+- The `Onion Architecture` 
 ## What is Cross-Site Request Forgery (XSRF) and how does it impact web applications?
-
+- It's a vulneraibility that allows making requests from a form in a malicious website to a web application and perform operations in the user's behalf.
+- It makes it easy for attackers to steal the information of the users through fake forms
 ## How does ASP.NET Core protect against XSRF attacks?
+You can apply `AutoValidateAntiforgeryTokenAttribute` as a global filter in `Startup.ConfigureServices()`, so it applies to all of your routes automatically: 
 
+```c#
+services.AddMvc(options => 
+	options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+```
+
+Note that `AutoValidateAntiforgeryTokenAttribute` only applies to unsafe requests (POST, PUT), not safe ones (GET, HEAD, OPTIOMS, TRACE).
+This way, the antiforgery token is only required for actions that are susceptible to CSRF attacks. 
 ## How can you implement XSRF protection in ASP.NET Core manually?
+You can apply `AutoValidateAntifo
