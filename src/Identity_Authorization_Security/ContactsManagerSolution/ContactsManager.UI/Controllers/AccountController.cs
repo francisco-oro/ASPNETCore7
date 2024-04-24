@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace ContactsManager.UI.Controllers
 {
     [Route("[controller]/[action]")]
-    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -22,12 +21,14 @@ namespace ContactsManager.UI.Controllers
         }
 
         [HttpGet]
+        [Authorize("NotAuthenticated")]
         public IActionResult Register()
         {
             return View();
         }
         
         [HttpPost]
+        [Authorize("NotAuthenticated")]
         public async Task<IActionResult> Register(RegisterDTO registerDto)
         {
             //Check for validation errors
@@ -76,12 +77,14 @@ namespace ContactsManager.UI.Controllers
         }
 
         [HttpGet]
+        [Authorize("NotAuthenticated")]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize("NotAuthenticated")]
         public async Task<IActionResult> Login(LoginDTO loginDto, string? ReturnUrl)
         {
             //Check for validation errors
@@ -115,6 +118,7 @@ namespace ContactsManager.UI.Controllers
             return View(loginDto);
         }
 
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

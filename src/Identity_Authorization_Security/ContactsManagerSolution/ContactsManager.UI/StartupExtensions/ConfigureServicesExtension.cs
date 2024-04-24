@@ -71,6 +71,14 @@ namespace ContactsManager.UI.StartupExtensions
             services.AddAuthorization(options =>
             {
                 options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build(); //enforces authorization policy (user must be authenticated) for all the action methods
+
+                options.AddPolicy("NotAuthenticated", policy =>
+                {
+                    policy.RequireAssertion(context =>
+                    {
+                        return !context.User.Identity.IsAuthenticated;
+                    });
+                });
             });
 
             services.ConfigureApplicationCookie(options =>
