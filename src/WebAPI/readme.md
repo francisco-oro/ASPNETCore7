@@ -171,25 +171,44 @@ public sealed class ActionResult<T>
 # Interview Questions
 
 ## What is ASP.NET Web API?
-It is a component of ASP.NET Core used to create RESTful HTTP services.
+ASP.NET Web API is a framework provided by Microsoft for building HTTP services that can be consumed by various clients, such as web browsers, mobile applications, and desktop applications. It allows developers to create RESTful APIs using the .NET platform.
+
+
+
 ## How do you define a Web API controller in ASP.NET Web API?
-Defining a Web API controller in ASP.NET Web API can be accomplished in two ways:
-- Using the `[ApiController]` attribute in the class
-- Using the `Controller` suffix in the class name e.j. `HomeController`
+To define a Web API controller, you need to create a new class that inherits from the ControllerBase class. This class represents an HTTP service and contains action methods that handle different HTTP requests.
 ## Explain the basic syntax of a Web API controller.
-- The controller name should be suffixed with the `Controller` word: `HomeController`
-- The `[Route]` attribute must be defined in the controller-level attributes
-- The `[ApiController]` attribute must be defined in the controller-level attributes 
+A Web API controller consists of a class that inherits from the ControllerBase class and contains action methods. Action methods are public methods decorated with attributes such as [HttpGet], [HttpPost], [HttpPut], or [HttpDelete], depending on the HTTP verb they handle. These methods are responsible for processing incoming requests and returning responses.
 ## What are Action Results in ASP.NET Web API?
+Action Results in ASP.NET Web API represent the result returned by an action method. They encapsulate the data that needs to be sent back to the client. Action Results derive from the IActionResult interface.
 
 ## What is the difference between IActionResult and ActionResult<T>?
-
+IActionResult is an interface that represents the result of an action method, whereas ActionResult<T> is a generic class that derives from IActionResult and is used when you want to return a specific type of data as the result of an action method. For example, ActionResult<string> can be used to return a string result.
 ## Explain the usage of the ProblemDetails class in ASP.NET Web API.
-
+The ProblemDetails class is a part of the ASP.NET Core framework and is used to provide consistent error responses from a Web API. It allows you to return structured error information in the form of a JSON response, including details like the error message, status code, and additional properties.
 ## Can you create a custom base class for Web API controllers? If so, how?
+Yes, you can create a custom base class for Web API controllers. To do this, you need to create a new class that derives from the ControllerBase class. This custom base class can contain common functionality, utility methods, or custom behavior that you want to share across multiple Web API controllers.
+
 
 ## How do you integrate Entity Framework Core with ASP.NET Web API?
+To use Entity Framework Core (EF Core) with ASP.NET Web API, you need to follow these steps:
+
+- Install the required NuGet packages for EF Core.
+
+- Define your data model classes as entities.
+
+- Create a DbContext class that represents the database context.
+
+- Configure the DbContext and entity relationships.
+
+- Inject the DbContext into your Web API controllers or services using dependency injection.
+
+- Use the DbContext in your controllers or services to perform database operations such as querying, inserting, updating, or deleting data.
 
 ## How can you return data from EF Core queries in Web API controller actions?
+You can return data from EF Core queries in Web API controller actions by using the Ok method of the ControllerBase. For example, you can use return Ok(data) to return an HTTP 200 OK response along with the data retrieved from the database.
+
 
 ## What is the purpose of the ActionResult class in Web API?
+The ActionResult class is the base class for all action results in Web API. It provides a convenient way to create and return different types of HTTP responses. It encapsulates both the data and the HTTP status code that should be returned to the client.
+
