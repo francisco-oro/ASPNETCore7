@@ -55,6 +55,11 @@ namespace OrdersWebAPI.Controllers
             }
 
             existingOrder.CustomerName = order.CustomerName;
+            if (order.OrderItems != null)
+            {
+                existingOrder.OrderItems = order.OrderItems;
+                existingOrder.TotalAmount = order.OrderItems.Sum(temp => temp.TotalPrice);
+            }
 
             try
             {
@@ -71,7 +76,6 @@ namespace OrdersWebAPI.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
 
@@ -81,6 +85,12 @@ namespace OrdersWebAPI.Controllers
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
             order.OrderNumber = $"Order_{DateTime.Today.Year}_{GetInteger()}";
+            order.OrderDate = DateTime.Now;
+            if (order.OrderItems != null)
+            {
+                order.TotalAmount = order.OrderItems.Sum(temp => temp.TotalPrice);
+            }
+
             _context.Order.Add(order);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetOrder", new { id = order.OrderId }, order);

@@ -16,9 +16,11 @@ namespace OrdersWebAPI.Entities
         public string CustomerName { get; set; }
 
         [Required]
-        public DateTime OrderDate { get; set; }
+        public DateTime? OrderDate { get; set; }
 
         [PositiveNumber]
-        public double TotalAmount { get; set; }
+        public double? TotalAmount { get; set; }
+
+        public virtual ICollection<OrderItem>? OrderItems { get; set; }
     }
 }

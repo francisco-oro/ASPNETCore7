@@ -31,7 +31,7 @@ namespace OrdersWebAPI.Controllers
 
             if (orderItem == null)
             {
-                return NotFound();
+                return Problem(detail:"Invalid id", statusCode: 400, title: "Order Item Search");
             }
 
             return orderItem;
@@ -47,7 +47,15 @@ namespace OrdersWebAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(orderItem).State = EntityState.Modified;
+            var orderItemResult = await _context.OrderItem.FindAsync(id);
+            if (orderItemResult is null)
+            {
+                return NotFound();
+            }
+
+            orderItemResult.UnitPrice = orderItem.UnitPrice;
+            orderItemResult.Quantity = orderItem.Quantity;
+            orderItemResult.ProductName = orderItem.ProductName;
 
             try
             {
