@@ -12,11 +12,9 @@ namespace OrdersWebAPI.Controllers
 {
     public class OrdersController : CustomControllerBase
     {
-        private readonly ApplicationDbContext _context;
-
-        public OrdersController(ApplicationDbContext context) 
+        private int _orderCount=0;
+        public OrdersController(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
 
         // GET: api/Orders
@@ -34,7 +32,7 @@ namespace OrdersWebAPI.Controllers
 
             if (order == null)
             {
-                return NotFound();
+                return Problem(detail:"Invalid id", statusCode: 400, title: "Order Search");
             }
 
             return order;
@@ -49,8 +47,14 @@ namespace OrdersWebAPI.Controllers
             {
                 return BadRequest();
             }
+            var existingOrder = await _context.Order.FindAsync(id);
 
-            _context.Entry(order).State = EntityState.Modified;
+            if (existingOrder == null)
+            {
+                return NotFound();
+            }
+
+            existingOrder.CustomerName = order.CustomerName;
 
             try
             {
@@ -76,9 +80,9 @@ namespace OrdersWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Order>> PostOrder(Order order)
         {
+            order.OrderNumber = $"Order_{DateTime.Today.Year}_{GetInteger()}";
             _context.Order.Add(order);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetOrder", new { id = order.OrderId }, order);
         }
 
@@ -101,6 +105,11 @@ namespace OrdersWebAPI.Controllers
         private bool OrderExists(Guid id)
         {
             return _context.Order.Any(e => e.OrderId == id);
+        }
+
+        private int GetInteger()
+        {
+            return _orderCount++;
         }
     }
 }

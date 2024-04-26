@@ -12,11 +12,8 @@ namespace OrdersWebAPI.Controllers
 {
     public class OrderItemsController : CustomControllerBase
     {
-        private readonly ApplicationDbContext _context;
-
-        public OrderItemsController(ApplicationDbContext context)
+        public OrderItemsController(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
 
         // GET: api/OrderItems
