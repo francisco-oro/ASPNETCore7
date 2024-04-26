@@ -10,21 +10,24 @@ namespace OrdersWebAPI.CustomValidators
         {
             if (value != null)
             {
-                if (value is int)
+                if (value is int i)
                 {
-
+                    if (i < 0)
+                    {
+                        return new ValidationResult(string.Format(ErrorMessage ?? DefaultErrorMessage));
+                    }
+                    return ValidationResult.Success;
                 }
 
-                if (value is double)
+                if (value is double number)
                 {
-                    
+                    if (number < 0.0)
+                    {
+                        return new ValidationResult(string.Format(ErrorMessage ?? DefaultErrorMessage));
+                    }
+                    return ValidationResult.Success;
                 }
-                double number = (double)value;
-                if (number < 0.0)
-                {
-                    return new ValidationResult(string.Format(ErrorMessage ?? DefaultErrorMessage));
-                }
-                return ValidationResult.Success;
+
             }
 
             return null;

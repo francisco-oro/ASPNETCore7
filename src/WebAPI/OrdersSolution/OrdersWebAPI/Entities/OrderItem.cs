@@ -17,6 +17,11 @@ namespace OrdersWebAPI.Entities
         public string ProductName { get; set; }
 
         [PositiveNumber] 
-        public int Type { get; set; }
+        public int Quantity { get; set; }
+
+        [PositiveNumber] 
+        public double UnitPrice { get; set; }
+
+        public double TotalPrice { get; set; }
     }
 }
