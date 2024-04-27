@@ -31,7 +31,7 @@ namespace OrdersWebAPI.Controllers
 
             if (orderItem == null)
             {
-                return Problem(detail:"Invalid id", statusCode: 400, title: "Order Item Search");
+                return NotFound();
             }
 
             return orderItem;
@@ -57,6 +57,9 @@ namespace OrdersWebAPI.Controllers
             orderItemResult.Quantity = orderItem.Quantity;
             orderItemResult.ProductName = orderItem.ProductName;
 
+            var orderResult = await _context.Order.FindAsync(orderItemResult.OrderId);
+            orderResult.UpdateTotalAmount(); 
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -81,7 +84,14 @@ namespace OrdersWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<OrderItem>> PostOrderItem(OrderItem orderItem)
         {
+            orderItem.OrderItemId = Guid.NewGuid();
+            orderItem.TotalPrice = orderItem.UnitPrice * orderItem.Quantity;
+
             _context.OrderItem.Add(orderItem);
+            var existingOrder = await _context.Order.FindAsync(orderItem.OrderId);
+            existingOrder?.OrderItems?.Add(orderItem);
+            existingOrder?.UpdateTotalAmount();
+            
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetOrderItem", new { id = orderItem.OrderItemId }, orderItem);

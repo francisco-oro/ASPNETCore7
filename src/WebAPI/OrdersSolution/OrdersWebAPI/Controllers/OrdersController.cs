@@ -58,7 +58,7 @@ namespace OrdersWebAPI.Controllers
             if (order.OrderItems != null)
             {
                 existingOrder.OrderItems = order.OrderItems;
-                existingOrder.TotalAmount = order.OrderItems.Sum(temp => temp.TotalPrice);
+                existingOrder.UpdateTotalAmount();
             }
 
             try
@@ -87,8 +87,8 @@ namespace OrdersWebAPI.Controllers
             order.OrderNumber = $"Order_{DateTime.Today.Year}_{GetInteger()}";
             order.OrderDate = DateTime.Now;
             if (order.OrderItems != null)
-            {
-                order.TotalAmount = order.OrderItems.Sum(temp => temp.TotalPrice);
+            {                order.TotalAmount = order.OrderItems.Sum(temp => temp.TotalPrice);
+
             }
 
             _context.Order.Add(order);

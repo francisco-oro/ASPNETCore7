@@ -9,8 +9,9 @@ namespace OrdersWebAPI.Entities
         [Key] 
         public Guid OrderItemId { get; set; }
 
+        //Uniqueidentifier
         [Required(ErrorMessage = "{0} is required")]
-        public Guid OrderId { get; set; }
+        public Guid? OrderId { get; set; }
 
         [Required(ErrorMessage = "{0} is required")]
         [MaxLength(50, ErrorMessage = "Maximum length of {0} is 50 characters")]
@@ -23,5 +24,8 @@ namespace OrdersWebAPI.Entities
         public double UnitPrice { get; set; }
 
         public double TotalPrice { get; set; }
+
+        [ForeignKey("OrderId")]
+        public Order? Order { get; set; }
     }
 }
