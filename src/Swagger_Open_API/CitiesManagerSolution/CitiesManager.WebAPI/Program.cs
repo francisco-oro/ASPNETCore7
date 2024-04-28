@@ -2,6 +2,7 @@ using CitiesManager.WebAPI.DbContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,11 @@ builder.Services.AddControllers(options =>
 builder.Services.AddApiVersioning(config =>
 {
     config.ApiVersionReader = new UrlSegmentApiVersionReader();
+    //config.ApiVersionReader = new HeaderApiVersionReader(); //Reads version number from request header called "api-version". Eg: api-version: 1.0
+    
+    config.DefaultApiVersion = new ApiVersion(1, 0);
+    config.AssumeDefaultVersionWhenUnspecified = true;
+
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -28,7 +34,15 @@ builder.Services.AddEndpointsApiExplorer(); //Generates description for all endp
 builder.Services.AddSwaggerGen(options =>
 {
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"));
+    options.SwaggerDoc("v1", new OpenApiInfo() { Title = "Cities Web API", Version = "1.0"});
+    options.SwaggerDoc("v2", new OpenApiInfo() { Title = "Cities Web API", Version = "2.0"});
 }); //generates OpenAPI specification
+
+builder.Services.AddVersionedApiExplorer(setup =>
+{
+    setup.GroupNameFormat = "'v'VVV"; //v1 
+    setup.SubstituteApiVersionInUrl = true;
+});
 
 var app = builder.Build();
 
@@ -39,7 +53,11 @@ app.UseHttpsRedirection();
 
 
 app.UseSwagger(); //creates endpoint for swagger.json
-app.UseSwaggerUI(); //creates swagger UI for testing all web API endpoints / action methods
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "1.0");
+    options.SwaggerEndpoint("/swagger/v2/swagger.json", "2.0");
+}); //creates swagger UI for testing all web API endpoints / action methods
 
 app.UseAuthorization();
 
