@@ -4,7 +4,13 @@
         <name>CitiesManager.WebAPI</name>
     </assembly>
     <members>
-        <member name="M:CitiesManager.WebAPI.Controllers.CitiesController.GetCities">
+        <member name="M:CitiesManager.WebAPI.Controllers.v1.CitiesController.GetCities">
+            <summary>
+            Gets a list of cities (including city Id and city name) from 'cities' table
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CitiesManager.WebAPI.Controllers.v2.CitiesController.GetCities">
             <summary>
             Gets a list of cities (including city Id and city name) from 'cities' table
             </summary>

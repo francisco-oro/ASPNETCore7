@@ -8,8 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using CitiesManager.WebAPI.DbContext;
 using CitiesManager.WebAPI.Models;
 
-namespace CitiesManager.WebAPI.Controllers
+namespace CitiesManager.WebAPI.Controllers.v1
 {
+    [ApiVersion("1.0")]
     public class CitiesController : CustomControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -25,6 +26,7 @@ namespace CitiesManager.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        //[Produces("application/xml")]
         public async Task<ActionResult<IEnumerable<City>>> GetCities()
         {
             return await _context.Cities.OrderBy(temp => temp.CityName).ToListAsync();
@@ -42,7 +44,7 @@ namespace CitiesManager.WebAPI.Controllers
                 //return NotFound();
             }
 
-            return city; 
+            return city;
         }
 
         // PUT: api/Cities/5
