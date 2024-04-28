@@ -25,7 +25,5 @@ namespace OrdersWebAPI.Entities
 
         public double TotalPrice { get; set; }
 
-        [ForeignKey("OrderId")]
-        public Order? Order { get; set; }
     }
 }

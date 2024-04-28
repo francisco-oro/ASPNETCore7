@@ -12,7 +12,7 @@ namespace OrdersWebAPI.Controllers
 {
     public class OrdersController : CustomControllerBase
     {
-        private int _orderCount=0;
+        private int _orderCount;
         public OrdersController(ApplicationDbContext context) : base(context)
         {
         }
@@ -21,14 +21,14 @@ namespace OrdersWebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrder()
         {
-            return await _context.Order.ToListAsync();
-        }
+            return await _context.Order.Include(order1 => order1.OrderItems).ToListAsync();
 
+        }
         // GET: api/Orders/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder(Guid id)
         {
-            var order = await _context.Order.FindAsync(id);
+            var order = await _context.Order.Include(o => o.OrderItems).FirstOrDefaultAsync(temp => temp.OrderId == id);
 
             if (order == null)
             {
@@ -47,7 +47,7 @@ namespace OrdersWebAPI.Controllers
             {
                 return BadRequest();
             }
-            var existingOrder = await _context.Order.FindAsync(id);
+            var existingOrder = await _context.Order.Include(order1 => order1.OrderItems).FirstOrDefaultAsync(temp => temp.OrderId == id);
 
             if (existingOrder == null)
             {
@@ -55,11 +55,6 @@ namespace OrdersWebAPI.Controllers
             }
 
             existingOrder.CustomerName = order.CustomerName;
-            if (order.OrderItems != null)
-            {
-                existingOrder.OrderItems = order.OrderItems;
-                existingOrder.UpdateTotalAmount();
-            }
 
             try
             {
@@ -87,8 +82,8 @@ namespace OrdersWebAPI.Controllers
             order.OrderNumber = $"Order_{DateTime.Today.Year}_{GetInteger()}";
             order.OrderDate = DateTime.Now;
             if (order.OrderItems != null)
-            {                order.TotalAmount = order.OrderItems.Sum(temp => temp.TotalPrice);
-
+            {                
+                order.TotalAmount = order.OrderItems.Sum(temp => temp.TotalPrice);
             }
 
             _context.Order.Add(order);
@@ -100,7 +95,7 @@ namespace OrdersWebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(Guid id)
         {
-            var order = await _context.Order.FindAsync(id);
+            var order = await _context.Order.Include(order1 => order1.OrderItems).FirstOrDefaultAsync(temp => temp.OrderId == id);
             if (order == null)
             {
                 return NotFound();
