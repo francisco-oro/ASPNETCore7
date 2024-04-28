@@ -7,7 +7,11 @@
 
             if (order.OrderItems != null)
             {
-                order.TotalAmount = (float)order.OrderItems.Sum(temp => temp.TotalPrice);
+                order.TotalAmount = 0;
+                foreach (var orderOrderItem in order.OrderItems)
+                {
+                    order.TotalAmount += orderOrderItem.TotalPrice;
+                }
                 return order.TotalAmount;
             }
             return null;

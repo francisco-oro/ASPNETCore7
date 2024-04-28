@@ -57,9 +57,9 @@ namespace OrdersWebAPI.Controllers
             orderItemResult.UnitPrice = orderItem.UnitPrice;
             orderItemResult.Quantity = orderItem.Quantity;
             orderItemResult.ProductName = orderItem.ProductName;
+            orderItemResult.TotalPrice = orderItemResult.UnitPrice * orderItemResult.Quantity;
 
-            var orderResult = await _context.Order.FirstOrDefaultAsync(temp => temp.OrderId == orderId);
-            orderResult.UpdateTotalAmount(); 
+            var orderResult = await _context.Order.Include(temp => temp.OrderItems).FirstOrDefaultAsync(temp => temp.OrderId == orderId);
 
             try
             {
@@ -76,7 +76,8 @@ namespace OrdersWebAPI.Controllers
                     throw;
                 }
             }
-
+            orderResult.UpdateTotalAmount();
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
@@ -99,7 +100,9 @@ namespace OrdersWebAPI.Controllers
             existingOrder?.UpdateTotalAmount();
             
             await _context.SaveChangesAsync();
-
+            
+            existingOrder.UpdateTotalAmount();
+            await _context.SaveChangesAsync();
             return CreatedAtAction("GetOrderItem", new { id = orderItem.OrderItemId, orderId = orderId }, orderItem);
         }
 
