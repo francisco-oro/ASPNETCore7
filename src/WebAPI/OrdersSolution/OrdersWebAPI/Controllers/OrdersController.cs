@@ -10,6 +10,7 @@ using OrdersWebAPI.Entities;
 
 namespace OrdersWebAPI.Controllers
 {
+    [Route("api/[controller]")]
     public class OrdersController : CustomControllerBase
     {
         private int _orderCount;
@@ -32,7 +33,7 @@ namespace OrdersWebAPI.Controllers
 
             if (order == null)
             {
-                return Problem(detail:"Invalid id", statusCode: 400, title: "Order Search");
+                return Problem(detail:"Invalid id", statusCode: 404, title: "Order Search");
             }
 
             return order;

@@ -4,6 +4,7 @@
     {
         public static double? UpdateTotalAmount(this Order order)
         {
+
             if (order.OrderItems != null)
             {
                 order.TotalAmount = (float)order.OrderItems.Sum(temp => temp.TotalPrice);

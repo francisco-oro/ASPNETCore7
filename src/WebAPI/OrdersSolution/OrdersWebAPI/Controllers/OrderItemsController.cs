@@ -10,6 +10,7 @@ using OrdersWebAPI.Entities;
 
 namespace OrdersWebAPI.Controllers
 {
+    [Route("api/orders/{orderId}/items")]
     public class OrderItemsController : CustomControllerBase
     {
         public OrderItemsController(ApplicationDbContext context) : base(context)
@@ -18,16 +19,16 @@ namespace OrdersWebAPI.Controllers
 
         // GET: api/OrderItems
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderItem>>> GetOrderItem()
+        public async Task<ActionResult<IEnumerable<OrderItem>>> GetOrderItems(Guid orderId)
         {
-            return await _context.OrderItem.ToListAsync();
+            return await _context.OrderItem.Where(o => o.OrderId == orderId).ToListAsync();
         }
 
         // GET: api/OrderItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderItem>> GetOrderItem(Guid id)
+        public async Task<ActionResult<OrderItem>> GetOrderItem(Guid orderId, Guid id)
         {
-            var orderItem = await _context.OrderItem.FindAsync(id);
+            var orderItem = await _context.OrderItem.Where(o => o.OrderId == orderId).FirstOrDefaultAsync(o => o.OrderItemId == id);
 
             if (orderItem == null)
             {
@@ -40,14 +41,14 @@ namespace OrdersWebAPI.Controllers
         // PUT: api/OrderItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrderItem(Guid id, OrderItem orderItem)
+        public async Task<IActionResult> PutOrderItem(Guid orderId, Guid id, OrderItem orderItem)
         {
             if (id != orderItem.OrderItemId)
             {
                 return BadRequest();
             }
 
-            var orderItemResult = await _context.OrderItem.FindAsync(id);
+            var orderItemResult = await _context.OrderItem.FirstOrDefaultAsync(o => o.OrderItemId == id);
             if (orderItemResult is null)
             {
                 return NotFound();
@@ -57,7 +58,7 @@ namespace OrdersWebAPI.Controllers
             orderItemResult.Quantity = orderItem.Quantity;
             orderItemResult.ProductName = orderItem.ProductName;
 
-            var orderResult = await _context.Order.Include("OrderItems").FirstOrDefaultAsync(temp => temp.OrderId == orderItem.OrderId);
+            var orderResult = await _context.Order.FirstOrDefaultAsync(temp => temp.OrderId == orderId);
             orderResult.UpdateTotalAmount(); 
 
             try
@@ -82,26 +83,31 @@ namespace OrdersWebAPI.Controllers
         // POST: api/OrderItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<OrderItem>> PostOrderItem(OrderItem orderItem)
+        public async Task<ActionResult<OrderItem>> PostOrderItem(Guid orderId, OrderItem orderItem)
         {
+            if (orderId != orderItem.OrderId)
+            {
+                return BadRequest();
+            }
+
             orderItem.OrderItemId = Guid.NewGuid();
             orderItem.TotalPrice = orderItem.UnitPrice * orderItem.Quantity;
 
             _context.OrderItem.Add(orderItem);
-            var existingOrder = await _context.Order.Include("OrderItems").FirstOrDefaultAsync(temp => temp.OrderId ==orderItem.OrderId);
+            var existingOrder = await _context.Order.Include(o => o.OrderItems).FirstOrDefaultAsync(temp => temp.OrderId == orderId);
             existingOrder?.OrderItems?.Add(orderItem);
             existingOrder?.UpdateTotalAmount();
             
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOrderItem", new { id = orderItem.OrderItemId }, orderItem);
+            return CreatedAtAction("GetOrderItem", new { id = orderItem.OrderItemId, orderId = orderId }, orderItem);
         }
 
         // DELETE: api/OrderItems/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrderItem(Guid id)
+        public async Task<IActionResult> DeleteOrderItem(Guid orderId, Guid id)
         {
-            var orderItem = await _context.OrderItem.FindAsync(id);
+            var orderItem = await _context.OrderItem.FirstOrDefaultAsync(o => o.OrderItemId == id);
             if (orderItem == null)
             {
                 return NotFound();
