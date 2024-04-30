@@ -1,4 +1,8 @@
-﻿using System;
-using _02_Reflection;
+﻿var s = "abracadabra   ";
+var t = typeof(string);
+Console.WriteLine(t);  
 
-SystemType
+
+var trimMethod = t.GetMethod("Trim",, Array.Empty<Type>());
+Console.WriteLine(trimMethod);
+
