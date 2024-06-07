@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {City} from "../models/city";
 import {CitiesService} from "../services/cities.service";
-import {resolveProvidersRequiringFactory} from "@angular/compiler-cli/src/ngtsc/annotations/common";
 
 @Component({
   selector: 'app-cities',
@@ -16,9 +15,18 @@ export class CitiesComponent implements OnInit{
 
   ngOnInit(): void {
     this.citiesService.getCities()
-      .subscribe(
-        (response: City[] => {}),
-      );
+      .subscribe({
+        next: (response: City[]) => {
+          this.cities = response;
+        },
+
+        error: (error: any) => {
+          console.log(error);
+        },
+
+        complete: () => {
+        }
+      });
   }
 }
 
