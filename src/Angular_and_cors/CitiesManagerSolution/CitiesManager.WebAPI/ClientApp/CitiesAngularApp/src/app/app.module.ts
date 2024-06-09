@@ -6,11 +6,13 @@ import { AppComponent } from './app.component';
 import { CitiesComponent } from './cities/cities.component';
 import {HttpClientModule} from "@angular/common/http";
 import {ReactiveFormsModule} from "@angular/forms";
+import { DisableControlDirective } from './directives/disable-control.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CitiesComponent
+    CitiesComponent,
+    DisableControlDirective
   ],
     imports: [
         BrowserModule,
