@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CitiesManager.Core.Entities;
+using CitiesManager.Infrastructure.DatabaseContext;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CitiesManager.WebAPI.DbContext;
-using CitiesManager.WebAPI.Models;
 
 namespace CitiesManager.WebAPI.Controllers.v2
 {

@@ -594,6 +594,13 @@ a.button-link:link, a.button-link:visited
   margin: 7px 0px;
   display: inline-block;
 }
+.border-less-textbox
+{
+  padding: 8px 10px;
+  font-size: 105%;
+  border: none;
+  width: 100%;
+}
 
 
 .form-input
@@ -837,13 +844,6 @@ a.button-link:link, a.button-link:visited
     background-color: #ffffff;
   }
 
-  .border-less-textbox
-  {
-    padding: 8px 10px;
-    font-size: 105%;
-    border: none;
-    width: 100%;
-  }
 
 
   .orders-list

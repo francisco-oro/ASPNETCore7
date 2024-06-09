@@ -1,9 +1,9 @@
-﻿using CitiesManager.WebAPI.Models;
+﻿using CitiesManager.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CitiesManager.WebAPI.DbContext
+namespace CitiesManager.Infrastructure.DatabaseContext
 {
-    public class ApplicationDbContext : Microsoft.EntityFrameworkCore.DbContext 
+    public class ApplicationDbContext : DbContext 
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {

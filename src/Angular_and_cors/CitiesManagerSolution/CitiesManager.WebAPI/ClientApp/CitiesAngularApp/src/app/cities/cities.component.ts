@@ -72,6 +72,10 @@ export class CitiesComponent implements OnInit {
 
         // this.loadCities();
         this.cities.push(new City(value.cityID, value.cityName));
+        this.putCityFormArray.push(new FormGroup({
+          cityID: new FormControl(value.cityID, [Validators.required]),
+          cityName: new FormControl({value: value.cityName, disabled: true},[Validators.required]),
+        }));
 
         this.postCityForm.reset();
         this.isPostCityFormSubmitted = false;
@@ -101,7 +105,26 @@ export class CitiesComponent implements OnInit {
       error: (err:any) => {},
       complete: () => {},
 
-    })
+    });
+  }
+
+  public deleteClicked(city: City, i: number) {
+    if(confirm(`Are you sure to delete this city: ${city.cityName}`)) {
+      this.citiesService.deleteCity(city.cityID).subscribe({
+        next: (response: string ) => {
+          console.log(response);
+
+          this.putCityFormArray.removeAt(i);
+          this.cities.splice(i, 1);
+        },
+
+        error: (error: any) => {
+          console.log(error);
+        },
+
+        complete: () => { }
+      });
+    }
   }
 }
 
