@@ -44,11 +44,22 @@ builder.Services.AddVersionedApiExplorer(setup =>
     setup.SubstituteApiVersionInUrl = true;
 });
 
+// CORS: localhost:4200, localhost:4100
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(corsPolicyBuilder =>
     {
-        corsPolicyBuilder.WithOrigins(builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? Array.Empty<string>());
+        corsPolicyBuilder
+            .WithOrigins(builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? Array.Empty<string>())
+            .WithHeaders("Authorization", "origin", "accept", "content-type")
+            .WithMethods("GET", "POST", "PUT", "DELETE");
+    });
+    options.AddPolicy("4100Client" ,corsPolicyBuilder =>
+    {
+        corsPolicyBuilder
+            .WithOrigins(builder.Configuration.GetSection("AllowedOrigins2").Get<string[]>() ?? Array.Empty<string>())
+            .WithHeaders("Authorization", "origin", "accept")
+            .WithMethods("GET");
     });
 });
 
