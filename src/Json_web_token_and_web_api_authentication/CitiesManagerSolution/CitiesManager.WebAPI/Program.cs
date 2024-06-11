@@ -67,18 +67,17 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
-    {
-        options.Password.RequiredLength = 5;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireLowercase = true;
-        options.Password.RequireDigit = true;
-    })
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders()
-    .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
-    .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
-
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 5;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders()
+.AddUserStore<UserStore<ApplicationUser,ApplicationRole, ApplicationDbContext, Guid>>()
+.AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
 
 var app = builder.Build();
 
