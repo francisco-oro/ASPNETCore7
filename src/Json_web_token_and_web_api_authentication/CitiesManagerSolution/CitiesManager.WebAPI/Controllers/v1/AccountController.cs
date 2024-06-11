@@ -24,15 +24,51 @@ public class AccountController : CustomControllerBase
         _signInManager = signInManager;
         _roleManager = roleManager;
     }
-
-
-    public async Task<IActionResult<ApplicationUser>> PostRegister(RegisterDTO registerDto)
+    
+    [HttpPost]
+    public async Task<ActionResult<ApplicationUser>> PostRegister(RegisterDTO registerDto)
     {
+        string errorMessage;
         // Validation
         if (ModelState.IsValid == false)
         {
-            string errorMessage = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(error => error.ErrorMessage));
+            errorMessage = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(error => error.ErrorMessage));
             return Problem(errorMessage);
         }
-    } 
+        
+        // Create user
+        ApplicationUser applicationUser = new ApplicationUser()
+        {
+            Email = registerDto.Email,
+            PhoneNumber = registerDto.PhoneNumber,
+            UserName = registerDto.Email,
+            PersonName = registerDto.PersonName
+        };
+
+        IdentityResult identityResult = await _userManager.CreateAsync(applicationUser, registerDto.Password);
+
+        if (identityResult.Succeeded)
+        {
+            // Sign-in
+            await _signInManager.SignInAsync(applicationUser, isPersistent: false);
+            return Ok(applicationUser);
+        }
+
+        errorMessage = string.Join(" | ", identityResult.Errors.Select(e => e.Description));
+        // error1 | error 2
+        return Problem(errorMessage);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> IsEmailAlreadyRegistered(string email)
+    {
+        ApplicationUser? applicationUser = await _userManager.FindByEmailAsync(email);
+        if (applicationUser == null)
+        {
+            return Ok(true);
+        }
+
+        return Ok(false);
+    }
+    
 }
