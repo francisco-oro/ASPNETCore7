@@ -25,7 +25,7 @@ public class AccountController : CustomControllerBase
         _roleManager = roleManager;
     }
     
-    [HttpPost]
+    [HttpPost("register")]
     public async Task<ActionResult<ApplicationUser>> PostRegister(RegisterDTO registerDto)
     {
         string errorMessage;

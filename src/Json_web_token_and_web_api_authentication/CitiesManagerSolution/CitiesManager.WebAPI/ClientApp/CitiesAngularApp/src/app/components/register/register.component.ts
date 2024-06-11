@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AccountService} from "../../services/account.service";
 import {Router} from "@angular/router";
 import {RegisterUser} from "../../models/register-user";
@@ -23,20 +23,20 @@ export class RegisterComponent {
     });
   }
 
-  get register_personNameControl(): any{
+  get register_personNameControl(): AbstractControl{
     return this.registerForm.controls["personName"];
   }
-  get register_emailControl(): any{
-    return this.registerForm.controls["personName"];
+  get register_emailControl(): AbstractControl{
+    return this.registerForm.controls["email"];
   }
-  get register_phoneNumberControl(): any{
-    return this.registerForm.controls["personName"];
+  get register_phoneNumberControl(): AbstractControl{
+    return this.registerForm.controls["phoneNumber"];
   }
-  get register_passwordControl(): any{
-    return this.registerForm.controls["personName"];
+  get register_passwordControl(): AbstractControl{
+    return this.registerForm.controls["password"];
   }
-  get register_confirmPasswordControl(): any{
-    return this.registerForm.controls["personName"];
+  get register_confirmPasswordControl(): AbstractControl{
+    return this.registerForm.controls["confirmPassword"];
   }
 
   registerSubmitted(){
@@ -52,7 +52,11 @@ export class RegisterComponent {
           this.router.navigate(['/cities']);
 
           this.registerForm.reset();
-        }
+        },
+        error: err => {
+          console.log(err);
+        },
+        complete: () => {}
       })
   }
 }
