@@ -1,4 +1,4 @@
-<div class="w-50 margin-auto">
+<div class="w-75 margin-auto">
   <div class="form-container">
     <h2>Register</h2>
 
@@ -52,7 +52,7 @@
         </div>
 
         <div class="flex-1">
-          <input type="text"  id="password" class="form-input" formControlName="password"/>
+          <input type="password"  id="password" class="form-input" formControlName="password"/>
           <span class="text-red"
           *ngIf="(register_passwordControl.touched || isFormSubmitted)
           && register_passwordControl.errors?.['required']">Password can't be blank</span>
@@ -65,10 +65,13 @@
         </div>
 
         <div class="flex-1">
-          <input type="text"  id="confirmPassword" class="form-input" formControlName="confirmPassword"/>
+          <input type="password"  id="confirmPassword" class="form-input" formControlName="confirmPassword"/>
           <span class="text-red"
           *ngIf="(register_confirmPasswordControl.touched || isFormSubmitted)
           && register_confirmPasswordControl.errors?.['required']">Confirm password can't be blank</span>
+          <span class="text-red"
+          *ngIf="(register_confirmPasswordControl.touched || isFormSubmitted)
+          && register_confirmPasswordControl.errors?.['compareValidator']">Password and confirm password do not match</span>
         </div>
       </div>
 <!--      Submit-->

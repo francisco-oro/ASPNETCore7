@@ -3,6 +3,7 @@ import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/form
 import {AccountService} from "../../services/account.service";
 import {Router} from "@angular/router";
 import {RegisterUser} from "../../models/register-user";
+import {CompareValidator} from "../../validators/custom.validators";
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,10 @@ export class RegisterComponent {
       phoneNumber: new FormControl(null, [Validators.required]),
       password: new FormControl(null, [Validators.required]),
       confirmPassword: new FormControl(null, [Validators.required]),
-    });
+    },
+      {
+        validators: [CompareValidator("password", "confirmPassword")]
+      });
   }
 
   get register_personNameControl(): AbstractControl{
@@ -40,23 +44,25 @@ export class RegisterComponent {
   }
 
   registerSubmitted(){
-    this.isFormSubmitted = true;
+    if (this.registerForm.valid){
+      this.isFormSubmitted = true;
 
-    this.accountService.postRegister(this.registerForm.value)
-      .subscribe({
-        next: (response: RegisterUser) => {
-          console.log(response);
+      this.accountService.postRegister(this.registerForm.value)
+        .subscribe({
+          next: (response: RegisterUser) => {
+            console.log(response);
 
-          this.isFormSubmitted = false;
+            this.isFormSubmitted = false;
 
-          this.router.navigate(['/cities']);
+            this.router.navigate(['/cities']);
 
-          this.registerForm.reset();
-        },
-        error: err => {
-          console.log(err);
-        },
-        complete: () => {}
-      })
+            this.registerForm.reset();
+          },
+          error: err => {
+            console.log(err);
+          },
+          complete: () => {}
+        });
+    }
   }
 }
