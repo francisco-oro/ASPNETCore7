@@ -42,8 +42,9 @@ public class AccountController : CustomControllerBase
     [HttpPost("register")]
     public async Task<ActionResult<ApplicationUser>> PostRegister(RegisterDTO registerDto)
     {
-        string errorMessage;
+        // string errorMessage;
         // Validation
+        string errorMessage;
         if (ModelState.IsValid == false)
         {
             errorMessage = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(error => error.ErrorMessage));
@@ -90,9 +91,48 @@ public class AccountController : CustomControllerBase
         return Ok(false);
     }
     
-    public async Task<ActionResult<ApplicationUser>> PostLogin(LoginDTO loginDto)
+    /// <summary>
+    /// Handles login POST requests to /api/v1.0/account/login
+    /// </summary>
+    /// <param name="loginDto">Login Data Transfer Object</param>
+    /// <returns>A status 200 response with the user details if the login was successful or a status
+    /// 400 response with the error message if the request is not valid</returns>
+    [HttpPost("login")]
+    public async Task<IActionResult> PostLogin(LoginDTO loginDto)
     {
-        
+        // Validation
+        if (ModelState.IsValid == false)
+        {
+            string errorMessage = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(error => error.ErrorMessage));
+            return Problem(errorMessage);
+        }
+
+        var result = await _signInManager.PasswordSignInAsync(loginDto.Email, loginDto.Password, isPersistent: false,
+            lockoutOnFailure: false);
+
+        if (result.Succeeded)
+        {
+            ApplicationUser? user = await _userManager.FindByEmailAsync(loginDto.Email);
+            if (user == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(new {personName = user.PersonName, email = user.Email});
+        }
+
+        return Problem("Invalid email or password");
+    }
+
+    /// <summary>
+    /// Handles logout GET requests to /api/v1.0/account/login
+    /// </summary>
+    /// <returns>A no content status 204 respose</returns>
+    [HttpGet("logout")]
+    public async Task<IActionResult> GetLogout()
+    {
+        await _signInManager.SignOutAsync();
+        return NoContent();
     }
     
 }

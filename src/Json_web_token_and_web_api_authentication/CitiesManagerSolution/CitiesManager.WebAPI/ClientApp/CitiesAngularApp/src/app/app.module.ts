@@ -8,13 +8,15 @@ import {HttpClientModule} from "@angular/common/http";
 import {ReactiveFormsModule} from "@angular/forms";
 import { DisableControlDirective } from './directives/disable-control.directive';
 import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CitiesComponent,
     DisableControlDirective,
-    RegisterComponent
+    RegisterComponent,
+    LoginComponent
   ],
     imports: [
         BrowserModule,
