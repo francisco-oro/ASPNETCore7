@@ -7,12 +7,19 @@
         </div>
         <div class="flex-1 pr" id="search-box-div">
           <div class="navbar account-links">
-            <ul>
+            <ul
+              *ngIf="accountService.currentUsername === '' || accountService.currentUsername === null || accountService.currentUsername === undefined">
               <li>
                 <a [routerLink]="['/login']">Login</a>
               </li>
               <li>
                 <a [routerLink]="['/register']">Register</a>
+              </li>
+            </ul>
+            <ul
+              *ngIf="accountService.currentUsername !== '' && accountService.currentUsername !== null &&  accountService.currentUsername !== undefined">
+              <li>
+                <a href="#" onClick="return false" (click)="onLogoutClicked()">Logout</a>
               </li>
             </ul>
           </div>

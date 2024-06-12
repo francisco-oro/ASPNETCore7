@@ -9,7 +9,7 @@ const API_BASE_URL: string = "http://localhost:5218/api/v1.0/account";
   providedIn: 'root'
 })
 export class AccountService {
-
+  public currentUsername: string | null = null;
   constructor(private httpClient: HttpClient) { }
 
   public postRegister(registerUser: RegisterUser): Observable<RegisterUser>{

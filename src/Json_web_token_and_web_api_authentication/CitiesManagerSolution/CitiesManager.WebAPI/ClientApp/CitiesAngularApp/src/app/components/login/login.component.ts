@@ -23,7 +23,7 @@ export class LoginComponent {
   }
 
   get login_emailControl(): AbstractControl{
-    return this.loginForm.controls["login"];
+    return this.loginForm.controls["email"];
   }
   get login_passwordControl(): AbstractControl{
     return this.loginForm.controls["password"];
@@ -32,13 +32,13 @@ export class LoginComponent {
     if (this.loginForm.valid){
       this.isFormSubmitted = true;
 
-      this.accountService.postRegister(this.loginForm.value)
+      this.accountService.postLogin(this.loginForm.value)
         .subscribe({
           next: (response: LoginUser) => {
             console.log(response);
 
             this.isFormSubmitted = false;
-
+            this.accountService.currentUsername = response.email;
             this.router.navigate(['/cities']);
 
             this.loginForm.reset();
