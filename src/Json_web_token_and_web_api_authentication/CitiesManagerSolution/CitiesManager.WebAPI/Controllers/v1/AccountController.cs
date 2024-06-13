@@ -1,5 +1,6 @@
 using CitiesManager.Core.DTO;
 using CitiesManager.Core.Identity;
+using CitiesManager.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,13 +27,18 @@ public class AccountController : CustomControllerBase
     /// <param name="userManager">Responsible for creating, deleting and modifying existing users</param>
     /// <param name="signInManager">Manages the user sign-in and sign-out of in the application</param>
     /// <param name="roleManager">Manages rol-based authentication and authorization</param>
-    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
+    /// <param name="jwtService">Manages JWT tokens</param>
+
+    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IJwtService jwtService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
+        _jwtService = jwtService;
     }
-    
+    private readonly IJwtService _jwtService;
+
+
     /// <summary>
     /// Handles user registration POST requests to /api/v1.0/account/register 
     /// </summary>
@@ -66,7 +72,9 @@ public class AccountController : CustomControllerBase
         {
             // Sign-in
             await _signInManager.SignInAsync(applicationUser, isPersistent: false);
-            return Ok(applicationUser);
+            AuthenticationResponse authenticationResponse = _jwtService.CreateJwtToken(applicationUser);
+            
+            return Ok(authenticationResponse);
         }
 
         errorMessage = string.Join(" | ", identityResult.Errors.Select(e => e.Description));
@@ -118,7 +126,10 @@ public class AccountController : CustomControllerBase
                 return NoContent();
             }
 
-            return Ok(new {personName = user.PersonName, email = user.Email});
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            AuthenticationResponse authenticationResponse = _jwtService.CreateJwtToken(user);
+            
+            return Ok(authenticationResponse);
         }
 
         return Problem("Invalid email or password");
