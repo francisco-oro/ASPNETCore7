@@ -9,13 +9,14 @@
             Manges user authentication and registration within the application. 
             </summary>
         </member>
-        <member name="M:CitiesManager.WebAPI.Controllers.v1.AccountController.#ctor(Microsoft.AspNetCore.Identity.UserManager{CitiesManager.Core.Identity.ApplicationUser},Microsoft.AspNetCore.Identity.SignInManager{CitiesManager.Core.Identity.ApplicationUser},Microsoft.AspNetCore.Identity.RoleManager{CitiesManager.Core.Identity.ApplicationRole})">
+        <member name="M:CitiesManager.WebAPI.Controllers.v1.AccountController.#ctor(Microsoft.AspNetCore.Identity.UserManager{CitiesManager.Core.Identity.ApplicationUser},Microsoft.AspNetCore.Identity.SignInManager{CitiesManager.Core.Identity.ApplicationUser},Microsoft.AspNetCore.Identity.RoleManager{CitiesManager.Core.Identity.ApplicationRole},CitiesManager.Core.ServiceContracts.IJwtService)">
             <summary>
             Constructor method with DI 
             </summary>
             <param name="userManager">Responsible for creating, deleting and modifying existing users</param>
             <param name="signInManager">Manages the user sign-in and sign-out of in the application</param>
             <param name="roleManager">Manages rol-based authentication and authorization</param>
+            <param name="jwtService">Manages JWT tokens</param>
         </member>
         <member name="M:CitiesManager.WebAPI.Controllers.v1.AccountController.PostRegister(CitiesManager.Core.DTO.RegisterDTO)">
             <summary>

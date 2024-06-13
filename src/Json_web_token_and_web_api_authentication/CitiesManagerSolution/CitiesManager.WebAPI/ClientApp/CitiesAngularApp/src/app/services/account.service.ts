@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {RegisterUser} from "../models/register-user";
 import {Observable} from "rxjs";
 import {LoginUser} from "../models/login-user";
+import {authenticationResponse} from "../interfaces/authenticationResponse";
 
 const API_BASE_URL: string = "http://localhost:5218/api/v1.0/account";
 @Injectable({
@@ -12,12 +13,12 @@ export class AccountService {
   public currentUsername: string | null = null;
   constructor(private httpClient: HttpClient) { }
 
-  public postRegister(registerUser: RegisterUser): Observable<RegisterUser>{
-    return this.httpClient.post<RegisterUser>(`${API_BASE_URL}/register`, registerUser);
+  public postRegister(registerUser: RegisterUser): Observable<authenticationResponse>{
+    return this.httpClient.post<authenticationResponse>(`${API_BASE_URL}/register`, registerUser);
   }
 
-  public postLogin(loginUser: LoginUser): Observable<LoginUser>{
-    return this.httpClient.post<LoginUser>(`${API_BASE_URL}/login`, loginUser);
+  public postLogin(loginUser: LoginUser): Observable<authenticationResponse>{
+    return this.httpClient.post<authenticationResponse>(`${API_BASE_URL}/login`, loginUser);
   }
 
   public getLogout(): Observable<string>{

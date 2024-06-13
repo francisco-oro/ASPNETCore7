@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {CompareValidator} from "../../validators/custom.validators";
 import {RegisterUser} from "../../models/register-user";
 import {LoginUser} from "../../models/login-user";
+import {authenticationResponse} from "../../interfaces/authenticationResponse";
 
 @Component({
   selector: 'app-login',
@@ -34,7 +35,7 @@ export class LoginComponent {
 
       this.accountService.postLogin(this.loginForm.value)
         .subscribe({
-          next: (response: LoginUser) => {
+          next: (response: authenticationResponse) => {
 
             this.isFormSubmitted = false;
             this.accountService.currentUsername = response.email;
