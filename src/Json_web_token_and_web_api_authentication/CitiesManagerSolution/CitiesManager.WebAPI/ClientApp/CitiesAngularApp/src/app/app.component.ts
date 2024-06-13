@@ -14,7 +14,7 @@ export class AppComponent {
     this.accountService.getLogout().subscribe({
       next: (response: string) => {
         this.accountService.currentUsername = null;
-
+        localStorage.removeItem("token");
         this.router.navigate(['/login'])
       },
       error: err => {
