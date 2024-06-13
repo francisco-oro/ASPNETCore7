@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using CitiesManager.Core.DTO;
 using CitiesManager.Core.Identity;
@@ -36,7 +37,7 @@ public class JwtService : IJwtService
         {
             new Claim(JwtRegisteredClaimNames.Sub, applicationUser.Id.ToString()), // Subject (user id) 
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // JWT unique ID 
-            new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)), // Issued at (date and time of token generation) 
+            new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()), // Issued at (date and time of token generation) 
             new Claim(ClaimTypes.NameIdentifier, applicationUser.Email ?? string.Empty), // Unique name identifier of the user (Email)
             new Claim(ClaimTypes.Name, applicationUser.PersonName ?? string.Empty), // Name of the user
         };
@@ -65,7 +66,20 @@ public class JwtService : IJwtService
             Token = token, 
             Email = applicationUser.Email,
             PersonName = applicationUser.PersonName,
-            Expiration = expiration
+            Expiration = expiration, 
+            RefreshToken = GenerateRefreshToken()
         };
+    }
+
+    /// <summary>
+    /// Creates a refresh token (base 64 string of random numbers)
+    /// </summary>
+    /// <returns></returns>
+    private static string GenerateRefreshToken()
+    {
+        Byte[] bytes = new byte[64];
+        var randomNumberGenerator  = RandomNumberGenerator.Create();
+        randomNumberGenerator.GetBytes(bytes);
+        return Convert.ToBase64String(bytes);
     }
 }

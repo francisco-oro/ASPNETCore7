@@ -96,9 +96,9 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 // JWT
 builder.Services.AddAuthentication(authenticationOptions =>
 {
-    authenticationOptions.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    authenticationOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     
-    authenticationOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    authenticationOptions.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>
 {
