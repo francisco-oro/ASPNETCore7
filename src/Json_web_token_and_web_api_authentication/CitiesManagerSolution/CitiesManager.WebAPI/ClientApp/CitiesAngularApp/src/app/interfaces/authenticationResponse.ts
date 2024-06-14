@@ -5,3 +5,8 @@ export interface authenticationResponse {
   expiration: string;
   refreshToken: string;
 }
+
+export interface refreshTokenResponse {
+  token: string;
+  refreshToken: string;
+}

@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {RegisterUser} from "../models/register-user";
 import {Observable} from "rxjs";
 import {LoginUser} from "../models/login-user";
-import {authenticationResponse} from "../interfaces/authenticationResponse";
+import {authenticationResponse, refreshTokenResponse} from "../interfaces/authenticationResponse";
 
 const API_BASE_URL: string = "http://localhost:5218/api/v1.0/account";
 @Injectable({
@@ -25,10 +25,10 @@ export class AccountService {
     return this.httpClient.get<string>(`${API_BASE_URL}/logout`);
   }
 
-  public postGenerateNewToken(): Observable<authenticationResponse> {
+  public postGenerateNewToken(): Observable<refreshTokenResponse> {
     const token = localStorage.getItem("token");
     const refreshToken = localStorage.getItem("refreshToken");
 
-    return this.httpClient.post<authenticationResponse>(`${API_BASE_URL}generate-new-jwt-token`, {token: token, refreshToken: refreshToken})
+    return this.httpClient.post<refreshTokenResponse>(`${API_BASE_URL}/generate-new-jwt-token`, {token: token, refreshToken: refreshToken})
   }
 }

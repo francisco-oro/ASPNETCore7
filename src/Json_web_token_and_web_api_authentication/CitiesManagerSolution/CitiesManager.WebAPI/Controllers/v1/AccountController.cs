@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using CitiesManager.Core.DTO;
 using CitiesManager.Core.Identity;
 using CitiesManager.Core.ServiceContracts;
@@ -149,6 +150,26 @@ public class AccountController : CustomControllerBase
     {
         await _signInManager.SignOutAsync();
         return NoContent();
+    }
+
+    [HttpPost("generate-new-token")]
+    public  IActionResult GenerateNewAccesToken(TokenModel? tokenModel)
+    {
+        if (tokenModel == null)
+        {
+            return BadRequest("Invalid client request"); 
+        }
+
+        string? jwtToken = tokenModel.Token;
+        string? refreshToken = tokenModel.RefreshToken;
+
+        ClaimsPrincipal? claimsPrincipal = _jwtService.GetPrincipalFromJwtToken(jwtToken);
+        if (claimsPrincipal == null)
+        {
+            return BadRequest("Invalid jwt access token");
+        }
+
+        claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
     }
     
 }
