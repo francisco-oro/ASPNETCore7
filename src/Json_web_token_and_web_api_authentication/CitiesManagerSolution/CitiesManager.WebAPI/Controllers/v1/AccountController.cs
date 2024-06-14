@@ -73,6 +73,9 @@ public class AccountController : CustomControllerBase
             // Sign-in
             await _signInManager.SignInAsync(applicationUser, isPersistent: false);
             AuthenticationResponse authenticationResponse = _jwtService.CreateJwtToken(applicationUser);
+            applicationUser.RefreshToken = authenticationResponse.RefreshToken;
+            applicationUser.RefreshTokenExpirationDateTime = authenticationResponse.RefreshTokenExpirationTime;
+            await _userManager.UpdateAsync(applicationUser);
             
             return Ok(authenticationResponse);
         }
@@ -128,7 +131,9 @@ public class AccountController : CustomControllerBase
 
             await _signInManager.SignInAsync(user, isPersistent: false);
             AuthenticationResponse authenticationResponse = _jwtService.CreateJwtToken(user);
-            
+            user.RefreshToken = authenticationResponse.RefreshToken;
+            user.RefreshTokenExpirationDateTime = authenticationResponse.RefreshTokenExpirationTime;
+            await _userManager.UpdateAsync(user);
             return Ok(authenticationResponse);
         }
 

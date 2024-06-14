@@ -3,4 +3,5 @@ export interface authenticationResponse {
   email: string;
   token: string;
   expiration: string;
+  refreshToken: string;
 }

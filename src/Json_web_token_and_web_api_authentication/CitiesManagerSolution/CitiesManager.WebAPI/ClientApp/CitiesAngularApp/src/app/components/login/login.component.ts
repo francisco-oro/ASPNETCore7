@@ -40,6 +40,7 @@ export class LoginComponent {
             this.isFormSubmitted = false;
             this.accountService.currentUsername = response.email;
             localStorage.setItem("token", response.token);
+            localStorage.setItem("refreshToken", response.refreshToken);
             this.router.navigate(['/cities']);
 
             this.loginForm.reset();

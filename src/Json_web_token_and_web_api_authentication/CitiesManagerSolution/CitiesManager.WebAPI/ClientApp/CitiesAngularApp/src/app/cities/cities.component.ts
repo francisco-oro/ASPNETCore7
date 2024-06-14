@@ -126,5 +126,9 @@ export class CitiesComponent implements OnInit {
       });
     }
   }
+
+  public refreshClicked(): void {
+
+  }
 }
 

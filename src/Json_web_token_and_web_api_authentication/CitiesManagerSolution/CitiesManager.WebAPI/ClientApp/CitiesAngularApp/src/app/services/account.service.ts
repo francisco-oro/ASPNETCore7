@@ -24,4 +24,11 @@ export class AccountService {
   public getLogout(): Observable<string>{
     return this.httpClient.get<string>(`${API_BASE_URL}/logout`);
   }
+
+  public postGenerateNewToken(): Observable<authenticationResponse> {
+    const token = localStorage.getItem("token");
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    return this.httpClient.post<authenticationResponse>(`${API_BASE_URL}generate-new-jwt-token`, {token: token, refreshToken: refreshToken})
+  }
 }

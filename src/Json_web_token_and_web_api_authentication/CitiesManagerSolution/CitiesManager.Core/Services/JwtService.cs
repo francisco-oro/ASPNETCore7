@@ -67,14 +67,15 @@ public class JwtService : IJwtService
             Email = applicationUser.Email,
             PersonName = applicationUser.PersonName,
             Expiration = expiration, 
-            RefreshToken = GenerateRefreshToken()
+            RefreshToken = GenerateRefreshToken(),
+            RefreshTokenExpirationTime = DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["RefreshToken:EXPIRATION_MINUTES"]))
         };
     }
 
     /// <summary>
     /// Creates a refresh token (base 64 string of random numbers)
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The refresh token ini base 64 string</returns>
     private static string GenerateRefreshToken()
     {
         Byte[] bytes = new byte[64];
