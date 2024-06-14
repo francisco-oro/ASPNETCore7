@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {City} from "../models/city";
 import {CitiesService} from "../services/cities.service";
 import {FormArray, FormControl, FormGroup, RequiredValidator, Validators} from "@angular/forms";
+import {AccountService} from "../services/account.service";
+import {authenticationResponse} from "../interfaces/authenticationResponse";
 
 @Component({
   selector: 'app-cities',
@@ -16,7 +18,9 @@ export class CitiesComponent implements OnInit {
   putCityForm: FormGroup;
   editCityID: string | null = null;
 
-  constructor(private citiesService: CitiesService) {
+  constructor(
+    private accountService: AccountService,
+    private citiesService: CitiesService) {
     this.postCityForm = new FormGroup({
       cityName: new FormControl(null, [Validators.required])
     });
@@ -127,8 +131,16 @@ export class CitiesComponent implements OnInit {
     }
   }
 
+  // Executes when the 'Refresh' button is clicked
   public refreshClicked(): void {
+    this.accountService.postGenerateNewToken().subscribe({
+      next: (response: authenticationResponse) => {
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("refreshToken", response.refreshToken);
 
+        this.loadCities();
+      }
+    });
   }
 }
 

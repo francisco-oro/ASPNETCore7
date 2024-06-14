@@ -5,8 +5,6 @@ using CitiesManager.Core.ServiceContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 namespace CitiesManager.WebAPI.Controllers.v1;
 /// <summary>
@@ -152,24 +150,44 @@ public class AccountController : CustomControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Handles refresh-token POST requests to /api/v1.0/account/generate-new-token
+    /// </summary>
+    /// <param name="tokenModel">Token model class</param>
+    /// <returns>Status 200 response with the authentication response class if the request is successful
+    /// Status 400 error response if token is invalid or has not expired yet</returns>
     [HttpPost("generate-new-token")]
-    public  IActionResult GenerateNewAccesToken(TokenModel? tokenModel)
+    public  async Task<IActionResult> GenerateNewAccessToken(TokenModel? tokenModel)
     {
         if (tokenModel == null)
         {
             return BadRequest("Invalid client request"); 
         }
 
-        string? jwtToken = tokenModel.Token;
-        string? refreshToken = tokenModel.RefreshToken;
-
-        ClaimsPrincipal? claimsPrincipal = _jwtService.GetPrincipalFromJwtToken(jwtToken);
+        ClaimsPrincipal? claimsPrincipal = _jwtService.GetPrincipalFromJwtToken(tokenModel.Token);
         if (claimsPrincipal == null)
         {
             return BadRequest("Invalid jwt access token");
         }
 
-        claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+        string? email = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        ApplicationUser? applicationUser = await _userManager.FindByEmailAsync(email);
+        if (applicationUser == null 
+            || applicationUser.RefreshToken != tokenModel.RefreshToken
+            || applicationUser.RefreshTokenExpirationDateTime <= DateTime.Now)
+        {
+            return BadRequest("Invalid refresh token");
+        }
+
+        AuthenticationResponse authenticationResponse = _jwtService.CreateJwtToken(applicationUser);
+
+        applicationUser.RefreshToken = authenticationResponse.RefreshToken;
+        applicationUser.RefreshTokenExpirationDateTime = authenticationResponse.RefreshTokenExpirationTime;
+
+        await _userManager.UpdateAsync(applicationUser);
+
+        return Ok(authenticationResponse);
     }
     
 }

@@ -48,7 +48,7 @@ public class JwtService : IJwtService
         
         // Create a SigningCredentials object with the security key and the HMACSHA256 algorithm.
         SigningCredentials signingCredentials =
-            new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
+            new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
         
         // Create a JwtSecurityToken object with the given issuer, audience, claims, expiration and signing credentials.
         JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
