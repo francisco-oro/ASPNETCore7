@@ -40,6 +40,7 @@ public class JwtService : IJwtService
             new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()), // Issued at (date and time of token generation) 
             new Claim(ClaimTypes.NameIdentifier, applicationUser.Email ?? string.Empty), // Unique name identifier of the user (Email)
             new Claim(ClaimTypes.Name, applicationUser.PersonName ?? string.Empty), // Name of the user
+            new Claim(ClaimTypes.Email, applicationUser.Email ?? string.Empty), // Email of the user
         };
 
         // Create a SymmetricSecurityKey object using the key specified in the configuration

@@ -170,7 +170,7 @@ public class AccountController : CustomControllerBase
             return BadRequest("Invalid jwt access token");
         }
 
-        string? email = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+        string? email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
 
         ApplicationUser? applicationUser = await _userManager.FindByEmailAsync(email);
         if (applicationUser == null 
