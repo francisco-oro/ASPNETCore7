@@ -1,6 +1,9 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using MinimalAPI.EndpointFilters;
 using MinimalAPI.Models;
 
 namespace MinimalAPI.RouteGroups;
@@ -21,7 +24,7 @@ public static class ProductsMapGroup
             // 1, xxxxxxxx
             // 2, xxxxxxxx
 
-            await context.Response.WriteAsync(JsonSerializer.Serialize(list));
+            return Results.Ok(JsonSerializer.Serialize(list));
         });
 
 // GET /products/{id}
@@ -30,20 +33,42 @@ public static class ProductsMapGroup
             Product? product = list.FirstOrDefault(temp => temp.Id == id);
             if (product == null)
             {
-                context.Response.StatusCode = 400; //Bad request 
-                await context.Response.WriteAsync("Incorrect product ID");
-                return;
+                return Results.BadRequest("Incorrect product ID");
             }
 
-            await context.Response.WriteAsync(JsonSerializer.Serialize(product));
+            return Results.Ok(JsonSerializer.Serialize(product));
         });
+
 
 // POST /products/
         routeGroupBuilder.MapPost("/", async (HttpContext context, Product product) =>
         {
             list.Add(product);
-            await context.Response.WriteAsync("Product added");
-        });
+            return Results.NoContent();
+        })        
+            .AddEndpointFilter<CustomEndpointFilter>()
+            .AddEndpointFilter(async (context, @delegate) =>
+        {
+            Product? product = context.Arguments.OfType<Product>().FirstOrDefault();
+
+            if (product == null)
+            {
+                return Results.BadRequest("Product details are not found in the request");
+            }
+
+            var validationContext = new ValidationContext(product);
+            List<ValidationResult> errors = new List<ValidationResult>();
+            bool isValid = Validator.TryValidateObject(product, validationContext, errors, true);
+            if (!isValid)
+            {
+                return Results.BadRequest(errors.FirstOrDefault()?.ErrorMessage);
+            }
+
+            var result = await @delegate(context);  // invokes the subsequent filter or endpoint after logic
+            
+            // After logic here 
+            return result;
+        });;
         
         //PUT /products/{id}
 
@@ -52,14 +77,12 @@ public static class ProductsMapGroup
             Product? productFromCollection = list.FirstOrDefault(temp => temp.Id == id);
             if (productFromCollection == null)
             {
-                context.Response.StatusCode = 400; //Bad request 
-                await context.Response.WriteAsync("Incorrect product ID");
-                return;
+                return Results.BadRequest("Incorrect product ID");
             }
 
             productFromCollection.ProductName = product.ProductName;
 
-            await context.Response.WriteAsync("Product Updated");
+            return Results.Ok("Product Updated");
         });
 
         
@@ -70,7 +93,10 @@ public static class ProductsMapGroup
             Product? productFromCollection = list.FirstOrDefault(temp => temp.Id == id);
             if (productFromCollection == null)
             {
-                return Results.BadRequest(new { error = "Incorrect Product ID"});
+                return Results.ValidationProblem(new Dictionary<string, string[]>()
+                {
+                    { "Id", new string[] {"Incorrect Product ID"} }
+                });
             }
 
             list.Remove(productFromCollection);
